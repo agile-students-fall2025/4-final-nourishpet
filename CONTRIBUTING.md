@@ -17,7 +17,7 @@ Wireframes/design-first phase.
 ## What We Accept (now)
 - Wireframes and prototypes
 - Design specs (layout, spacing, tokens, states, interactions)
-- UX description revisement
+- UX description change
 
 ## Git Workflow
 Default branch: `main`
@@ -37,10 +37,10 @@ git checkout -b <yourname>
 
 # stage and commit (one-line message)
 git add .
-git commit -m "design: update wireframes and README links"
+git commit -m "meaningful one-line message"
 
 # push your branch and open a PR to main
-git push -u origin <yourname>
+git push origin <yourname>
 
 
 
