@@ -20,17 +20,17 @@ Wireframes/design-first phase.
 - UX description change
 
 ## Git Workflow
-Default branch: `main`
+Default branch: `master`
 
-- Work on your own branch named **<yourname>**; do not commit directly to `main`.
+- Work on your own branch named **<yourname>**; do not commit directly to `master`.
 - Commit messages: **one line**, meaningful and concise (what changed + why).
-- Open a Pull Request to `main`; **at least 1 peer review is required** before merge.
+- Open a Pull Request to `master`; **at least 1 peer review is required** before merge.
 
 **Steps**
 ```bash
-# update local main
-git checkout main
-git pull origin main
+# update local master
+git checkout master
+git pull origin master
 
 # create your branch
 git checkout -b <yourname>
@@ -39,7 +39,7 @@ git checkout -b <yourname>
 git add .
 git commit -m "meaningful one-line message"
 
-# push your branch and open a PR to main
+# push your branch and open a PR to master
 git push origin <yourname>
 
 
