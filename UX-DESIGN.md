@@ -6,7 +6,7 @@ The App Map illustrates the main user flow of the **NourishPet** application. Us
 * **Recording**, where review past records of their food intake and nutrition history.
 * **Pet/Daily Intake**, which displays the daily nutrition goals, progress, and growth of the pet.
 * **Setting/User**, which allows users to **edit** their profile information, **confirm** or **cancel** changes, and **log out**.
-* **Feed**, which lets users **search for food**, view detailed **Food Pages**, and **feaed meals** to their pet.
+* **Feed**, which lets users **search for food**, view detailed **Food Pages**, and **feed meals** to their pet.
 
 ![App Map](ux-design/app%20map.png)
 
