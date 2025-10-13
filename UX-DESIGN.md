@@ -86,3 +86,7 @@ This page displays the user's personal information, including their name, profil
 On this page, the user can update or modify their personal and body information.
 
 ![Edit Info](ux-design/Edit%20Info.png)
+
+## Prototype
+
+[Figma's prototyping](https://www.figma.com/prototyping/)
