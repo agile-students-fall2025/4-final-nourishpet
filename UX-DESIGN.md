@@ -9,63 +9,81 @@
 ## Authentication
 
 ### Log In
-Let users access their account. It has the App Logo at the top. It allows users to type their username and password to log in, leading them to the home page. If they want, they can also use the Register link to go to register screen to register.
-![Log In](ux-design/prototype/Log%20In.png)
+This page lets users access their accounts by entering a username and password.  
+It includes an app logo at the top and a link to the Register page for new users.
+
+![Log In](ux-design/Log%20In.png)
 
 ### Register
-Let users create a new account. Users can fill the three fields: username, password, and confirmed password to create an new account, leading them to the home page. If they already have an account, they can use the Login link to go to the Log In screen.
-![Register](ux-design/prototype/Register.png)
+This page allows users to create a new account by filling in three fields: username, password, and confirm password.  
+A link is provided to return to the Log In screen.
+
+![Register](ux-design/Register.png)
 
 ---
 
 ## Home / Daily Experience
 
 ### Home Page
-It is the main dashboard. It has the pet image that leads to the pet growth screen. There is the nutrition chart that shows today's intake. It also has the Feed tab that opens the food search/add flow, and the Records/History that leads to the Recording screen. 
-![Home Page](ux-design/prototype/Home%20Page.png)
+This is the main **dashboard**. It displays the pet image (linking to the Pet Page), a nutrition chart showing today’s intake, and navigation tabs for **Feed** and **Records/History**.
 
-### Pet Page (Daily Dashboard)
-This is the daily hub: see today's goals and status, and watch progress convert into the pet's XP (eat healthier → more XP → a stronger pet). From here, quickly navigate to **Home**, **Feed**, and **Records/History**.
-![Pet Page](ux-design/prototype/Pet%20Page.png)
+![Home Page](ux-design/Home%20Page.png)
+
+### Pet Page
+This is the daily **dashboard** for tracking nutrition and caring for the pet.  
+Users can view today’s goals and status, and see their progress convert into the pet’s XP (healthier eating → more XP → a stronger pet).  
+Navigation options lead to **Feed** (rewards) and **Records/History** (meal logs).
+
+![Pet Page](ux-design/Pet%20Page.png)
 
 ---
 
 ## Feed (Rewards / Level-ups)
 
 ### Feed My Pet — Search
-On this page, the user can search for food ingredients by name to view their nutritional facts (carbohydrates, protein, and fat per 100 g). A search bar allows users to quickly find ingredients and add them to their pet’s meal plan. 
-![Feed Search](ux-design/prototype/Feed%20My%20Pet__%20Search.png)
+Users can search for ingredients by name to view nutritional facts (carbs, protein, and fat per 100 g) and add items to their meal plan.
+
+![Feed Search](ux-design/Feed%20My%20Pet__%20Search.png)
 
 ### Feed My Pet — Ingredients
-This page allows the user to enter the weight (in grams) of a selected ingredient and view its calculated nutritional values. Users can choose from similar ingredient variations and add items directly to their feeding list.
-![Feed Ingredients](ux-design/prototype/Feed%20My%20Pet__%20Ingredients.png)
+Users enter the amount (in grams) of a selected ingredient and view its calculated nutritional values before adding it to the pet’s feeding list.
+
+![Feed Ingredients](ux-design/Feed%20My%20Pet__%20Ingredients.png)
 
 ### Feed My Pet — Added
-After adding an ingredient, this page confirms successful addition and provides options to add more ingredients or proceed to the intake summary. It helps reassure users that their input has been saved correctly.
-![Feed Added](ux-design/prototype/Feed%20My%20Pet__%20Added.png)
+Confirms that an ingredient was added successfully and lets users add more or proceed to the summary.
+
+![Feed Added](ux-design/Feed%20My%20Pet__%20Added.png)
 
 ---
 
 ## Records
 
 ### Detailed Records — Today
-This page contains the detailed nutrition data on a specific date. It includes detailed nutrient information, a list of intakes, and some visualization data.
-![Detailed Records Today](ux-design/prototype/Detailed%20Records%20Today.png)
+Displays detailed nutrition data for the current day, including nutrient breakdowns, meal list, and visual summaries.
+
+![Detailed Records Today](ux-design/Detailed%20Records%20Today.png)
+
+### Detailed Records — History
+Allows users to browse nutrition data from previous days and view streak progress.
+
+![Detailed Records History](ux-design/Detailed%20Records_History.png)
 
 ### Archive
-This contains the dates of the past week and a goal reaching status. By clicking on the data, the user will be able to go into a more detailed nutrition page on that specific date. 
-![Archive](ux-design/prototype/Archive.png)
+Shows the past week’s entries with goal-completion status. Clicking on a date opens the detailed nutrition record for that day.
+
+![Archive](ux-design/Archive.png)
 
 ---
 
 ## Profile & Settings
 
 ### User Page
-This page displays the user's personal information, including their name, profile picture, and body metrics.
-![User Page](ux-design/prototype/User%20Page.png)
+Displays the user’s profile information, including their name, avatar, and body metrics.
+
+![User Page](ux-design/User%20Page.png)
 
 ### Edit Info
-On this page, the user can update or modify their personal and body information. 
-![Edit Info](ux-design/prototype/Edit%20Info.png)
+Allows users to edit or update personal details and dietary targets.
 
----
+![Edit Info](ux-design/Edit%20Info.png)
