@@ -15,6 +15,7 @@ Let users access their account. It has the App Logo at the top. It allows users 
 
 ### Register
 Let users create a new account. Users can fill the three fields: username, password, and confirmed password to create an new account, leading them to the home page. If they already have an account, they can use the Login link to go to the Log In screen.
+
 ![Register](ux-design/Register.png)
 
 ### Home Page
@@ -26,7 +27,6 @@ This is the main **dashboard**. It displays the pet image (linking to the Pet Pa
 This is the daily hub: see today's goals and status, and watch progress convert into the pet's XP (eat healthier → more XP → a stronger pet). From here, quickly navigate to **Home**, **Feed**, and **Records/History**.
 
 ![Pet Page](ux-design/Pet%20Page.png)
-
 
 ### Feed My Pet — Search
 On this page, the user can search for food ingredients by name to view their nutritional facts (carbohydrates, protein, and fat per 100 g). A search bar allows users to quickly find ingredients and add them to their pet’s meal plan. 
@@ -41,7 +41,6 @@ This page allows the user to enter the weight (in grams) of a selected ingredien
 ### Feed My Pet — Added
 After adding an ingredient, this page confirms successful addition and provides options to add more ingredients or proceed to the intake summary. It helps reassure users that their input has been saved correctly.
 
-
 ![Feed Added](ux-design/Feed%20My%20Pet__%20Added.png)
 
 ### Detailed Records — Today
@@ -49,8 +48,6 @@ Detailed Records (Today) Page:
 This page displays the pet’s daily nutritional intake summary, including calories, protein, carbs, and fat. Users can track progress toward daily goals through progress bars and a pie chart, as well as review detailed food entries with portion sizes and nutrient breakdowns.
 
 ![Detailed Records Today](ux-design/Detailed%20Records%20Today.png)
-
-
 
 ### Detailed Records — History
 This page contains the detailed nutrition data on a specific date. It includes detailed nutrient information, a list of intakes, and some visualization data.
@@ -60,13 +57,10 @@ This page contains the detailed nutrition data on a specific date. It includes d
 ### Archive
 This contains the dates of the past week and a goal reaching status. By clicking on the data, the user will be able to go into a more detailed nutrition page on that specific date. 
 
-
 ![Archive](ux-design/Archive.png)
-
 
 ### User Page
 This page displays the user's personal information, including their name, profile picture, and body metrics.
-
 
 ![User Page](ux-design/User%20Page.png)
 
@@ -74,6 +68,7 @@ This page displays the user's personal information, including their name, profil
 On this page, the user can update or modify their personal and body information.
 
 ![Edit Info](ux-design/Edit%20Info.png)
+
 ---
 ## Prototype
 
