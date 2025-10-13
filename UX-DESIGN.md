@@ -71,5 +71,5 @@ On this page, the user can update or modify their personal and body information.
 
 ---
 ## Prototype
-
+The link is below:
 [Figma Prototype](https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0)
