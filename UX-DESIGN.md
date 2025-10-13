@@ -6,7 +6,7 @@
 
 ---
 
-## Authentication
+# Wireframes
 
 ### Log In
 Let users access their account. It has the App Logo at the top. It allows users to type their username and password to log in, leading them to the home page. If they want, they can also use the Register link to go to register screen to register.
@@ -16,10 +16,6 @@ Let users access their account. It has the App Logo at the top. It allows users 
 ### Register
 Let users create a new account. Users can fill the three fields: username, password, and confirmed password to create an new account, leading them to the home page. If they already have an account, they can use the Login link to go to the Log In screen.
 ![Register](ux-design/Register.png)
-
----
-
-## Home / Daily Experience
 
 ### Home Page
 This is the main **dashboard**. It displays the pet image (linking to the Pet Page), a nutrition chart showing today’s intake, and navigation tabs for **Feed** and **Records/History**.
@@ -31,9 +27,6 @@ This is the daily hub: see today's goals and status, and watch progress convert 
 
 ![Pet Page](ux-design/Pet%20Page.png)
 
----
-
-## Feed (Rewards / Level-ups)
 
 ### Feed My Pet — Search
 On this page, the user can search for food ingredients by name to view their nutritional facts (carbohydrates, protein, and fat per 100 g). A search bar allows users to quickly find ingredients and add them to their pet’s meal plan. 
@@ -57,9 +50,7 @@ This page displays the pet’s daily nutritional intake summary, including calor
 
 ![Detailed Records Today](ux-design/Detailed%20Records%20Today.png)
 
----
 
-## Records
 
 ### Detailed Records — History
 This page contains the detailed nutrition data on a specific date. It includes detailed nutrient information, a list of intakes, and some visualization data.
@@ -72,9 +63,6 @@ This contains the dates of the past week and a goal reaching status. By clicking
 
 ![Archive](ux-design/Archive.png)
 
----
-
-## Profile & Settings
 
 ### User Page
 This page displays the user's personal information, including their name, profile picture, and body metrics.
@@ -86,7 +74,7 @@ This page displays the user's personal information, including their name, profil
 On this page, the user can update or modify their personal and body information.
 
 ![Edit Info](ux-design/Edit%20Info.png)
-
+---
 ## Prototype
 
 [Figma's prototyping](https://www.figma.com/prototyping/)
