@@ -38,7 +38,7 @@ This is the daily hub: see today's goals and status, and watch progress convert 
 ### Feed My Pet — Search
 On this page, the user can search for food ingredients by name to view their nutritional facts (carbohydrates, protein, and fat per 100 g). A search bar allows users to quickly find ingredients and add them to their pet’s meal plan. 
 
-![Feed Search](ux-design/Feed My Pet __ Search.png)
+![Feed Search](ux-design/Feed%20My%20Pet__%20Search.png)
 
 ### Feed My Pet — Ingredients
 This page allows the user to enter the weight (in grams) of a selected ingredient and view its calculated nutritional values. Users can choose from similar ingredient variations and add items directly to their feeding list.
