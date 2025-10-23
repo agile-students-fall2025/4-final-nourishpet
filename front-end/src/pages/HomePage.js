@@ -7,6 +7,8 @@ function HomePage(){
             <div>Home Page</div>
             <button>
                 <Link to="/userpage">User Page</Link>
+            </button>
+            <button>
                 <Link to="/petpage">Pet Page</Link>
             </button>
         </div>
