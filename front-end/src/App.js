@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import UserPage from './pages/UserPage.js';
 import HomePage from './pages/HomePage.js';
+import PetPage from './petpage/PetPage.js';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/userpage" element={<UserPage />} />
+          <Route path="/petpage" element={<PetPage />} />
         </Routes>
       </div>
     </Router>
