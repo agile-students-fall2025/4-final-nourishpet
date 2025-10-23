@@ -5,7 +5,7 @@ import UserPage from './pages/UserPage.js';
 import HomePage from './pages/HomePage.js';
 import EditUserInfo from './pages/EditUserInfo.js'
 import PetPage from './petpage/PetPage.js';
-
+import Archive from './archives/Archive.js';
 
 function App() {
   return (
@@ -16,6 +16,7 @@ function App() {
           <Route path="/userpage" element={<UserPage />} />
           <Route path="/editUserInfo" element={<EditUserInfo />} />
           <Route path="/petpage" element={<PetPage />} />
+          <Route path="/archives" element={<Archive />} />
         </Routes>
       </div>
     </Router>

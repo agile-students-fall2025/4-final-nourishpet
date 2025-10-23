@@ -1,0 +1,32 @@
+.Archive h1{
+    text-align: center;
+}
+
+.record-list {
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.record-row {
+  display: flex;
+  justify-content: space-between; /* Puts space between the two items */
+  align-items: center;            /* Vertically centers them */
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.record-date {
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  flex: 1;                 /* Gives this column 1 "part" of the space */
+  text-align: center;        /* Aligns text to the left */
+}
+
+.record-status {
+  flex: 2;                 /* Gives this column 2 "parts" of the space */
+  text-align: left;        /* Aligns text to the left */
+  padding-left: 20px;
+  font-weight: 500;
+}
