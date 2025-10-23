@@ -1,0 +1,26 @@
+import React from 'react';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
+import './PetPage.css';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function StatusPie({nutrition}){
+    const pieData = {
+        labels: ["Protein","Carbs", "Fat"],
+        datasets: [
+            {
+                data: [nutrition.protein,nutrition.carbs,nutrition.fat],
+                backgroundColor: ["#6fa3ef", "#ffd166", "#ef6f6c"]
+            }
+        ]
+    }
+    return (
+        <div className="status-pie">
+        <h4>Today's Status</h4>
+        <Pie data={pieData} width={100} height={100} />
+        </div>
+    );
+}
+
+export default StatusPie;
