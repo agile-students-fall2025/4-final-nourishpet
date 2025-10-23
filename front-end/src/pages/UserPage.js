@@ -65,7 +65,7 @@ function LogoutButton() {
 function EditButton() {
 return (
     <button className="edit-button">
-        <Link to='edit_user_info'>Edit</Link>
+        <Link to='/editUserInfo'>Edit</Link>
     </button>
 );
 }
