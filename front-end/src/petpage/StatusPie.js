@@ -17,8 +17,8 @@ function StatusPie({nutrition}){
     }
     return (
         <div className="status-pie">
-        <h4>Today's Status</h4>
-        <Pie data={pieData} width={100} height={100} />
+        <h4>Status</h4>
+        <Pie data={pieData}/>
         </div>
     );
 }

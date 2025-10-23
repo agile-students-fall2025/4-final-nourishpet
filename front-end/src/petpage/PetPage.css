@@ -1,0 +1,44 @@
+.xp-container {
+  margin-bottom: 10px;
+}
+
+.xp-bar-bg {
+  background: #eee;
+  width: 200px;
+  margin: auto;
+  border-radius: 6px;
+}
+
+.xp-bar-fill {
+  height: 12px;
+  background: #6fa3ef;
+  border-radius: 6px;
+}
+
+.mid-section {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.goals-panel {
+  text-align: left;
+}
+
+.goal-item {
+  margin-bottom: 10px;
+}
+
+.goal-bar-bg {
+  background: #eee;
+  width: 120px;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.goal-bar-fill {
+  background: #6fa3ef;
+  height: 8px;
+  border-radius: 4px;
+}
+
