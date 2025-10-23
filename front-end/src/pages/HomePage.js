@@ -1,0 +1,16 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function HomePage(){
+    return(
+        <div>
+            <div>Home Page</div>
+            <button>
+                <Link to="/userpage">User Page</Link>
+            </button>
+        </div>
+        
+    )
+}
+
+export default HomePage;
