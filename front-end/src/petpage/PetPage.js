@@ -39,7 +39,7 @@ function PetPage() {
     <div className="pet-page">
       <h3>Pet Page</h3>
       <p className="subtext">
-        This is the daily hub: track nutrition and your pet’s XP growth.
+        This is the daily hub: track nutrition and your pet's XP growth.
       </p>
       <p>{today}</p>
 
