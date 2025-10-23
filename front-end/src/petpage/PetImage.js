@@ -12,6 +12,6 @@ function PetImage({petName}){
             />
         </div>
     );
-}s
+}
 
 export default PetImage;
