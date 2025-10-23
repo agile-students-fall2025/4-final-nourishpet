@@ -36,3 +36,47 @@
     transform: rotate(360deg);
   }
 }
+
+/* UserPage.css */
+.user-page {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.user-info-display {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.user-portrait {
+  margin-bottom: 20px;
+}
+
+.portrait-placeholder {
+  width: 150px;
+  height: 150px;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.user-details {
+  text-align: left;
+  margin: 20px 0;
+}
+
+.user-details p {
+  margin: 10px 0;
+  padding: 5px 0;
+}
