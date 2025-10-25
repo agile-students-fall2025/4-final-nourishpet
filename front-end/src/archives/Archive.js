@@ -1,5 +1,6 @@
 import './Archive.css';
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 //random nutrition details for the past week (count=7)
@@ -43,12 +44,9 @@ function WeekArchive() {
                         
                         <div className='record-row' key={record.id}>
                         
-                            {/*<div className='record-date'>
-                                <Link to={/holder for detial page}>{record.Date}</Link> 
-                            </div>*/}
-                            <div className='record-date'>
+                            <Link to={'/archives/histrecord'}>
                                 {record.Date}
-                            </div>
+                            </Link> 
 
                             <div className='record-status'>
                                 {statusText}
