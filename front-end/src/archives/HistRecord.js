@@ -58,7 +58,6 @@ function HistRecord() {
 
             <div className="food-details">
                 <p>Detailed Intake List</p>
-
                 
                 {foodlist.foods.map((foodName, index) => (
 
@@ -72,29 +71,6 @@ function HistRecord() {
                     </div>
 
                 ))}
-                {/*
-                <div className="food-items">
-                     Map over the array and give each item its own tag 
-                    {foodlist.foods.map((food, index) => (
-                        <span key={index}>{food}</span>
-                    ))}
-                </div>
-
-                <div className="gram-items">
-                    {foodlist.grams.map((gram, index) => (
-                        <span key={index}>{gram}</span>
-                    ))}
-                </div>
-
-                <div className="protein-items">
-                    {foodlist.protein}
-                </div>
-                <div className="carbs-items">
-                    {foodlist.carbs}
-                </div>
-                <div className="fat-items">
-                    {foodlist.fat} 
-                </div>*/}
             </div>
            
         </div>
