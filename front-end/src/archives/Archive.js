@@ -3,9 +3,8 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-//random nutrition details for the past week (count=7)
+//fake nutrition and goal data fetch from db (count=7)
 const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
-const mygoal = 1600
 
 function WeekArchive() {
 
@@ -37,14 +36,14 @@ function WeekArchive() {
             
             <div className='record-list'>
                 {records.map(record =>{
-                    const goalstatus = (record['Total Intake'] >=mygoal)
+                    const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
                     const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
 
                     return (
                         
                         <div className='record-row' key={record.id}>
                         
-                            <Link to={'/archives/histrecord'}>
+                            <Link to={`/archives/histrecord/${record.id}`}>
                                 {record.Date}
                             </Link> 
 

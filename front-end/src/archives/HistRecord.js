@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
-import PetImage from "../petpage/PetImage";
+import { useParams, Link } from 'react-router-dom';
+import axios from 'axios';
 import XPBar from "../petpage/XPBar";
 import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
-import "../petpage/PetPage.css";
+import "./HistRecord.css";
 
-function PetPage() {
-  return (
-    <div className="pet-page">
-      <h3>HistRecord</h3>
-    </div>
-  );
+//random nutrition details for the past week (count=7)
+const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
+
+function HistRecord() {
+    
+    return (
+        <div className="archive-page">
+            <h1>Detailed Recrod</h1>
+           
+        </div>
+    );
 }
 
-export default PetPage;
+export default HistRecord;
