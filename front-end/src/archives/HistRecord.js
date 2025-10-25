@@ -5,12 +5,12 @@ import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
 import "../petpage/PetPage.css";
 
-function PetPage() {
+function HistRecord() {
   return (
-    <div className="pet-page">
+    <div className="hist-record">
       <h3>HistRecord</h3>
     </div>
   );
 }
 
-export default PetPage;
+export default HistRecord;
