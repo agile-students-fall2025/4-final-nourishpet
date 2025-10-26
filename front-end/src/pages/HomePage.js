@@ -14,6 +14,9 @@ function HomePage(){
             <button>
                 <Link to="/archives">Archives</Link>
             </button>
+            <button>
+                <Link to="/feedpage">Feed Page</Link>
+            </button>
         </div>
         
     )
