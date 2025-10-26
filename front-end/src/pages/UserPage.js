@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { fetchUserData } from '../services/mockApi';
 import UserImage from './UserImage';
-import './UserPage.css';
+import '../css/UserPage.css';
+import Footer from '../components/Footer.js'
 
 function UserPage(){
     const [userData, setUserData] = useState(null);
@@ -45,9 +46,7 @@ function UserPage(){
 
             </div>
 
-            <button>
-                <Link to="/">Home Page</Link>
-            </button>
+            < Footer/>
         </div>
     )
 }
@@ -73,7 +72,7 @@ function UserInfoDisplay({ userData }){
 function LogoutButton() {
     return (
       <button className="logout-button">
-        <Link to='/log_out'>Log Out</Link>
+        <Link to='/login'>Log Out</Link>
       </button>
     );
   }

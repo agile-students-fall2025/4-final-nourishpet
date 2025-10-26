@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { fetchUserData, updateUserData } from '../services/mockApi';
 import UserImage from './UserImage';
-import './UserPage.css';
+import '../css/UserPage.css';
+import Footer from '../components/Footer.js'
 
 function EditUserInfo(){
     const [userData, setUserData] = useState(null);
@@ -59,6 +60,8 @@ function EditUserInfo(){
                 <Confirm onConfirm={handleConfirm} />
                 <Cancel />
             </div>
+
+            < Footer/>
         </div>
     )
 }
