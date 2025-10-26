@@ -5,6 +5,7 @@ import XPBar from "./XPBar";
 import GoalsPanel from "./GoalsPanel";
 import StatusPie from "./StatusPie";
 import "./PetPage.css";
+import Footer from "../components/Footer";
 
 function PetPage() {
   const today = new Date().toLocaleDateString("en-US", {
@@ -68,6 +69,7 @@ function PetPage() {
         <StatusPie nutrition={nutrition} />
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
