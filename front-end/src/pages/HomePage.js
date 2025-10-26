@@ -11,6 +11,9 @@ function HomePage(){
             <button>
                 <Link to="/petpage">Pet Page</Link>
             </button>
+            <button>
+                <Link to="/feedpage">Feed Page</Link>
+            </button>
         </div>
         
     )

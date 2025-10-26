@@ -5,6 +5,9 @@ import UserPage from './pages/UserPage.js';
 import HomePage from './pages/HomePage.js';
 import EditUserInfo from './pages/EditUserInfo.js'
 import PetPage from './petpage/PetPage.js';
+import FeedPage from './pages/FeedPage.js';
+
+
 
 
 function App() {
@@ -16,6 +19,7 @@ function App() {
           <Route path="/userpage" element={<UserPage />} />
           <Route path="/editUserInfo" element={<EditUserInfo />} />
           <Route path="/petpage" element={<PetPage />} />
+          <Route path="/feedpage" element={<FeedPage />} />
         </Routes>
       </div>
     </Router>
