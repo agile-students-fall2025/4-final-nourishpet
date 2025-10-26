@@ -1,0 +1,62 @@
+
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.register-box {
+  width: 400px;
+  padding: 40px;
+  text-align: center;
+}
+
+.logo-placeholder {
+  width: 180px;
+  height: 140px;
+  background-color: #ddd;
+  margin: 0 auto 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.register-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.register-input {
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #333;
+}
+
+.register-button {
+  padding: 12px;
+  font-size: 16px;
+  color: white;
+  background-color: #000;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.link-text {
+  color: #007bff;
+  text-decoration: underline;
+}
+
