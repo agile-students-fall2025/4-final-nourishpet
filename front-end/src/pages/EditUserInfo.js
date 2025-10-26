@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { fetchUserData, updateUserData } from '../services/mockApi';
+import UserImage from './UserImage';
+import './UserPage.css';
 
 function EditUserInfo(){
     const [userData, setUserData] = useState(null);
@@ -64,11 +66,7 @@ function EditUserInfo(){
 function UserInfo({ formData, onInputChange }){
     return (
         <div className="user-info-display">
-            <div className="portrait-section">
-                <div className="portrait-placeholder">
-                    Set Your Portraits
-                </div>
-            </div>
+            <UserImage />
 
             <div className="form-section">
                 <div className="form-field">

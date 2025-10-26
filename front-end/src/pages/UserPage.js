@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { fetchUserData } from '../services/mockApi';
+import UserImage from './UserImage';
+import './UserPage.css';
 
 function UserPage(){
     const [userData, setUserData] = useState(null);
@@ -37,9 +39,10 @@ function UserPage(){
                     <EditButton />
                 </div>
             
-            <UserInfoDisplay userData={userData} />
-            
-            <LogoutButton />
+                <UserInfoDisplay userData={userData} />
+                
+                <LogoutButton />
+
             </div>
 
             <button>
@@ -49,27 +52,22 @@ function UserPage(){
     )
 }
 
-function UserInfoDisplay( {userData} ){
+function UserInfoDisplay({ userData }){
     return (
         <div className="user-info-display">
-
-          <div className="user-portrait">
-            <div className="portrait-placeholder">
-              User Portraits
+            <UserImage />
+            
+            <h2 className="user-name">{userData.name}</h2>
+            
+            <div className="user-details">
+                <p>Pet Name: {userData.petName}</p>
+                <p>Target Weight: {userData.targetWeight}kg</p>
+                <p>Height: {userData.height}cm</p>
+                <p>Current Weight: {userData.currentWeight}kg</p>
+                <p>BMI: {userData.bmi}</p>
             </div>
-          </div>
-          
-          <h2 className="user-name">{userData.name}</h2>
-          
-          <div className="user-details">
-            <p>Pet Name: {userData.petName}</p>
-            <p>Target Weight: {userData.targetWeight} kg</p>
-            <p>Height: {userData.height} cm</p>
-            <p>Current Weight: {userData.currentWeight} kg</p>
-            <p>BMI: {userData.bmi}</p>
-          </div>
         </div>
-      );
+    );
 }
 
 function LogoutButton() {
