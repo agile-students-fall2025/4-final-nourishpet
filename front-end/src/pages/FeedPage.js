@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050"
+const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
 
 const fmt = (n) => {
   const v = Number(n);
@@ -115,6 +115,13 @@ function FeedPage() {
             item={oneResult}
             grams={grams}
           />
+
+         
+          <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
+            <Link to="/archives">
+              <button className="btn">Intake</button>
+            </Link>
+          </div>
 
           <nav
             style={{
@@ -230,7 +237,7 @@ function FeedOneResult({ show, loading, error, item, grams }) {
                   For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
-              <Link to="/petpage">
+              <Link to="/archives">
                 <button className="btn" type="button">Add</button>
               </Link>
             </div>
