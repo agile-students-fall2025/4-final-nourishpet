@@ -116,9 +116,9 @@ function FeedPage() {
             grams={grams}
           />
 
-          {/* Bottom-right floating Intake button -> /archieve */}
+         
           <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
-            <Link to="/archieve">
+            <Link to="/archive">
               <button className="btn">Intake</button>
             </Link>
           </div>
