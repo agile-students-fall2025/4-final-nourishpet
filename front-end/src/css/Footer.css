@@ -1,16 +1,17 @@
-/* Footer Styles */
 
 .footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #d3d3d3;
-  padding: 20px 0;
+  background-color: #eee;
+  padding: 18px 0;
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
+  max-width: 430px;
+  border-top: 1px solid #ddd;
 }
 
 .footer-link {
@@ -23,9 +24,10 @@
 .footer-item {
   font-size: 14px;
   padding: 10px;
+  font-weight: 500;
 }
 
 .footer-link:hover .footer-item {
-  background-color: #bbb;
+  color: #6fa3ef;
 }
 
