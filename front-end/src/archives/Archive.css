@@ -83,3 +83,36 @@
   margin: auto;
 }
 
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #eee;
+  padding: 18px 0;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  border-top: 1px solid #ddd;
+}
+
+.footer-link {
+  flex: 1;
+  text-decoration: none;
+  color: #333;
+  text-align: center;
+}
+
+.footer-item {
+  font-size: 14px;
+  padding: 10px;
+  font-weight: 500;
+}
+
+.footer-link:hover .footer-item {
+  color: #6fa3ef;
+}
+

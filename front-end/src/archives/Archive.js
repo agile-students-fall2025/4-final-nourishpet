@@ -2,6 +2,7 @@ import './Archive.css';
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Footer from '../components/Footer';
 
 //fake nutrition and goal data fetch from db (count=7)
 const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
@@ -54,6 +55,7 @@ function WeekArchive() {
                     );
                 })}
             </div>
+            <Footer />
         </main>
     )
 }
