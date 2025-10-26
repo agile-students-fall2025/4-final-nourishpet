@@ -38,17 +38,18 @@ function PetPage() {
   return (
     <div className="pet-page">
       <h3>Pet Page</h3>
-      <p className="subtext">
-        This is the daily hub: track nutrition and your pet's XP growth.
-      </p>
-      <p>{today}</p>
+      <p id="date-top-right">{today}</p>
 
       <PetImage petName={petName} />
       <XPBar xp={xp} level={level} />
 
       <div className="mid-section">
+        <div className="goals-panel">
         <GoalsPanel nutrition={nutrition} goals={goals} />
+        </div>
+        <div className="status-panel">
         <StatusPie nutrition={nutrition} />
+        </div>
       </div>
     </div>
   );
