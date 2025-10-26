@@ -30,3 +30,49 @@
   padding-left: 20px;
   font-weight: 500;
 }
+
+.nutrition-record {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.food-details {
+  margin-top: 20px;
+  width: 100%;
+  margin: 40px auto;
+  align-items: center;
+}
+
+.food-details p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.food-row {
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 12px 5px; 
+  align-items: center;
+  text-align: center;
+}
+
+.food-row span {
+  font-size: 0.9rem;
+  color: black;
+}
+
+.food-name {
+  font-weight: bold;
+  color: #000;
+  min-width: 120px; 
+}
+
+.food-gram{
+  min-width: 120px;
+}
