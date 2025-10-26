@@ -14,7 +14,22 @@
 
 .user-info-display {
   text-align: center;
+  margin: 50px 0 20px 0;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.edit-user-info-display {
+  text-align: center;
   margin: 20px 0;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .user-portrait {
@@ -36,7 +51,7 @@
 
 .user-details {
   text-align: center;
-  margin: 15px 0;
+  margin: 15px 0 40px 0;
 }
 
 .user-details p {
@@ -59,6 +74,11 @@
 
 .form-section {
   margin: 20px 0;
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .form-field {
@@ -93,17 +113,27 @@
 }
 
 .confirm, .cancel {
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  padding: 12px 24px;
+  border: 1px solid #6c757d;
+  background-color: #f8f9fa;
+  border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
-  color: #333;
+  color: #495057;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 .confirm:hover, .cancel:hover {
-  background-color: #e0e0e0;
+  background-color: #e9ecef;
+  border-color: #495057;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.confirm a, .cancel a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .input-with-unit {
@@ -132,4 +162,28 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+}
+
+.edit-button, .logout-button {
+  padding: 12px 24px;
+  border: 1px solid #6c757d;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #495057;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.edit-button:hover, .logout-button:hover {
+  background-color: #e9ecef;
+  border-color: #495057;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.edit-button a, .logout-button a {
+  text-decoration: none;
+  color: inherit;
 }

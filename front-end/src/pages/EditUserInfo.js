@@ -68,7 +68,7 @@ function EditUserInfo(){
 
 function UserInfo({ formData, onInputChange }){
     return (
-        <div className="user-info-display">
+        <div className="edit-user-info-display">
             <UserImage />
 
             <div className="form-section">
