@@ -20,6 +20,7 @@ function App() {
           <Route path="/userpage" element={<UserPage />} />
           <Route path="/editUserInfo" element={<EditUserInfo />} />
           <Route path="/petpage" element={<PetPage />} />
+          <Route path="/feedpage" element={<FeedPage />} />
         </Routes>
       </div>
     </Router>
