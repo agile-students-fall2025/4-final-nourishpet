@@ -230,7 +230,7 @@ function FeedOneResult({ show, loading, error, item, grams }) {
                   For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
-              <Link to="/petpage">
+              <Link to="/archives">
                 <button className="btn" type="button">Add</button>
               </Link>
             </div>
