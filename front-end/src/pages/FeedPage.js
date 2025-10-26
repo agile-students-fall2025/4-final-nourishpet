@@ -40,6 +40,7 @@ function FeedPage() {
   const [rows, setRows] = useState([]); // flattened rows (no date)
   const [error, setError] = useState("");
   const [grams, setGrams] = useState("150"); // user-entered grams
+  const [showConfirm, setShowConfirm] = useState(false); // NEW: confirmation popup
 
   // Filter then take just ONE result
   const oneResult = useMemo(() => {
@@ -93,6 +94,13 @@ function FeedPage() {
         .card .meta{flex:1}
         .nutri{font-size:12px;color:var(--muted)}
         .muted{color:var(--muted)}
+
+        /* --- lightweight modal styles --- */
+        .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:50}
+        .modal{background:#e0e0e0;border-radius:12px;max-width:720px;width:90%;padding:32px;position:relative}
+        .modal h3{margin:0 0 8px;font-size:28px}
+        .modal p{margin:0;font-size:22px;line-height:1.35}
+        .modal .close{position:absolute;top:10px;right:10px;border:1px solid var(--ring);background:#f2f4f7;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
       `}</style>
 
       <div className="app">
@@ -103,7 +111,6 @@ function FeedPage() {
             query={query}
             setQuery={setQuery}
             onSearch={handleSearch}
-            endpoint={MOCKAROO_URL}
             grams={grams}
             setGrams={setGrams}
           />
@@ -114,11 +121,12 @@ function FeedPage() {
             error={error}
             item={oneResult}
             grams={grams}
+            onAdd={() => setShowConfirm(true)} // show popup on Add
           />
 
-         
+          {/* Bottom-right floating Intake button -> /archieve */}
           <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
-            <Link to="/archive">
+            <Link to="/petpage">
               <button className="btn">Intake</button>
             </Link>
           </div>
@@ -143,6 +151,17 @@ function FeedPage() {
         </main>
       </div>
 
+      {/* Confirmation popup */}
+      {showConfirm && (
+        <div className="overlay" role="dialog" aria-modal="true" aria-label="Item added">
+          <div className="modal">
+            <button className="close" onClick={() => setShowConfirm(false)} aria-label="Close">×</button>
+            <h3>Successfully Added!</h3>
+            <p>You can check your ingredients in Intake!</p>
+          </div>
+        </div>
+      )}
+
       <button className="btn" style={{ margin: 16 }}>
         <Link to="/">Home Page</Link>
       </button>
@@ -163,7 +182,7 @@ function FeedHeader() {
   );
 }
 
-function FeedSearchSection({ query, setQuery, onSearch, endpoint, grams, setGrams }) {
+function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
     <section className="sheet">
       <h1>Search Ingredients</h1>
@@ -200,7 +219,7 @@ function FeedSearchSection({ query, setQuery, onSearch, endpoint, grams, setGram
   );
 }
 
-function FeedOneResult({ show, loading, error, item, grams }) {
+function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
   if (!show) return null;
 
   // scale assuming item values are per 100 g
@@ -237,9 +256,11 @@ function FeedOneResult({ show, loading, error, item, grams }) {
                   For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
-              <Link to="/archives">
-                <button className="btn" type="button">Add</button>
-              </Link>
+
+              {/* Add -> opens confirmation popup */}
+              <button className="btn" type="button" onClick={onAdd}>
+                Add
+              </button>
             </div>
           )}
         </div>
