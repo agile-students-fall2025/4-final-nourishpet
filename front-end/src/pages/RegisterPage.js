@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/RegisterPage.css';
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -19,6 +20,8 @@ function RegisterPage() {
     // Registration functionality will be implemented when backend is ready
     console.log('Registration attempted with:', { username, password });
     // TODO: Add registration logic here
+    
+    navigate('/');
   };
 
   return (

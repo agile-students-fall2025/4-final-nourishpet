@@ -75,7 +75,7 @@ function UserInfoDisplay( {userData} ){
 function LogoutButton() {
     return (
       <button className="logout-button">
-        <Link to='/log_out'>Log Out</Link>
+        <Link to='/login'>Log Out</Link>
       </button>
     );
   }

@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../css/LoginPage.css';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
     // Login functionality will be implemented when backend is ready
     console.log('Login attempted with:', { username, password });
     // TODO: Add authentication logic here
+
+    navigate('/');
   };
 
   return (
