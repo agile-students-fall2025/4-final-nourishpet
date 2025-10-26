@@ -74,5 +74,12 @@
 }
 
 .food-gram{
-  min-width: 120px;
+  text-align: center;
 }
+
+.status-pie {
+  width: 250px;   
+  height: 400px;
+  margin: auto;
+}
+
