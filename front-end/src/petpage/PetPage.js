@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import PetImage from "./PetImage";
 import XPBar from "./XPBar";
 import GoalsPanel from "./GoalsPanel";
@@ -13,20 +14,36 @@ function PetPage() {
     year: "numeric"
   });
 
+  const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
   // Fake "database fetch"
   const [petData, setPetData] = useState(null);
 
-  useEffect(() => {
-    // Simulate async DB fetch
-    setTimeout(() => {
-      setPetData({
-        petName: "Charlie",
-        level: 4,
-        xp: 60,
-        nutrition: { calories: 1240, protein: 62, carbs: 140, fat: 38 },
-        goals: { calories: 2000, protein: 120, carbs: 250, fat: 70 }
-      });
-    }, 600); // pretend we fetched from DB
+    useEffect(() => {
+    axios
+      .get(mockurl)
+      .then((res) => {
+        console.log(res);
+        const todayData = res.data[0]; 
+
+        setPetData({
+          petName: "Charlie",
+          level: 4,
+          xp: 60,
+          nutrition: {
+            calories: todayData["Total Intake"],
+            protein: todayData.Protein,
+            carbs: todayData.Carbs,
+            fat: todayData.Fat,
+          },
+          goals: {
+            calories: todayData["Total Intake Goal"],
+            protein: todayData["Protein Goal"],
+            carbs: todayData["Carbs Goal"],
+            fat: todayData["Fat Goal"],
+          },
+        });
+      })
+      .catch((err) => console.error("Error fetching mock data:", err));
   }, []);
 
   if (!petData) {
