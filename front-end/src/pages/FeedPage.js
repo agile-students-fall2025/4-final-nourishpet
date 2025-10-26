@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050"
+const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
 
 const fmt = (n) => {
   const v = Number(n);
@@ -115,6 +115,13 @@ function FeedPage() {
             item={oneResult}
             grams={grams}
           />
+
+          {/* Bottom-right floating Intake button -> /archieve */}
+          <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
+            <Link to="/archieve">
+              <button className="btn">Intake</button>
+            </Link>
+          </div>
 
           <nav
             style={{
