@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720";
+const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050"
 
 const fmt = (n) => {
   const v = Number(n);
