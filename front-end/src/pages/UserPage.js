@@ -1,16 +1,34 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchUserData } from '../services/mockApi';
 
 function UserPage(){
-    const [userData, setUserData] = useState({
-        name: "Charlie",
-        petName: "Charlie's dog",
-        targetWeight: "50kg",
-        height: "160cm",
-        currentWeight: "55kg",
-        bmi: "21.5 Standard"
-      });
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+      const loadUserData = async () => {
+        try {
+          const data = await fetchUserData();
+          setUserData(data);
+        } catch (error){
+          console.error('Failed to fetch user data:', error);
+        } finally{
+          setLoading(false);
+        }
+      };
+
+      loadUserData();
+    }, []);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (!userData) {
+        return <div>Failed to load user data</div>;
+    }
+    
     return(
         <div>
             <div className="user-page">
@@ -45,9 +63,9 @@ function UserInfoDisplay( {userData} ){
           
           <div className="user-details">
             <p>Pet Name: {userData.petName}</p>
-            <p>Target Weight: {userData.targetWeight}</p>
-            <p>Height: {userData.height}</p>
-            <p>Current Weight: {userData.currentWeight}</p>
+            <p>Target Weight: {userData.targetWeight} kg</p>
+            <p>Height: {userData.height} cm</p>
+            <p>Current Weight: {userData.currentWeight} kg</p>
             <p>BMI: {userData.bmi}</p>
           </div>
         </div>

@@ -182,3 +182,24 @@
 .confirm:hover, .cancel:hover {
   background-color: #e0e0e0;
 }
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.input-with-unit input {
+  flex: 1;
+  max-width: 150px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.unit {
+  color: #666;
+  font-weight: bold;
+  min-width: 30px;
+}
