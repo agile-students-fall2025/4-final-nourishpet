@@ -24,6 +24,12 @@ git clone https://github.com/agile-students-fall2025/4-final-nourishpet
 # navigate to front-end folder
 cd front-end
 
+# download npm 
+npm install
+
+# make sure node.js is downloaded and ready
+node -v
+
 #start front-end
 npm start
 ```
