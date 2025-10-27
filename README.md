@@ -16,7 +16,7 @@ Make healthy eating sticky and delightful by turning daily nutrition goals into 
 ---
 
 ## Building and Testing of Project
-**Sprint 1: Front-end Design**
+**Sprint 1: Front-end Design(Currently Working)**
 ```bash
 # clone from Github Repo
 git clone https://github.com/agile-students-fall2025/4-final-nourishpet
