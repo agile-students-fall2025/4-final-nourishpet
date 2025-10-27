@@ -8,6 +8,8 @@ import RegisterPage from './pages/RegisterPage.js';
 import EditUserInfo from './pages/EditUserInfo.js'
 import PetPage from './petpage/PetPage.js';
 import FeedPage from './pages/FeedPage.js';
+
+
 import Archive from './archives/Archive.js';
 import HistRecord from './archives/HistRecord.js';
 
@@ -23,6 +25,8 @@ function App() {
           <Route path="/editUserInfo" element={<EditUserInfo />} />
           <Route path="/petpage" element={<PetPage />} />
           <Route path="/feedpage" element={<FeedPage />} />
+          <Route path="/archives" element={<Archive />} />
+          <Route path="/archives/histrecord/:id" element={<HistRecord />} />
         </Routes>
       </div>
     </Router>
