@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { fetchUserData, updateUserData } from '../services/mockApi';
+import UserImage from './UserImage';
+import '../css/UserPage.css';
+import Footer from '../components/Footer.js'
 
 function EditUserInfo(){
     const [userData, setUserData] = useState(null);
@@ -57,18 +60,16 @@ function EditUserInfo(){
                 <Confirm onConfirm={handleConfirm} />
                 <Cancel />
             </div>
+
+            < Footer/>
         </div>
     )
 }
 
 function UserInfo({ formData, onInputChange }){
     return (
-        <div className="user-info-display">
-            <div className="portrait-section">
-                <div className="portrait-placeholder">
-                    Set Your Portraits
-                </div>
-            </div>
+        <div className="edit-user-info-display">
+            <UserImage />
 
             <div className="form-section">
                 <div className="form-field">

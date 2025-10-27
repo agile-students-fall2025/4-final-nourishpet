@@ -1,0 +1,160 @@
+
+.homepage {
+  min-height: 932px;
+  padding-bottom: 70px;
+  max-width: 430px;
+  margin: 0 auto;
+  background-color: #fff;
+  position: relative;
+}
+
+/* Header */
+.homepage-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+}
+
+.user-button {
+  background-color: #eee;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Main content */
+.homepage-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+  gap: 25px;
+  padding: 10px 0;
+}
+
+/* App intro section */
+.app-intro {
+  width: 100%;
+}
+
+.intro-box {
+  background-color: #eee;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.app-title {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.app-tagline {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Pet image section */
+.pet-section {
+  margin: 15px 0;
+}
+
+.pet-image-link {
+  text-decoration: none;
+  color: #666;
+}
+
+.pet-image-circle {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background-color: #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.pet-name {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+}
+
+.pet-photo-circle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pet-hint {
+  margin: 0;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Nutrition chart section */
+.nutrition-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.nutrition-chart {
+  background-color: #eee;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 6px;
+  min-height: 150px;
+}
+
+.nutrition-chart h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.nutrition-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.nutrition-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.nutrition-item:last-child {
+  border-bottom: none;
+}
+
+.nutrition-label {
+  font-weight: 500;
+  color: #333;
+  font-size: 14px;
+}
+
+.nutrition-value {
+  color: #6fa3ef;
+  font-size: 14px;
+  font-weight: 500;
+}
+

@@ -9,20 +9,19 @@ Wireframes/design-first phase.
 
 ## Team Norms
 - Communicate via GitHub Issues/PRs.
-- 2-week sprint cadence: plan at start, quick demo/retro at end.
+- 2-week sprint cadence: plan at start, 2-3 synchronous standups per week, quick demo/retro at end.
 - Keep scope tight; prefer incremental changes.
 - Be kind and direct: feedback is specific, actionable, and respectful.
 
 
 ## What We Accept (now)
-- Wireframes and prototypes
-- Design specs (layout, spacing, tokens, states, interactions)
-- UX description change
+- front-end design with React.js
+
 
 ## Git Workflow
 Default branch: `master`
 
-- Work on your own branch named **<yourname>**; do not commit directly to `master`.
+- Work on your own branch (branch naming details see below); do not commit directly to `master`.
 - Commit messages: **one line**, meaningful and concise (what changed + why).
 - Open a Pull Request to `master`; **at least 1 peer review is required** before merge.
 
@@ -32,15 +31,20 @@ Default branch: `master`
 git checkout master
 git pull origin master
 
-# create your branch
-git checkout -b <yourname>
+# create your branch named after the User Story and Task/Spike which they are intended to implement
+git checkout -b user-story/13/task/9/implement-user-login
+git checkout -b spike/27/learn-react-js
 
 # stage and commit (one-line message)
 git add .
 git commit -m "meaningful one-line message"
 
 # push your branch and open a PR to master
-git push origin <yourname>
+git push origin <branchname>
+
+# for peer review
+git fetch origin pull/pull-id/head:pr-id-review
+```
 
 
 
