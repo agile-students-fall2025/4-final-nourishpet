@@ -15,7 +15,7 @@ function PetPage() {
     year: "numeric"
   });
 
-  const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
+  const mockurl = 'https://api.mockaroo.com/api/0571eeb0?count=1&key=ee5ed170'
   // Fake "database fetch"
   const [petData, setPetData] = useState(null);
 
