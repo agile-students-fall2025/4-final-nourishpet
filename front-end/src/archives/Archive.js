@@ -44,8 +44,8 @@ function WeekArchive() {
                         
                         <div className='record-row' key={record.id}>
                         
-                            <Link to={`/archives/histrecord/${record.id}`}>
-                                {record.Date}
+                            <Link to={`/archives/histrecord/${record.id}`} className='date-link'>
+                                <div className='date-item'>{record.Date}</div>
                             </Link> 
 
                             <div className='record-status'>
