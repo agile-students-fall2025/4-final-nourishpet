@@ -1,6 +1,8 @@
 // FeedPage.js
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import "./FeedPage.css"; // import your external stylesheet
+import Footer from '../components/Footer';
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
 const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
@@ -115,41 +117,15 @@ function FeedPage() {
             setGrams={setGrams}
           />
 
-          <FeedOneResult
-            show={didSearch}
-            loading={loading}
-            error={error}
-            item={oneResult}
-            grams={grams}
-            onAdd={() => setShowConfirm(true)} // show popup on Add
-          />
+        {/* Bottom nav
+        <nav className="bottom-nav">
+          <Link to="/" className="nav-link">
+            <button className="btn full">Logo / Home</button>
+          </Link>
+        </nav> */}
+      </main>
+      <Footer />
 
-          {/* Bottom-right floating Intake button -> /archieve */}
-          <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
-            <Link to="/petpage">
-              <button className="btn">Intake</button>
-            </Link>
-          </div>
-
-          <nav
-            style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: "flex",
-              borderTop: "1px solid #ddd",
-              background: "#fafafa",
-            }}
-          >
-            <Link to="/" style={{ flex: 1 }}>
-              <button className="btn" style={{ width: "100%", padding: 14 }}>
-                Logo / Home
-              </button>
-            </Link>
-          </nav>
-        </main>
-      </div>
 
       {/* Confirmation popup */}
       {showConfirm && (
@@ -267,6 +243,7 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
       )}
     </section>
   );
+  
 }
 
 export default FeedPage;
