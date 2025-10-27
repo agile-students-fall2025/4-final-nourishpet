@@ -2,8 +2,9 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050"
+// Uses your Mockaroo endpoint directly; fetch only on Search click
+const MOCKAROO_URL =
+  "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
 
 const fmt = (n) => {
   const v = Number(n);
@@ -40,13 +41,12 @@ function FeedPage() {
   const [rows, setRows] = useState([]); // flattened rows (no date)
   const [error, setError] = useState("");
   const [grams, setGrams] = useState("150"); // user-entered grams
+  const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
 
   // Filter then take just ONE result
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
-    const filtered = q
-      ? rows.filter((r) => String(r.food).toLowerCase().includes(q))
-      : rows;
+    const filtered = q ? rows.filter((r) => String(r.food).toLowerCase().includes(q)) : rows;
     return filtered[0] || null; // only the first match
   }, [rows, query]);
 
@@ -73,72 +73,101 @@ function FeedPage() {
   };
 
   return (
-    <div>
-      <style>{`
-        :root{--bg:#f7f7f8;--card:#fff;--ink:#111827;--muted:#6b7280;--ring:#e5e7eb;--accent:#eef2f7;}
-        body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,sans-serif}
-        .app{max-width:960px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
-        .page{flex:1;padding:20px}
-        .sheet{background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:18px}
-        h1{font-size:22px;margin:6px 0 12px}
-        h2{font-size:18px;margin:18px 0 10px}
-        .field{display:flex;gap:10px;align-items:center;margin:8px 0}
-        .input{flex:1;background:#f2f4f7;border:1px solid var(--ring);padding:14px 12px;border-radius:10px;font-size:16px}
-        .input.small{max-width:240px}
-        .suffix{font-size:12px;color:var(--muted);margin-left:8px}
-        .btn{border:1px solid var(--ring);background:#f2f4f7;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-        .btn:disabled{opacity:.5;cursor:not-allowed}
-        .list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-        .card{background:var(--accent);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:12px;border:1px solid var(--ring)}
-        .card .meta{flex:1}
-        .nutri{font-size:12px;color:var(--muted)}
-        .muted{color:var(--muted)}
-      `}</style>
+    <div className="app">
+      <main className="page">
+        <FeedHeader />
 
-      <div className="app">
-        <main className="page">
-          <FeedHeader />
+        <FeedSearchSection
+          query={query}
+          setQuery={setQuery}
+          onSearch={handleSearch}
+          grams={grams}
+          setGrams={setGrams}
+        />
 
-          <FeedSearchSection
-            query={query}
-            setQuery={setQuery}
-            onSearch={handleSearch}
-            endpoint={MOCKAROO_URL}
-            grams={grams}
-            setGrams={setGrams}
-          />
+        <FeedOneResult
+          show={didSearch}
+          loading={loading}
+          error={error}
+          item={oneResult}
+          grams={grams}
+          onAdd={() => setShowConfirm(true)}
+        />
 
-          <FeedOneResult
-            show={didSearch}
-            loading={loading}
-            error={error}
-            item={oneResult}
-            grams={grams}
-          />
+        {/* Bottom-right floating Intake button -> /archieve */}
+        <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
+          <Link to="/histrecord">
+            <button className="btn">Intake</button>
+          </Link>
+        </div>
 
-          <nav
+        {/* Bottom nav (Home) */}
+        <nav
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            borderTop: "1px solid var(--ring)",
+            background: "#fafafa",
+          }}
+        >
+          <Link to="/" style={{ flex: 1 }}>
+            <button className="btn" style={{ width: "100%", padding: 14 }}>
+              Logo / Home
+            </button>
+          </Link>
+        </nav>
+      </main>
+
+      {/* Confirmation popup (kept inline styles so we don't touch your CSS) */}
+      {showConfirm && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Item added"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 50,
+          }}
+        >
+          <div
             style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: "flex",
-              borderTop: "1px solid #ddd",
-              background: "#fafafa",
+              background: "#e0e0e0",
+              borderRadius: 12,
+              maxWidth: 720,
+              width: "90%",
+              padding: 32,
+              position: "relative",
+              textAlign: "left",
             }}
           >
-            <Link to="/" style={{ flex: 1 }}>
-              <button className="btn" style={{ width: "100%", padding: 14 }}>
-                Logo / Home
-              </button>
-            </Link>
-          </nav>
-        </main>
-      </div>
-
-      <button className="btn" style={{ margin: 16 }}>
-        <Link to="/">Home Page</Link>
-      </button>
+            <button
+              onClick={() => setShowConfirm(false)}
+              aria-label="Close"
+              className="btn"
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                padding: "6px 10px",
+                borderRadius: 8,
+                fontWeight: 700,
+              }}
+            >
+              ×
+            </button>
+            <h2 style={{ margin: "0 0 12px" }}>Successfully Added!</h2>
+            <div style={{ fontSize: 18 }}>You Can Check Your Ingredients In Inta!</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -147,8 +176,8 @@ function FeedPage() {
 
 function FeedHeader() {
   return (
-    <div className="page-header" style={{ display: "flex", justifyContent: "space-between", marginBottom: 24 }}>
-      <h1 style={{ margin: 0 }}>Feed Page</h1>
+    <div className="page-header" style={{ marginBottom: 24 }}>
+      <h1 style={{ margin: 0, color: "var(--ink)" }}>Feed Page</h1>
       <Link to="/userpage">
         <button className="btn">User</button>
       </Link>
@@ -156,7 +185,7 @@ function FeedHeader() {
   );
 }
 
-function FeedSearchSection({ query, setQuery, onSearch, endpoint, grams, setGrams }) {
+function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
     <section className="sheet">
       <h1>Search Ingredients</h1>
@@ -193,7 +222,7 @@ function FeedSearchSection({ query, setQuery, onSearch, endpoint, grams, setGram
   );
 }
 
-function FeedOneResult({ show, loading, error, item, grams }) {
+function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
   if (!show) return null;
 
   // scale assuming item values are per 100 g
@@ -230,9 +259,9 @@ function FeedOneResult({ show, loading, error, item, grams }) {
                   For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
-              <Link to="/petpage">
-                <button className="btn" type="button">Add</button>
-              </Link>
+              <button className="btn" type="button" disabled>
+                Add
+              </button>
             </div>
           )}
         </div>
