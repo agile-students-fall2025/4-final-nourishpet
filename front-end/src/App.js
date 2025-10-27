@@ -8,8 +8,6 @@ import RegisterPage from './pages/RegisterPage.js';
 import EditUserInfo from './pages/EditUserInfo.js'
 import PetPage from './petpage/PetPage.js';
 import FeedPage from './pages/FeedPage.js';
-
-
 import Archive from './archives/Archive.js';
 import HistRecord from './archives/HistRecord.js';
 
