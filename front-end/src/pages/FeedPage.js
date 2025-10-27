@@ -1,8 +1,8 @@
 // FeedPage.js
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import "./FeedPage.css"; // import your external stylesheet
 
-// Uses your Mockaroo endpoint directly; fetch only on Search click
 const MOCKAROO_URL =
   "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
 
@@ -12,15 +12,21 @@ const fmt = (n) => {
   return v.toFixed(1).replace(/\.0$/, ".0");
 };
 
-// Parse one day's record (matches your sample JSON keys)
+// Parse one day's record
 function parseDailyRecord(rec) {
   const foods = Array.isArray(rec?.["Food List"]) ? rec["Food List"] : [];
   const grams = Array.isArray(rec?.["Gram List"]) ? rec["Gram List"] : [];
   const prots = Array.isArray(rec?.["Protein List"]) ? rec["Protein List"] : [];
-  const fats  = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
+  const fats = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
   const carbs = Array.isArray(rec?.["Carbs List"]) ? rec["Carbs List"] : [];
 
-  const len = Math.max(foods.length, grams.length, prots.length, fats.length, carbs.length);
+  const len = Math.max(
+    foods.length,
+    grams.length,
+    prots.length,
+    fats.length,
+    carbs.length
+  );
   const rows = [];
   for (let i = 0; i < len; i++) {
     rows.push({
@@ -38,16 +44,17 @@ function FeedPage() {
   const [query, setQuery] = useState("");
   const [didSearch, setDidSearch] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState([]); // flattened rows (no date)
+  const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
-  const [grams, setGrams] = useState("150"); // user-entered grams
-  const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
+  const [grams, setGrams] = useState("100");
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  // Filter then take just ONE result
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
-    const filtered = q ? rows.filter((r) => String(r.food).toLowerCase().includes(q)) : rows;
-    return filtered[0] || null; // only the first match
+    const filtered = q
+      ? rows.filter((r) => String(r.food).toLowerCase().includes(q))
+      : rows;
+    return filtered[0] || null;
   }, [rows, query]);
 
   const handleSearch = async (e) => {
@@ -94,77 +101,34 @@ function FeedPage() {
           onAdd={() => setShowConfirm(true)}
         />
 
-        {/* Bottom-right floating Intake button -> /archieve */}
-        <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
+        {/* Floating Intake button */}
+        <div className="floating-btn">
           <Link to="/histrecord">
             <button className="btn">Intake</button>
           </Link>
         </div>
 
-        {/* Bottom nav (Home) */}
-        <nav
-          style={{
-            position: "fixed",
-            left: 0,
-            right: 0,
-            bottom: 0,
-            display: "flex",
-            borderTop: "1px solid var(--ring)",
-            background: "#fafafa",
-          }}
-        >
-          <Link to="/" style={{ flex: 1 }}>
-            <button className="btn" style={{ width: "100%", padding: 14 }}>
-              Logo / Home
-            </button>
+        {/* Bottom nav */}
+        <nav className="bottom-nav">
+          <Link to="/" className="nav-link">
+            <button className="btn full">Logo / Home</button>
           </Link>
         </nav>
       </main>
 
-      {/* Confirmation popup (kept inline styles so we don't touch your CSS) */}
+      {/* Confirmation popup */}
       {showConfirm && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Item added"
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,.35)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 50,
-          }}
-        >
-          <div
-            style={{
-              background: "#e0e0e0",
-              borderRadius: 12,
-              maxWidth: 720,
-              width: "90%",
-              padding: 32,
-              position: "relative",
-              textAlign: "left",
-            }}
-          >
+        <div className="popup-overlay" role="dialog" aria-modal="true" aria-label="Item added">
+          <div className="popup-card">
             <button
               onClick={() => setShowConfirm(false)}
               aria-label="Close"
-              className="btn"
-              style={{
-                position: "absolute",
-                top: 10,
-                right: 10,
-                padding: "6px 10px",
-                borderRadius: 8,
-                fontWeight: 700,
-              }}
+              className="btn close-btn"
             >
               ×
             </button>
-            <h2 style={{ margin: "0 0 12px" }}>Successfully Added!</h2>
-            <div style={{ fontSize: 18 }}>You Can Check Your Ingredients In Inta!</div>
+            <h2>Successfully Added!</h2>
+            <p>You can check your ingredients in Intake!</p>
           </div>
         </div>
       )}
@@ -172,12 +136,12 @@ function FeedPage() {
   );
 }
 
-/* ===== child components (like UserPage) ===== */
+/* ===== Child Components ===== */
 
 function FeedHeader() {
   return (
-    <div className="page-header" style={{ marginBottom: 24 }}>
-      <h1 style={{ margin: 0, color: "var(--ink)" }}>Feed Page</h1>
+    <div className="page-header">
+      <h1>Feed Page</h1>
       <Link to="/userpage">
         <button className="btn">User</button>
       </Link>
@@ -191,7 +155,6 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
       <h1>Search Ingredients</h1>
 
       <form onSubmit={onSearch}>
-        {/* Search row */}
         <div className="field">
           <input
             className="input"
@@ -205,17 +168,18 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
           </button>
         </div>
 
-        {/* Grams row */}
-        <div className="field" style={{ marginTop: 8 }}>
-          <input
-            className="input small"
-            id="grams"
-            type="number"
-            min="1"
-            value={grams}
-            onChange={(e) => setGrams(e.target.value)}
-          />
-          <span className="suffix">Gram</span>
+        <div className="field">
+          <div className="input-with-unit">
+            <input
+              className="input small"
+              id="grams"
+              type="number"
+              min="1"
+              value={grams}
+              onChange={(e) => setGrams(e.target.value)}
+            />
+            <span className="unit">gram</span>
+          </div>
         </div>
       </form>
     </section>
@@ -225,7 +189,6 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
 function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
   if (!show) return null;
 
-  // scale assuming item values are per 100 g
   const g = Math.max(1, parseFloat(grams || "0"));
   const factor = g / 100;
 
@@ -238,28 +201,31 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
     : null;
 
   return (
-    <section className="sheet" style={{ marginTop: 16 }}>
+    <section className="sheet">
       <h2>Nutrition facts</h2>
 
-      {loading && <div>Loading…</div>}
-      {!loading && error && <div style={{ color: "crimson" }}>{error}</div>}
+      {loading && <div className="loading">Loading…</div>}
+      {!loading && error && <div className="error">{error}</div>}
 
       {!loading && !error && (
         <div className="list">
           {!item && <div className="muted">No results.</div>}
-
           {item && (
             <div className="card">
               <div className="meta">
-                <div style={{ fontWeight: 600 }}>{item.food}</div>
-                <div className="nutri" style={{ marginBottom: 4 }}>
-                  Per 100 g — Carbs: {fmt(item.carbs)} g · Protein: {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
+                <div className="food-name">{item.food}</div>
+                <div className="nutri">
+                  Per 100 g — Carbs: {fmt(item.carbs)} g · Protein:{" "}
+                  {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
                 </div>
                 <div className="nutri">
-                  For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
+                  For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein:{" "}
+                  {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
-              <button className="btn" type="button" disabled>
+
+          
+              <button className="btn" type="button" onClick={onAdd}>
                 Add
               </button>
             </div>
