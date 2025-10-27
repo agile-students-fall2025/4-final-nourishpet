@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import "./FeedPage.css"; // import your external stylesheet
+import Footer from '../components/Footer';
 
 const MOCKAROO_URL =
   "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
@@ -108,13 +109,15 @@ function FeedPage() {
           </Link>
         </div>
 
-        {/* Bottom nav */}
+        {/* Bottom nav
         <nav className="bottom-nav">
           <Link to="/" className="nav-link">
             <button className="btn full">Logo / Home</button>
           </Link>
-        </nav>
+        </nav> */}
       </main>
+      <Footer />
+
 
       {/* Confirmation popup */}
       {showConfirm && (
@@ -234,6 +237,7 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
       )}
     </section>
   );
+  
 }
 
 export default FeedPage;
