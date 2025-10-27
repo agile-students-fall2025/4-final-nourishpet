@@ -1,0 +1,104 @@
+:root{
+  --nav-h: 64px;         
+  --fab-gap: 16px;       
+  --overlay-z: 1000;     
+  --popup-z: 1001;       
+}
+
+.page{
+  padding: 16px 14px calc(var(--nav-h) + 32px);
+}
+@media (min-width:900px){
+  .page{ padding: 28px 28px calc(var(--nav-h) + 40px); }
+}
+
+.bottom-nav{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display:flex;
+  border-top: 1px solid var(--ring);
+  background: #fafafa;
+  height: var(--nav-h);
+  align-items: center;
+  padding: 0 8px;
+  z-index: 500;
+}
+.bottom-nav .btn.full{
+  width: 100%;
+  padding: 14px;
+  background: #f3f4f6;
+  color: #111827;
+  border-color: var(--ring);
+}
+
+/* ---- 右下角浮动 Intake 按钮 ---- */
+.floating-btn{
+  position: fixed;
+  right: var(--fab-gap);
+  /* 按钮浮在底部导航之上，留出导航高度 + 间距 */
+  bottom: calc(var(--nav-h) + var(--fab-gap));
+  z-index: 700;
+}
+
+/* ---- 覆盖层（弹窗背景）确保居中且压在搜索框上方 ---- */
+.popup-overlay{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;   /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
+  background: rgba(0,0,0,.35);
+  z-index: var(--overlay-z);
+  /* 防止背景滚动时穿透点击 */
+  backdrop-filter: saturate(120%) blur(2px);
+}
+
+/* ---- 弹窗卡片 ---- */
+.popup-card{
+  background: #ffffff;
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.18);
+  width: min(92vw, 720px);
+  padding: 24px 28px;
+  position: relative;
+  z-index: var(--popup-z);
+  text-align: left;
+}
+
+.popup-card h2{
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.popup-card p{
+  margin: 0;
+  font-size: 16px;
+}
+
+.close-btn{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.page-header{ margin-bottom: 24px; }
+.food-name{ font-weight: 600; }
+.loading{ color: var(--muted); }
+.error{ color: #b91c1c; font-weight: 700; }
+
+.input-with-unit{
+  display: flex; align-items: center; gap: 5px;
+}
+.input-with-unit .unit{ color: #666; font-weight: bold; min-width: 30px; }
+
+@media (max-width:520px){
+  .field{ flex-wrap: wrap; }
+  .field .btn{ width:100%; }
+}
