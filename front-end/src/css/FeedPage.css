@@ -1,0 +1,188 @@
+/* =============== Tokens  =============== */
+:root{
+  --ink:#111827;
+  --muted:#6b7280;
+  --bg:#f3f4f6;
+  --panel:#ffffff;
+  --ring:#e5e7eb;
+  --accent:#2563eb;
+  --accent-ink:#ffffff;
+
+  --nav-h: 64px;
+  --fab-gap: 16px;
+  --overlay-z: 1000;
+  --popup-z: 1001;
+}
+
+/* =============== Page container =============== */
+.page{
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px calc(var(--nav-h) + 32px);
+}
+@media (min-width:900px){
+  .page{ padding: 28px 28px calc(var(--nav-h) + 40px); }
+}
+
+/* =============== Section headings -> like Figma =============== */
+.sheet h1{
+  margin: 0 0 14px;
+  font-size: 28px;
+  font-weight: 900;
+  text-align: left;                 /* from centered -> left */
+}
+.sheet h2{
+  margin: 8px 0 12px;
+  font-size: 24px;                  /* bigger */
+  font-weight: 900;
+  text-align: left;
+}
+
+/* =============== Panels =============== */
+.sheet{
+  background: var(--panel);
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+
+/* =============== grey strips =============== */
+form{ display:flex; flex-direction:column; gap: 12px; }
+
+.field{
+  display: grid;
+  grid-template-columns: 1fr auto;     /* input | button or input | unit */
+  align-items: center;
+  gap: 12px;
+
+  background: #e5e7eb;                  /* grey strip */
+  border: 1px solid var(--ring);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+/* Input inside grey strip: remove its own box so it looks like the mock */
+.field .input{
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;                           /* strip handles padding */
+  font-size: 18px;
+  color: var(--ink);
+  outline: none;
+}
+.field .input.small{ max-width: none; } /* stretch in weight row */
+
+/* Right-side elements inside the strip */
+.field .btn{
+  background: #d1d5db;                  /* subtle grey like Figma */
+  color: #111827;
+  border: 1px solid #c7cdd6;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.field .unit{
+  color:#4b5563;
+  font-weight:700;
+  border: 0;                             /* text-only on the right */
+  background: transparent;
+  min-width: auto;
+  padding: 0;
+  text-align: right;
+}
+
+/* =============== Results container & cards =============== */
+.sheet .list{
+  background: #eef0f2;                  /* large light-grey box */
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card{
+  background: #e5e7eb;                  /* inner grey rows */
+  border: 1px solid #d7dbe2;
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr auto;      /* meta | Add */
+  align-items: center;
+  gap: 12px;
+}
+.meta{ display:flex; flex-direction:column; gap:6px; }
+.food-name{ font-weight: 700; }
+.nutri{ color:#4b5563; font-size: 14px; }
+
+.card .btn{
+  background:#d1d5db;
+  color:#111827;
+  border:1px solid #c7cdd6;
+  padding:8px 12px;
+  border-radius:8px;
+  font-weight:700;
+}
+
+/* =============== Bottom nav / Intake / Popup (unchanged styles) =============== */
+.bottom-nav{
+  position: fixed; left: 0; right: 0; bottom: 0;
+  display: flex; align-items: center; gap: 8px;
+  height: var(--nav-h);
+  border-top: 1px solid var(--ring);
+  background: #fafafa;
+  padding: 8px 12px;
+  z-index: 500;
+}
+.bottom-nav .btn.full{
+  width: 100%;
+  height: 56px;
+  padding: 0 14px;
+  background: #f3f4f6;
+  color: #111827;
+  border: 1px solid var(--ring);
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.floating-btn{
+  position: fixed;
+  right: var(--fab-gap);
+  bottom: calc(var(--nav-h) + var(--fab-gap));
+  z-index: 700;
+}
+
+.popup-overlay{
+  position: fixed; inset: 0;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,.35);
+  z-index: var(--overlay-z);
+  backdrop-filter: saturate(120%) blur(2px);
+}
+.popup-card{
+  position: relative;
+  width: min(92vw, 720px);
+  background: var(--panel);
+  border: 1px solid var(--ring);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0,0,0,.18);
+  padding: 24px 28px;
+  z-index: var(--popup-z);
+  text-align: left;
+}
+.popup-card h2{ margin:0 0 10px; font-size:20px; font-weight:800; }
+.popup-card p{ margin:0; font-size:16px; }
+.close-btn{ position:absolute; top:10px; right:10px; padding:6px 10px; border-radius:8px; font-weight:700; }
+
+/* =============== States & small screens =============== */
+.loading{ color: var(--muted); }
+.error{ color: #b91c1c; font-weight: 700; }
+
+@media (max-width:520px){
+  /* still stack rows nicely when narrow */
+  .field{ grid-template-columns: 1fr auto; }
+  .bottom-nav{ height: 56px; }
+}
