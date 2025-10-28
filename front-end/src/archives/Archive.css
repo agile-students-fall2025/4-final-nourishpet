@@ -1,9 +1,23 @@
+.Archive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-top: 40px;
+  padding-bottom: 70px;
+}
+
 .Archive h1{
-    text-align: center;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 .record-list {
   max-width: 400px;
+  width: 100%;
   margin: 20px auto;
 }
 
@@ -16,21 +30,27 @@
 }
 
 .date-link {
-  flex: 1;                 /* Gives this column 1 "part" of the space */
+  flex: 2;                 /* Gives this column 1 "part" of the space */
   text-decoration: none;
-  color: #333;
+  background-color: #eee;
   text-align: center;
+  padding: 5px 10px;
+}
+
+.date-link:hover {
+  color: #6fa3ef;
 }
 
 .date-item {
   font-size: 14px;
   padding: 10px;
   font-weight: 500;
+  color: #333;
 }
 
 .record-status {
-  flex: 2;                 /* Gives this column 2 "parts" of the space */
-  text-align: left;        /* Aligns text to the left */
+  flex: 3;                 /* Gives this column 2 "parts" of the space */
+  text-align: center;        /* Aligns text to the left */
   padding-left: 20px;
   font-weight: 500;
 }
@@ -87,36 +107,4 @@
   margin: auto;
 }
 
-
-.footer {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #eee;
-  padding: 18px 0;
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 430px;
-  border-top: 1px solid #ddd;
-}
-
-.footer-link {
-  flex: 1;
-  text-decoration: none;
-  color: #333;
-  text-align: center;
-}
-
-.footer-item {
-  font-size: 14px;
-  padding: 10px;
-  font-weight: 500;
-}
-
-.footer-link:hover .footer-item {
-  color: #6fa3ef;
-}
 
