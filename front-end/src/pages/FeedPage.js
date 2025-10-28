@@ -105,7 +105,7 @@ function FeedPage() {
         />
 
         <div className="floating-btn">
-          <Link to="/archives/histrecord/:id">
+          <Link to="/archives/histrecord/1">
             <button className="btn">Intake</button>
           </Link>
         </div>
