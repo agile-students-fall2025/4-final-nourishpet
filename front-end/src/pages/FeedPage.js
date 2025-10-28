@@ -1,9 +1,12 @@
 // FeedPage.js
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import "./FeedPage.css";
+import Footer from "../components/Footer";
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL = "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
+const MOCKAROO_URL =
+  "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
 
 const fmt = (n) => {
   const v = Number(n);
@@ -16,10 +19,16 @@ function parseDailyRecord(rec) {
   const foods = Array.isArray(rec?.["Food List"]) ? rec["Food List"] : [];
   const grams = Array.isArray(rec?.["Gram List"]) ? rec["Gram List"] : [];
   const prots = Array.isArray(rec?.["Protein List"]) ? rec["Protein List"] : [];
-  const fats  = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
+  const fats = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
   const carbs = Array.isArray(rec?.["Carbs List"]) ? rec["Carbs List"] : [];
 
-  const len = Math.max(foods.length, grams.length, prots.length, fats.length, carbs.length);
+  const len = Math.max(
+    foods.length,
+    grams.length,
+    prots.length,
+    fats.length,
+    carbs.length
+  );
   const rows = [];
   for (let i = 0; i < len; i++) {
     rows.push({
@@ -40,7 +49,7 @@ function FeedPage() {
   const [rows, setRows] = useState([]); // flattened rows (no date)
   const [error, setError] = useState("");
   const [grams, setGrams] = useState("150"); // user-entered grams
-  const [showConfirm, setShowConfirm] = useState(false); // NEW: confirmation popup
+  const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
 
   // Filter then take just ONE result
   const oneResult = useMemo(() => {
@@ -48,7 +57,7 @@ function FeedPage() {
     const filtered = q
       ? rows.filter((r) => String(r.food).toLowerCase().includes(q))
       : rows;
-    return filtered[0] || null; // only the first match
+    return filtered[0] || null;
   }, [rows, query]);
 
   const handleSearch = async (e) => {
@@ -74,107 +83,72 @@ function FeedPage() {
   };
 
   return (
-    <div>
-      <style>{`
-        :root{--bg:#f7f7f8;--card:#fff;--ink:#111827;--muted:#6b7280;--ring:#e5e7eb;--accent:#eef2f7;}
-        body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,sans-serif}
-        .app{max-width:960px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
-        .page{flex:1;padding:20px}
-        .sheet{background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:18px}
-        h1{font-size:22px;margin:6px 0 12px}
-        h2{font-size:18px;margin:18px 0 10px}
-        .field{display:flex;gap:10px;align-items:center;margin:8px 0}
-        .input{flex:1;background:#f2f4f7;border:1px solid var(--ring);padding:14px 12px;border-radius:10px;font-size:16px}
-        .input.small{max-width:240px}
-        .suffix{font-size:12px;color:var(--muted);margin-left:8px}
-        .btn{border:1px solid var(--ring);background:#f2f4f7;padding:10px 14px;border-radius:10px;font-weight:600;cursor:pointer}
-        .btn:disabled{opacity:.5;cursor:not-allowed}
-        .list{display:flex;flex-direction:column;gap:12px;margin-top:8px}
-        .card{background:var(--accent);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:12px;border:1px solid var(--ring)}
-        .card .meta{flex:1}
-        .nutri{font-size:12px;color:var(--muted)}
-        .muted{color:var(--muted)}
+    <div className="app">
+      <main className="page">
+        <FeedHeader />
 
-        /* --- lightweight modal styles --- */
-        .overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:50}
-        .modal{background:#e0e0e0;border-radius:12px;max-width:720px;width:90%;padding:32px;position:relative}
-        .modal h3{margin:0 0 8px;font-size:28px}
-        .modal p{margin:0;font-size:22px;line-height:1.35}
-        .modal .close{position:absolute;top:10px;right:10px;border:1px solid var(--ring);background:#f2f4f7;border-radius:8px;padding:6px 10px;font-weight:700;cursor:pointer}
-      `}</style>
+        <FeedSearchSection
+          query={query}
+          setQuery={setQuery}
+          onSearch={handleSearch}
+          grams={grams}
+          setGrams={setGrams}
+        />
 
-      <div className="app">
-        <main className="page">
-          <FeedHeader />
+        <FeedOneResult
+          show={didSearch}
+          loading={loading}
+          error={error}
+          item={oneResult}
+          grams={grams}
+          onAdd={() => setShowConfirm(true)}
+        />
 
-          <FeedSearchSection
-            query={query}
-            setQuery={setQuery}
-            onSearch={handleSearch}
-            grams={grams}
-            setGrams={setGrams}
-          />
+        <div className="floating-btn">
+          <Link to="/archives/histrecord/:id">
+            <button className="btn">Intake</button>
+          </Link>
+        </div>
 
-          <FeedOneResult
-            show={didSearch}
-            loading={loading}
-            error={error}
-            item={oneResult}
-            grams={grams}
-            onAdd={() => setShowConfirm(true)} // show popup on Add
-          />
 
-          {/* Bottom-right floating Intake button -> /archieve */}
-          <div style={{ position: "fixed", right: 16, bottom: 96, zIndex: 10 }}>
-            <Link to="/petpage">
-              <button className="btn">Intake</button>
-            </Link>
-          </div>
+      </main>
 
-          <nav
-            style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: "flex",
-              borderTop: "1px solid #ddd",
-              background: "#fafafa",
-            }}
-          >
-            <Link to="/" style={{ flex: 1 }}>
-              <button className="btn" style={{ width: "100%", padding: 14 }}>
-                Logo / Home
-              </button>
-            </Link>
-          </nav>
-        </main>
-      </div>
+      {/* Footer sits below main content */}
+      <Footer />
 
       {/* Confirmation popup */}
       {showConfirm && (
-        <div className="overlay" role="dialog" aria-modal="true" aria-label="Item added">
-          <div className="modal">
-            <button className="close" onClick={() => setShowConfirm(false)} aria-label="Close">×</button>
-            <h3>Successfully Added!</h3>
+        <div
+          className="popup-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Item added"
+        >
+          <div className="popup-card">
+            <button
+              className="btn close-btn"
+              onClick={() => setShowConfirm(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <h2>Successfully Added!</h2>
             <p>You can check your ingredients in Intake!</p>
           </div>
         </div>
       )}
 
-      <button className="btn" style={{ margin: 16 }}>
-        <Link to="/">Home Page</Link>
-      </button>
+      
     </div>
   );
 }
 
-/* ===== child components (like UserPage) ===== */
+/* ===== child components ===== */
 
 function FeedHeader() {
   return (
-    <div className="page-header" style={{ display: "flex", justifyContent: "space-between", marginBottom: 24 }}>
-      <h1 style={{ margin: 0 }}>Feed Page</h1>
+    <div className="page-header">
+      <h1>Feed Page</h1>
       <Link to="/userpage">
         <button className="btn">User</button>
       </Link>
@@ -203,7 +177,7 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
         </div>
 
         {/* Grams row */}
-        <div className="field" style={{ marginTop: 8 }}>
+        <div className="field">
           <input
             className="input small"
             id="grams"
@@ -212,7 +186,7 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
             value={grams}
             onChange={(e) => setGrams(e.target.value)}
           />
-          <span className="suffix">Gram</span>
+          <span className="unit">Gram</span>
         </div>
       </form>
     </section>
@@ -235,11 +209,11 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
     : null;
 
   return (
-    <section className="sheet" style={{ marginTop: 16 }}>
+    <section className="sheet">
       <h2>Nutrition facts</h2>
 
-      {loading && <div>Loading…</div>}
-      {!loading && error && <div style={{ color: "crimson" }}>{error}</div>}
+      {loading && <div className="loading">Loading…</div>}
+      {!loading && error && <div className="error">{error}</div>}
 
       {!loading && !error && (
         <div className="list">
@@ -248,16 +222,17 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
           {item && (
             <div className="card">
               <div className="meta">
-                <div style={{ fontWeight: 600 }}>{item.food}</div>
-                <div className="nutri" style={{ marginBottom: 4 }}>
-                  Per 100 g — Carbs: {fmt(item.carbs)} g · Protein: {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
+                <div className="food-name">{item.food}</div>
+                <div className="nutri">
+                  Per 100 g — Carbs: {fmt(item.carbs)} g · Protein:{" "}
+                  {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
                 </div>
                 <div className="nutri">
-                  For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein: {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
+                  For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein:{" "}
+                  {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
                 </div>
               </div>
 
-              {/* Add -> opens confirmation popup */}
               <button className="btn" type="button" onClick={onAdd}>
                 Add
               </button>
