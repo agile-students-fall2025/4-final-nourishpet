@@ -1,7 +1,7 @@
 // FeedPage.js
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import "./FeedPage.css";
+import "../css/FeedPage.css";
 import Footer from "../components/Footer";
 
 /** Uses your Mockaroo endpoint directly; fetch only on Search click */
