@@ -1,188 +1,189 @@
-/* =============== Tokens  =============== */
+/* ================= Match homepage container ================= */
 :root{
-  --ink:#111827;
-  --muted:#6b7280;
-  --bg:#f3f4f6;
-  --panel:#ffffff;
-  --ring:#e5e7eb;
-  --accent:#2563eb;
-  --accent-ink:#ffffff;
-
-  --nav-h: 64px;
-  --fab-gap: 16px;
-  --overlay-z: 1000;
-  --popup-z: 1001;
+  --nav-h: 70px; /* footer height */
 }
+/* Constrain like .homepage: min-height + max-width + bottom padding */
+.app{ background-color: var(--bg); }
 
-/* =============== Page container =============== */
 .page{
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 16px 16px calc(var(--nav-h) + 32px);
-}
-@media (min-width:900px){
-  .page{ padding: 28px 28px calc(var(--nav-h) + 40px); }
+  padding-bottom: calc(var(--nav-h) + max(24px, env(safe-area-inset-bottom)) + 48px);
 }
 
-/* =============== Section headings -> like Figma =============== */
-.sheet h1{
-  margin: 0 0 14px;
-  font-size: 28px;
-  font-weight: 900;
-  text-align: left;                 /* from centered -> left */
-}
-.sheet h2{
-  margin: 8px 0 12px;
-  font-size: 24px;                  /* bigger */
-  font-weight: 900;
-  text-align: left;
+/* ================= Header (User button like homepage) ================= */
+.page-header{
+  position: relative;              /* to anchor the User button */
+  display: flex;
+  justify-content: center;         /* center the title */
+  align-items: center;
+  padding: 15px 0;
+  margin: 0 0 20px 0;
 }
 
-/* =============== Panels =============== */
+.page-header h1{
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+/* User button looks like homepage .user-button and sits top-right */
+.page-header .btn{
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  background-color: #eee;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+}
+
+/* ================= Intake button like homepage ================= */
+/* Absolute inside .page, raised above the fixed bottom bar */
+.floating-btn{
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--nav-h) + max(16px, env(safe-area-inset-bottom)) + 16px);
+  z-index: 700;
+}
+.floating-btn .btn{
+  background:#eee; color:#333; border:none; border-radius:4px; padding:10px 20px;
+}
+/* ================= Bottom area (looks like homepage blocks) ================= */
+/* footer also accounts for safe-area */
+.bottom-nav{
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+}
+
+/* Each button looks like a block cell */
+.bottom-nav .btn.full{
+  width: 100%;
+  height: 100%;
+  background: transparent;             /* let parent grey show through */
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-right: 1px solid #fff;        /* subtle separators */
+  border-radius: 0;
+}
+.bottom-nav .btn.full:last-child{ border-right: none; }
+
+/* ================= Form strips & list ================= */
 .sheet{
   background: var(--panel);
   border: 1px solid var(--ring);
   border-radius: 12px;
   padding: 18px;
-  margin-bottom: 16px;
+  margin: 0 20px 18px;                 /* side gutters like homepage main */
 }
 
-/* =============== grey strips =============== */
-form{ display:flex; flex-direction:column; gap: 12px; }
+.sheet h1{
+  margin: 0 0 14px;
+  font-size: 26px;                     /* match homepage headings */
+  font-weight: 600;
+  text-align: left;
+}
+.sheet h2{
+  margin: 8px 0 12px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: left;
+}
 
+/* grey strip rows like the homepage blocks */
+form{ display:flex; flex-direction:column; gap: 16px; }
 .field{
   display: grid;
-  grid-template-columns: 1fr auto;     /* input | button or input | unit */
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 12px;
-
-  background: #e5e7eb;                  /* grey strip */
-  border: 1px solid var(--ring);
-  border-radius: 10px;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius: 6px;                  /* same radius vibe as homepage */
   padding: 12px 14px;
 }
-
-/* Input inside grey strip: remove its own box so it looks like the mock */
 .field .input{
-  width: 100%;
   background: transparent;
   border: none;
-  padding: 0;                           /* strip handles padding */
+  padding: 0;
   font-size: 18px;
-  color: var(--ink);
+  color: #333;
   outline: none;
 }
-.field .input.small{ max-width: none; } /* stretch in weight row */
-
-/* Right-side elements inside the strip */
 .field .btn{
-  background: #d1d5db;                  /* subtle grey like Figma */
-  color: #111827;
-  border: 1px solid #c7cdd6;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: 700;
+  background:#d1d5db;
+  color:#333;
+  border:none;
+  border-radius:4px;
+  padding:10px 16px;
+  font-weight:600;
 }
-.field .unit{
-  color:#4b5563;
-  font-weight:700;
-  border: 0;                             /* text-only on the right */
-  background: transparent;
-  min-width: auto;
-  padding: 0;
-  text-align: right;
+.unit{
+  color:#666;
+  font-size:14px;
+  font-weight:600;
 }
 
-/* =============== Results container & cards =============== */
-.sheet .list{
-  background: #eef0f2;                  /* large light-grey box */
-  border: 1px solid var(--ring);
-  border-radius: 12px;
+/* Results container & item rows to echo homepage grey cards */
+.list{
+  background:#eee;
+  border:1px solid #ddd;
+  border-radius:6px;
   padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
 }
-
 .card{
-  background: #e5e7eb;                  /* inner grey rows */
-  border: 1px solid #d7dbe2;
-  border-radius: 10px;
-  padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1fr auto;      /* meta | Add */
-  align-items: center;
-  gap: 12px;
+  background:#eee;
+  border:1px solid #d7dbe2;
+  border-radius:6px;
+  padding:14px 16px;
+  display:grid;
+  grid-template-columns: 1fr auto;
+  align-items:center;
+  gap:12px;
 }
-.meta{ display:flex; flex-direction:column; gap:6px; }
-.food-name{ font-weight: 700; }
-.nutri{ color:#4b5563; font-size: 14px; }
-
 .card .btn{
   background:#d1d5db;
-  color:#111827;
-  border:1px solid #c7cdd6;
+  color:#333;
+  border:none;
+  border-radius:4px;
   padding:8px 12px;
-  border-radius:8px;
-  font-weight:700;
+  font-weight:600;
 }
+.food-name{ font-weight:700; }
+.nutri{ color:#4b5563; font-size:14px; }
 
-/* =============== Bottom nav / Intake / Popup (unchanged styles) =============== */
-.bottom-nav{
-  position: fixed; left: 0; right: 0; bottom: 0;
-  display: flex; align-items: center; gap: 8px;
-  height: var(--nav-h);
-  border-top: 1px solid var(--ring);
-  background: #fafafa;
-  padding: 8px 12px;
-  z-index: 500;
-}
-.bottom-nav .btn.full{
-  width: 100%;
-  height: 56px;
-  padding: 0 14px;
-  background: #f3f4f6;
-  color: #111827;
-  border: 1px solid var(--ring);
-  border-radius: 10px;
-  font-weight: 700;
-}
-
-.floating-btn{
-  position: fixed;
-  right: var(--fab-gap);
-  bottom: calc(var(--nav-h) + var(--fab-gap));
-  z-index: 700;
-}
-
+/* Popup (unchanged) */
 .popup-overlay{
-  position: fixed; inset: 0;
-  display:flex; align-items:center; justify-content:center;
-  background: rgba(0,0,0,.35);
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;         /* vertical center */
+  justify-content: center;     /* horizontal center */
+  background: rgba(0,0,0,.45); /* a touch darker for clarity */
   z-index: var(--overlay-z);
-  backdrop-filter: saturate(120%) blur(2px);
+  backdrop-filter: saturate(120%) blur(3px);
 }
+
 .popup-card{
   position: relative;
-  width: min(92vw, 720px);
-  background: var(--panel);
+  width: min(92vw, 430px);
+  background: #fff;
   border: 1px solid var(--ring);
   border-radius: 12px;
-  box-shadow: 0 12px 32px rgba(0,0,0,.18);
+  box-shadow: 0 18px 48px rgba(0,0,0,.28);
   padding: 24px 28px;
   z-index: var(--popup-z);
   text-align: left;
 }
-.popup-card h2{ margin:0 0 10px; font-size:20px; font-weight:800; }
-.popup-card p{ margin:0; font-size:16px; }
-.close-btn{ position:absolute; top:10px; right:10px; padding:6px 10px; border-radius:8px; font-weight:700; }
+.close-btn{ position:absolute; top:10px; right:10px; }
 
-/* =============== States & small screens =============== */
-.loading{ color: var(--muted); }
-.error{ color: #b91c1c; font-weight: 700; }
-
+/* Small screens: keep layout sturdy */
 @media (max-width:520px){
-  /* still stack rows nicely when narrow */
   .field{ grid-template-columns: 1fr auto; }
-  .bottom-nav{ height: 56px; }
 }
