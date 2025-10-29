@@ -6,10 +6,12 @@
 }
 
 .page-header {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 15px 0;
+  margin: 0 0 20px 0;
 }
 
 .user-info-display {
@@ -20,6 +22,20 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.page-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.edit-button-container {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
 .edit-user-info-display {
@@ -49,6 +65,13 @@
   overflow: hidden;
 }
 
+.user-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #333;
+}
+
 .user-details {
   text-align: center;
   margin: 15px 0 40px 0;
@@ -64,12 +87,6 @@
   padding: 20px;
   max-width: 600px;
   margin: 0 auto;
-}
-
-.page-header h1 {
-  color: #666;
-  font-size: 18px;
-  margin-bottom: 20px;
 }
 
 .form-section {
@@ -113,16 +130,13 @@
 }
 
 .confirm, .cancel {
-  padding: 12px 24px;
-  border: 1px solid #6c757d;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  cursor: pointer;
+  background-color: #eee;
+  padding: 10px 20px;
   text-decoration: none;
-  color: #495057;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s ease;
+  color: #333;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
 }
 
 .confirm:hover, .cancel:hover {
@@ -164,26 +178,41 @@
   border-radius: 50%;
 }
 
-.edit-button, .logout-button {
-  padding: 12px 24px;
-  border: 1px solid #6c757d;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  cursor: pointer;
+.edit-button-container .edit-button {
+  position: absolute !important;
+  right: 20px !important;
+  top: -70px !important;
+  background-color: #eee !important;
+  padding: 10px 20px !important;
+  text-decoration: none !important;
+  color: #333 !important;
+  font-size: 14px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.logout-button {
+  background-color: #eee;
+  padding: 10px 20px;
   text-decoration: none;
-  color: #495057;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #333;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.edit-button:hover, .logout-button:hover {
-  background-color: #e9ecef;
-  border-color: #495057;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.edit-button-container .edit-button:hover, .logout-button:hover {
+  background-color: #e9ecef !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
 
-.edit-button a, .logout-button a {
-  text-decoration: none;
-  color: inherit;
+.edit-button-container .edit-button a, .logout-button a {
+  text-decoration: none !important;
+  color: inherit !important;
+  display: block !important;
 }
+

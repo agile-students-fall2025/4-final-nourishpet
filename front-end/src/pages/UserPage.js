@@ -33,22 +33,25 @@ function UserPage(){
     }
     
     return(
-        <div>
-            <div className="user-page">
-                <div className="page-header">
-                    <h1>User Page</h1>
-                    <EditButton />
-                </div>
-            
-                <UserInfoDisplay userData={userData} />
-                
-                <LogoutButton />
+      <div>
+          <div className="user-page">
+              <div className="page-header">
+                  <h1>User Page</h1>
+              </div>
+              
+              <div className="edit-button-container">
+                  <EditButton />
+              </div>
+          
+              <UserInfoDisplay userData={userData} />
+              
+              <LogoutButton />
 
-            </div>
+          </div>
 
-            < Footer/>
-        </div>
-    )
+          < Footer/>
+      </div>
+  )
 }
 
 function UserInfoDisplay({ userData }){
