@@ -1,63 +1,81 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchUserData } from '../services/mockApi';
+import UserImage from './UserImage';
+import '../css/UserPage.css';
+import Footer from '../components/Footer.js'
 
 function UserPage(){
-    const [userData, setUserData] = useState({
-        name: "Charlie",
-        petName: "Charlie's dog",
-        targetWeight: "50kg",
-        height: "160cm",
-        currentWeight: "55kg",
-        bmi: "21.5 Standard"
-      });
+    const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+      const loadUserData = async () => {
+        try {
+          const data = await fetchUserData();
+          setUserData(data);
+        } catch (error){
+          console.error('Failed to fetch user data:', error);
+        } finally{
+          setLoading(false);
+        }
+      };
+
+      loadUserData();
+    }, []);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
+    if (!userData) {
+        return <div>Failed to load user data</div>;
+    }
+    
     return(
-        <div>
-            <div className="user-page">
-                <div className="page-header">
-                    <h1>User Page</h1>
-                    <EditButton />
-                </div>
-            
-            <UserInfoDisplay userData={userData} />
-            
-            <LogoutButton />
-            </div>
+      <div>
+          <div className="user-page">
+              <div className="page-header">
+                  <h1>User Page</h1>
+              </div>
+              
+              <div className="edit-button-container">
+                  <EditButton />
+              </div>
+          
+              <UserInfoDisplay userData={userData} />
+              
+              <LogoutButton />
 
-            <button>
-                <Link to="/">Home Page</Link>
-            </button>
-        </div>
-    )
+          </div>
+
+          < Footer/>
+      </div>
+  )
 }
 
-function UserInfoDisplay( {userData} ){
+function UserInfoDisplay({ userData }){
     return (
         <div className="user-info-display">
-
-          <div className="user-portrait">
-            <div className="portrait-placeholder">
-              User Portraits
+            <UserImage />
+            
+            <h2 className="user-name">{userData.name}</h2>
+            
+            <div className="user-details">
+                <p>Pet Name: {userData.petName}</p>
+                <p>Target Weight: {userData.targetWeight}kg</p>
+                <p>Height: {userData.height}cm</p>
+                <p>Current Weight: {userData.currentWeight}kg</p>
+                <p>BMI: {userData.bmi}</p>
             </div>
-          </div>
-          
-          <h2 className="user-name">{userData.name}</h2>
-          
-          <div className="user-details">
-            <p>Pet Name: {userData.petName}</p>
-            <p>Target Weight: {userData.targetWeight}</p>
-            <p>Height: {userData.height}</p>
-            <p>Current Weight: {userData.currentWeight}</p>
-            <p>BMI: {userData.bmi}</p>
-          </div>
         </div>
-      );
+    );
 }
 
 function LogoutButton() {
     return (
       <button className="logout-button">
-        <Link to='/log_out'>Log Out</Link>
+        <Link to='/login'>Log Out</Link>
       </button>
     );
   }

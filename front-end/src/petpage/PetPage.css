@@ -21,13 +21,17 @@
   margin-top: 20px;
 }
 
-.goals-panel {
-  text-align: left;
+.status-pie {
+  width: 250px;   
+  height: 400px;
+  margin: auto;
 }
 
-.goal-item {
-  margin-bottom: 10px;
+.goals-panel {
+  text-align: left;
+  margin-left: 15px;
 }
+
 
 .goal-bar-bg {
   background: #eee;
@@ -42,3 +46,10 @@
   border-radius: 4px;
 }
 
+#date-top-right {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  margin: 0;
+  font-size: 0.9rem;
+}

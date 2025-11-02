@@ -1,0 +1,110 @@
+.Archive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding-top: 40px;
+  padding-bottom: 70px;
+}
+
+.Archive h1{
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.record-list {
+  max-width: 400px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.record-row {
+  display: flex;
+  justify-content: space-between; /* Puts space between the two items */
+  align-items: center;            /* Vertically centers them */
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.date-link {
+  flex: 2;                 /* Gives this column 1 "part" of the space */
+  text-decoration: none;
+  background-color: #eee;
+  text-align: center;
+  padding: 5px 10px;
+}
+
+.date-link:hover {
+  color: #6fa3ef;
+}
+
+.date-item {
+  font-size: 14px;
+  padding: 10px;
+  font-weight: 500;
+  color: #333;
+}
+
+.record-status {
+  flex: 3;                 /* Gives this column 2 "parts" of the space */
+  text-align: center;        /* Aligns text to the left */
+  padding-left: 20px;
+  font-weight: 500;
+}
+
+.nutrition-record {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.food-details {
+  margin-top: 20px;
+  width: 100%;
+  margin: 40px auto;
+  align-items: center;
+}
+
+.food-details p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.food-row {
+  display: flex;
+  flex-direction: row; 
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 12px 5px; 
+  align-items: center;
+  text-align: center;
+}
+
+.food-row span {
+  font-size: 0.9rem;
+  color: black;
+}
+
+.food-name {
+  font-weight: bold;
+  color: #000;
+  min-width: 120px; 
+}
+
+.food-gram{
+  text-align: center;
+}
+
+.status-pie {
+  width: 250px;   
+  height: 400px;
+  margin: auto;
+}
+
+
