@@ -105,7 +105,7 @@ function FeedPage() {
         />
 
         <div className="floating-btn">
-          <Link to="/archives/histrecord">
+          <Link to="/archives/histrecord/1">
             <button className="btn">Intake</button>
           </Link>
         </div>
@@ -130,6 +130,7 @@ function FeedPage() {
               onClick={() => setShowConfirm(false)}
               aria-label="Close"
             >
+              ×
             </button>
             <h2>Successfully Added!</h2>
             <p>You can check your ingredients in Intake!</p>
