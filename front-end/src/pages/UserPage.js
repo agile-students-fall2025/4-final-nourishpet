@@ -1,27 +1,32 @@
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { fetchUserData } from '../services/mockApi';
 import UserImage from './UserImage';
 import '../css/UserPage.css';
 import Footer from '../components/Footer.js'
+import axios from "axios";
 
 function UserPage(){
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const loadUserData = async () => {
-        try {
-          const data = await fetchUserData();
-          setUserData(data);
-        } catch (error){
-          console.error('Failed to fetch user data:', error);
-        } finally{
-          setLoading(false);
-        }
-      };
+      axios
+        .get("http://localhost:5000/api/userdata")
+        .then((res) => {
+          console.log(res.data);
+          const userData = res.data; 
 
-      loadUserData();
+          setUserData({
+            name: userData.name,
+            petName: userData.petName,
+            targetWeight: userData.targetWeight,
+            height: userData.height,
+            currentWeight: userData.currentWeight,
+            bmi: userData.bmi,
+          });
+          setLoading(false);
+        })
+        .catch((err) => console.error("Error fetching data:", err));
     }, []);
 
     if (loading) {
