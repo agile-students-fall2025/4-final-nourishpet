@@ -4,24 +4,31 @@ import { fetchUserData, updateUserData } from '../services/mockApi';
 import UserImage from './UserImage';
 import '../css/UserPage.css';
 import Footer from '../components/Footer.js'
+import axios from "axios";
+
 
 function EditUserInfo(){
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      const loadUserData = async () => {
-        try {
-          const data = await fetchUserData();
-          setUserData(data);
-        } catch (error){
-          console.error('Failed to fetch user data:', error);
-        } finally{
-          setLoading(false);
-        }
-      };
+      axios
+        .get("http://localhost:5000/api/userdata")
+        .then((res) => {
+          console.log(res.data);
+          const userData = res.data; 
 
-      loadUserData();
+          setUserData({
+            name: userData.name,
+            petName: userData.petName,
+            targetWeight: userData.targetWeight,
+            height: userData.height,
+            currentWeight: userData.currentWeight,
+            bmi: userData.bmi,
+          });
+          setLoading(false);
+        })
+        .catch((err) => console.error("Error fetching data:", err));
     }, []);
 
     if (loading) {
@@ -40,12 +47,12 @@ function EditUserInfo(){
     };
 
     const handleConfirm = async() => {
-        try {
-            await updateUserData(userData);
-            console.log('Date updated:', userData);
-        } catch (error){
-            console.error('Failed to update user data:', error);
-        }
+        axios
+            .post("http://localhost:5000/api/updateuserdata", userData)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => console.error("Error fetching data:", err));
     };
 
     return(
