@@ -19,9 +19,11 @@ function UserPage(){
           setUserData({
             name: userData.name,
             petName: userData.petName,
-            targetWeight: userData.targetWeight,
+            age: userData.age,
+            gender: userData.gender,
             height: userData.height,
             currentWeight: userData.currentWeight,
+            targetWeight: userData.targetWeight,
             bmi: userData.bmi,
           });
           setLoading(false);

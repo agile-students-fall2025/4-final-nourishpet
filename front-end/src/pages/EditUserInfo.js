@@ -21,9 +21,11 @@ function EditUserInfo(){
           setUserData({
             name: userData.name,
             petName: userData.petName,
-            targetWeight: userData.targetWeight,
+            age: userData.age,
+            gender: userData.gender,
             height: userData.height,
             currentWeight: userData.currentWeight,
+            targetWeight: userData.targetWeight,
             bmi: userData.bmi,
           });
           setLoading(false);
@@ -68,7 +70,6 @@ function EditUserInfo(){
                 <Cancel />
             </div>
 
-            < Footer/>
         </div>
     )
 }
@@ -96,17 +97,23 @@ function UserInfo({ formData, onInputChange }){
                         onChange={(e) => onInputChange('petName', e.target.value)}
                     />
                 </div>
-                
+
                 <div className="form-field">
-                    <label>Target Weight:</label>
-                    <div className="input-with-unit">
-                        <input 
-                            type="number" 
-                            value={formData.targetWeight}
-                            onChange={(e) => onInputChange('targetWeight', e.target.value)}
-                        />
-                        <span className="unit">kg</span>
-                    </div>
+                    <label>Gender:</label>
+                    <input 
+                        type="text" 
+                        value={formData.gender}
+                        onChange={(e) => onInputChange('gender', e.target.value)}
+                    />
+                </div>
+
+                <div className="form-field">
+                    <label>Age:</label>
+                    <input 
+                        type="number" 
+                        value={formData.age}
+                        onChange={(e) => onInputChange('age', e.target.value)}
+                    />
                 </div>
                 
                 <div className="form-field">
@@ -128,6 +135,18 @@ function UserInfo({ formData, onInputChange }){
                             type="number" 
                             value={formData.currentWeight}
                             onChange={(e) => onInputChange('currentWeight', e.target.value)}
+                        />
+                        <span className="unit">kg</span>
+                    </div>
+                </div>
+
+                <div className="form-field">
+                    <label>Target Weight:</label>
+                    <div className="input-with-unit">
+                        <input 
+                            type="number" 
+                            value={formData.targetWeight}
+                            onChange={(e) => onInputChange('targetWeight', e.target.value)}
                         />
                         <span className="unit">kg</span>
                     </div>
