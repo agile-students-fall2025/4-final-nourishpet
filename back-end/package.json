@@ -12,5 +12,8 @@
   "description": "",
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "morgan": "^1.10.1"
   }
 }
