@@ -7,12 +7,11 @@ const app = express();
 app.use(cors()); // allow React frontend to access backend
 app.use(express.json());
 
-const MOCKAROO_URL_PetPage = "https://api.mockaroo.com/api/0571eeb0?count=1&key=ee5ed170";
-
 app.get("/api/petdata", async (req, res) => {
   try {
-    const response = await axios.get(MOCKAROO_URL_PetPage);
-    res.json(response.data[0]);
+    const rawData = readFileSync("./temp_data/todayData.json", "utf-8");
+    const petData = JSON.parse(rawData); // convert to JS object
+    res.json(petData);
   } catch (error) {
     console.error("Error fetching data:", error.message);
     res.status(500).json({ error: "Failed to fetch data" });
