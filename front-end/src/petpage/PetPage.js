@@ -15,16 +15,14 @@ function PetPage() {
     year: "numeric"
   });
 
-  const mockurl = 'https://api.mockaroo.com/api/0571eeb0?count=1&key=ee5ed170'
-  // Fake "database fetch"
   const [petData, setPetData] = useState(null);
 
     useEffect(() => {
     axios
-      .get(mockurl)
+      .get("http://localhost:5000/api/petdata")
       .then((res) => {
         console.log(res);
-        const todayData = res.data[0]; 
+        const todayData = res.data; 
 
         setPetData({
           petName: "Charlie",
