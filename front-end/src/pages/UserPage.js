@@ -19,9 +19,11 @@ function UserPage(){
           setUserData({
             name: userData.name,
             petName: userData.petName,
-            targetWeight: userData.targetWeight,
+            age: userData.age,
+            gender: userData.gender,
             height: userData.height,
             currentWeight: userData.currentWeight,
+            targetWeight: userData.targetWeight,
             bmi: userData.bmi,
           });
           setLoading(false);
@@ -38,21 +40,20 @@ function UserPage(){
     }
     
     return(
-      <div>
-          <div className="user-page">
+      <div className="homepage">
+          <header className="homepage-header">
+              <EditButton />
+          </header>
+
+          <main className="homepage-main">
               <div className="page-header">
-                  <h1>User Page</h1>
-              </div>
-              
-              <div className="edit-button-container">
-                  <EditButton />
+                  <h1 className="app-title">User Page</h1>
               </div>
           
               <UserInfoDisplay userData={userData} />
               
               <LogoutButton />
-
-          </div>
+          </main>
 
           < Footer/>
       </div>
@@ -61,35 +62,39 @@ function UserPage(){
 
 function UserInfoDisplay({ userData }){
     return (
-        <div className="user-info-display">
-            <UserImage />
-            
-            <h2 className="user-name">{userData.name}</h2>
-            
-            <div className="user-details">
-                <p>Pet Name: {userData.petName}</p>
-                <p>Target Weight: {userData.targetWeight}kg</p>
-                <p>Height: {userData.height}cm</p>
-                <p>Current Weight: {userData.currentWeight}kg</p>
-                <p>BMI: {userData.bmi}</p>
+        <section className="nutrition-section">
+            <div className="nutrition-chart">
+                <UserImage />
+                
+                <h2 className="app-title" style={{marginTop: '20px', marginBottom: '15px'}}>{userData.name}</h2>
+                
+                <div className="user-details-simple">
+                    <p><span className="detail-label">Pet Name:</span> <span className="detail-value">{userData.petName}</span></p>
+                    <p><span className="detail-label">Age:</span> <span className="detail-value">{userData.age}</span></p>
+                    <p><span className="detail-label">Gender:</span> <span className="detail-value">{userData.gender}</span></p>
+                    <p><span className="detail-label">Height:</span> <span className="detail-value">{userData.height}cm</span></p>
+                    <p><span className="detail-label">Current Weight:</span> <span className="detail-value">{userData.currentWeight}kg</span></p>
+                    <p><span className="detail-label">Target Weight:</span> <span className="detail-value">{userData.targetWeight}kg</span></p>
+                    <p><span className="detail-label">BMI:</span> <span className="detail-value">{userData.bmi}</span></p>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
 
 function LogoutButton() {
     return (
-      <button className="logout-button">
-        <Link to='/login'>Log Out</Link>
-      </button>
+      <Link to='/login' className="user-button" style={{display: 'inline-block', textAlign: 'center', marginTop: '20px'}}>
+        Log Out
+      </Link>
     );
   }
 
 function EditButton() {
 return (
-    <button className="edit-button">
-        <Link to='/editUserInfo'>Edit</Link>
-    </button>
+    <Link to='/editUserInfo' className="user-button">
+        Edit
+    </Link>
 );
 }
 
