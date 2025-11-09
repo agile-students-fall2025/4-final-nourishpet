@@ -36,16 +36,17 @@ function WeekArchive() {
                 {records.map(record =>{
                     const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
                     const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
+                    const rowHighlighted = goalstatus ? 'record-row-goal-reached' : '';
 
                     return (
                         
-                        <div className='record-row' key={record.id}>
+                        <div className={`record-row ${rowHighlighted}`} key={record.id}>
                         
                             <Link to={`/archives/histrecord/${record.id}`} className='date-link'>
                                 <div className='date-item'>{record.Date}</div>
                             </Link> 
 
-                            <div className='record-status'>
+                            <div className={`record-status`}>
                                 {statusText}
                             </div>
                         </div>
