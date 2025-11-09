@@ -24,6 +24,19 @@ app.get("/api/petdata", async (req, res) => {
   }
 });
 
+app.get("/api/histdata", async (req, res) => {
+  try {
+    //const idToFind = parseInt(req.params.id);
+    const rawData = readFileSync(path.join(__dirname, "temp_data", "histData.json"), "utf-8");
+    const histData = JSON.parse(rawData);
+    //const recordToFind = histData.find(r => r.id === idToFind)
+    res.json(histData);
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    res.status(500).json({ error: "Failed to fetch data" });
+  }
+});
+
 app.get("/api/userdata", async (req, res) => {
   const userData = readFileSync("./temp_data/userData.json", "utf8");
   res.json(JSON.parse(userData));
