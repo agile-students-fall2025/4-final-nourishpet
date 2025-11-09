@@ -53,7 +53,7 @@ function PetPage() {
 
   return (
     <div className="pet-page">
-      <h3>Pet Page</h3>
+      <h1>Pet Page</h1>
       <p id="date-top-right">{today}</p>
 
       <PetImage petName={petName} />
