@@ -48,5 +48,44 @@ app.post("/api/updateuserdata", async (req, res) => {
   res.json({ message: "User data updated successfully" });
 });
 
+function archiveTodayData() {
+  const todayPath = path.join(__dirname, "temp_data", "todayData.json");
+  const savePath = path.join(__dirname, "temp_data", "save.json");
+
+  try {
+    const todayData = JSON.parse(readFileSync(todayPath, "utf8"));
+
+    writeFileSync(
+      savePath,
+      JSON.stringify(
+        {
+          date: new Date().toISOString().split("T")[0],
+          ...todayData
+        },
+        null,
+        2
+      )
+    );
+
+    const reset = {
+      "Total Intake": 0,
+      "Protein": 0,
+      "Carbs": 0,
+      "Fat": 0,
+      "Total Intake Goal": 2000,
+      "Protein Goal": 120,
+      "Carbs Goal": 250,
+      "Fat Goal": 70
+    };
+
+    writeFileSync(todayPath, JSON.stringify(reset, null, 2));
+  } catch {}
+}
+
+setInterval(() => {
+  const now = new Date();
+  if (now.getHours() === 23 && now.getMinutes() === 59) archiveTodayData();
+}, 60000);
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
