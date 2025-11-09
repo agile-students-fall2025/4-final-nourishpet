@@ -37,6 +37,19 @@ app.get("/api/histdata", async (req, res) => {
   }
 });
 
+app.get("/api/fooddata", async (req, res) => {
+  try {
+    //const idToFind = parseInt(req.params.id);
+    const rawData = readFileSync(path.join(__dirname, "temp_data", "foodData.json"), "utf-8");
+    const foodData = JSON.parse(rawData);
+    //const recordToFind = histData.find(r => r.id === idToFind)
+    res.json(foodData);
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    res.status(500).json({ error: "Failed to fetch data" });
+  }
+});
+
 app.get("/api/userdata", async (req, res) => {
   const userData = readFileSync("./temp_data/userData.json", "utf8");
   res.json(JSON.parse(userData));

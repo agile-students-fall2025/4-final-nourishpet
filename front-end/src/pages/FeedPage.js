@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 import "../css/FeedPage.css";
 import Footer from "../components/Footer";
 
-/** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL =
-  "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
+const foodDB = "http://localhost:5000/api/fooddata";
 
 const fmt = (n) => {
   const v = Number(n);
@@ -15,6 +13,7 @@ const fmt = (n) => {
 };
 
 // Parse one day's record (matches your sample JSON keys)
+/*
 function parseDailyRecord(rec) {
   const foods = Array.isArray(rec?.["Food List"]) ? rec["Food List"] : [];
   const grams = Array.isArray(rec?.["Gram List"]) ? rec["Gram List"] : [];
@@ -41,6 +40,7 @@ function parseDailyRecord(rec) {
   }
   return rows;
 }
+  */
 
 function FeedPage() {
   const [query, setQuery] = useState("");
@@ -66,16 +66,19 @@ function FeedPage() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch(MOCKAROO_URL, {
+      const res = await fetch(foodDB, {
         credentials: "omit",
         headers: { Accept: "application/json" },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const flat = (Array.isArray(data) ? data : []).flatMap(parseDailyRecord);
-      setRows(flat);
+      if (!Array.isArray(data)) {
+        throw new Error("Food DB data is not an array");
+      }
+      // Your data is already the flat list of foods. Just set it.
+      setRows(data);
     } catch (err) {
-      setError(`Failed to load Mockaroo data (${err.message}).`);
+      setError(`Failed to load foodDB (${err.message}).`);
       setRows([]);
     } finally {
       setLoading(false);
@@ -149,9 +152,6 @@ function FeedHeader() {
   return (
     <div className="page-header">
       <h1>Feed Page</h1>
-      <Link to="/userpage">
-        <button className="btn">User</button>
-      </Link>
     </div>
   );
 }

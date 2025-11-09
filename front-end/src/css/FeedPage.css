@@ -7,6 +7,7 @@
 
 .page{
   padding-bottom: calc(var(--nav-h) + max(24px, env(safe-area-inset-bottom)) + 48px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
 }
 
 /* ================= Header (User button like homepage) ================= */
@@ -20,24 +21,15 @@
 }
 
 .page-header h1{
-  font-size: 26px;
-  font-weight: 700;
   margin: 0;
   text-align: center;
-}
-
-/* User button looks like homepage .user-button and sits top-right */
-.page-header .btn{
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  background-color: #eee;
-  padding: 10px 20px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
+  padding: 20px 25px;
+  transition: transform 0.3s ease;
+  color: #2d3748;
+  font-size: 27px;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.5px;
 }
 
 /* ================= Intake button like homepage ================= */
@@ -49,7 +41,16 @@
   z-index: 700;
 }
 .floating-btn .btn{
-  background:#eee; color:#333; border:none; border-radius:4px; padding:10px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 24px;
+  text-decoration: none;
+  color: #4db8c4;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 /* ================= Bottom area (looks like homepage blocks) ================= */
 /* footer also accounts for safe-area */
@@ -96,14 +97,14 @@
 /* grey strip rows like the homepage blocks */
 form{ display:flex; flex-direction:column; gap: 16px; }
 .field{
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  background: #eee;
-  border: 1px solid #ddd;
-  border-radius: 6px;                  /* same radius vibe as homepage */
-  padding: 12px 14px;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #5cc4d1;
 }
 .field .input{
   background: transparent;
@@ -114,12 +115,16 @@ form{ display:flex; flex-direction:column; gap: 16px; }
   outline: none;
 }
 .field .btn{
-  background:#d1d5db;
-  color:#333;
-  border:none;
-  border-radius:4px;
-  padding:10px 16px;
-  font-weight:600;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 24px;
+  text-decoration: none;
+  color: #4db8c4;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 .unit{
   color:#666;
@@ -129,16 +134,17 @@ form{ display:flex; flex-direction:column; gap: 16px; }
 
 /* Results container & item rows to echo homepage grey cards */
 .list{
-  background:#eee;
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding: 18px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #5cc4d1;
 }
 .card{
-  background:#eee;
+  background:white;
   border:1px solid #d7dbe2;
   border-radius:6px;
   padding:14px 16px;
@@ -148,12 +154,16 @@ form{ display:flex; flex-direction:column; gap: 16px; }
   gap:12px;
 }
 .card .btn{
-  background:#d1d5db;
-  color:#333;
-  border:none;
-  border-radius:4px;
-  padding:8px 12px;
-  font-weight:600;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 24px;
+  text-decoration: none;
+  color: #4db8c4;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 .food-name{ font-weight:700; }
 .nutri{ color:#4b5563; font-size:14px; }
