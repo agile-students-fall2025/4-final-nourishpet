@@ -4,9 +4,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
 
-//fake nutrition and goal data fetch from db (count=7)
-const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
-
 function WeekArchive() {
 
     const [records, setRecords] = useState([]);
@@ -14,7 +11,7 @@ function WeekArchive() {
 
     useEffect(() => {
         //fetch from url
-        axios.get(mockurl)
+        axios.get('http://localhost:5000/api/histdata')
         .then(response => {
             setRecords(response.data);
         })
