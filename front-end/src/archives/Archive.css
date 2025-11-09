@@ -42,6 +42,21 @@
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
 
+
+.record-row-goal-notreached {
+  display: flex;
+  justify-content: space-between; /* Puts space between the two items */
+  align-items: center;            /* Vertically centers them */
+  margin-bottom: 8px;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border-left: 4px solid #5cc4d1;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+
 .date-link {
   flex: 2;                 /* Gives this column 1 "part" of the space */
   text-decoration: none;

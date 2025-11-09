@@ -25,7 +25,7 @@ function WeekArchive() {
 
     //loading message
     if (loading) {
-    return <div className="loading">Loading Charlie's records...</div>;
+    return <div className="loading">Loading records...</div>;
     }
 
     return (
@@ -36,7 +36,7 @@ function WeekArchive() {
                 {records.map(record =>{
                     const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
                     const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
-                    const rowHighlighted = goalstatus ? 'record-row-goal-reached' : '';
+                    const rowHighlighted = goalstatus ? '' : 'record-row-goal-notreached';
 
                     return (
                         
