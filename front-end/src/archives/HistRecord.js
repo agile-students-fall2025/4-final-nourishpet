@@ -5,9 +5,6 @@ import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
 import "./Archive.css";
 
-//random nutrition details for the past week (count=7)
-const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
-
 function HistRecord() {
     const { id } = useParams();
     const [record, setRecord] = useState(null);
@@ -16,7 +13,7 @@ function HistRecord() {
 
     useEffect(() => {
         // fake fetch from db
-        axios.get(mockurl)
+        axios.get('http://localhost:5000/api/histdata')
             .then(response => {
                 const foundRecord = response.data.find(re => re.id === parseInt(id));
                 setRecord({
