@@ -50,8 +50,10 @@ function HistRecord() {
 
     return (
         <div className="archive-page">
-            <h1>{date}</h1>
             <BackButton />
+            
+            <h1>{date}</h1>
+           
             <div className="nutrition-record">
                 <GoalsPanel nutrition={nutrition} goals={goals} />
                 <StatusPie nutrition={nutrition} />
@@ -80,7 +82,7 @@ function HistRecord() {
 
 function BackButton() {
     return(
-        <Link to = '/archives'>
+        <Link to = '/archives' className="back-button">
             Back
         </Link>
     )
