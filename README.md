@@ -30,19 +30,19 @@ Note:
 6. **Testing:** Unit tests with **Mocha**, **Chai**, and coverage verification via **c8** (≥10%)  
 7.  **Security:** No credentials or URIs stored in version control — use `.env` for private settings
 
-# Navigate to the back-end folder
+## Navigate to the back-end folder
 cd back-end
 
-# Install dependencies
+## Install dependencies
 npm install
 
-# Run the server
+## Run the server
 npm run dev
 
-# Run unit tests
+## Run unit tests
 npm test
 
-# Check coverage
+## Check coverage
 npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
 2. Integrate front-end with back-end APIs.
 3. Ensure all front-end requests pull live data from the back-end.
