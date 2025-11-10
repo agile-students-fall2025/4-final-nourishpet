@@ -181,7 +181,7 @@ app.post("/api/updateuserdata", async (req, res) => {
   res.json({ message: "User data updated successfully" });
 });
 
-```
+/*
 function archiveTodayData() {
   const todayPath = path.join(__dirname, "temp_data", "todayData.json");
   const savePath = path.join(__dirname, "temp_data", "save.json");
@@ -220,7 +220,8 @@ setInterval(() => {
   const now = new Date();
   if (now.getHours() === 23 && now.getMinutes() === 59) archiveTodayData();
 }, 60000);
-```
+*/
+
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
