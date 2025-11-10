@@ -1,5 +1,5 @@
 // FeedPage.js
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/FeedPage.css";
 import Footer from "../components/Footer";
@@ -12,36 +12,6 @@ const fmt = (n) => {
   return v.toFixed(1).replace(/\.0$/, ".0");
 };
 
-// Parse one day's record (matches your sample JSON keys)
-/*
-function parseDailyRecord(rec) {
-  const foods = Array.isArray(rec?.["Food List"]) ? rec["Food List"] : [];
-  const grams = Array.isArray(rec?.["Gram List"]) ? rec["Gram List"] : [];
-  const prots = Array.isArray(rec?.["Protein List"]) ? rec["Protein List"] : [];
-  const fats = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
-  const carbs = Array.isArray(rec?.["Carbs List"]) ? rec["Carbs List"] : [];
-
-  const len = Math.max(
-    foods.length,
-    grams.length,
-    prots.length,
-    fats.length,
-    carbs.length
-  );
-  const rows = [];
-  for (let i = 0; i < len; i++) {
-    rows.push({
-      food: foods[i] ?? "Unknown",
-      grams: grams[i] ?? 0,
-      protein: prots[i] ?? 0,
-      fat: fats[i] ?? 0,
-      carbs: carbs[i] ?? 0,
-    });
-  }
-  return rows;
-}
-  */
-
 function FeedPage() {
   const [query, setQuery] = useState("");
   const [didSearch, setDidSearch] = useState(false);
@@ -50,6 +20,9 @@ function FeedPage() {
   const [error, setError] = useState("");
   const [grams, setGrams] = useState("150"); // user-entered grams
   const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
+
+  const [todayLog, setTodayLog] = useState(null); //hold log id
+  const [isSaving, setIsSaving] = useState(false);
 
   // Filter then take just ONE result
   const oneResult = useMemo(() => {
@@ -85,6 +58,47 @@ function FeedPage() {
     }
   };
 
+  const handleAddFood = async (item, scaledData, grams) => {
+    // Check if the item is missing
+    if (!item || !scaledData) {
+      setError("No food item selected.");
+      return;
+    }
+
+    setIsSaving(true);
+    setError("");
+
+    const newIntake = {
+      foodName: item.food,
+      grams: parseInt(grams),
+      protein: scaledData.protein,
+      fat: scaledData.fat,
+      carbs: scaledData.carbs,
+    };
+
+    try {
+      const res = await fetch('http://localhost:5000/api/addfooditem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newIntake),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const result = await res.json();
+
+      setTodayLog(result.updatedLog);
+      setShowConfirm(true);
+
+    } catch (err) {
+      setError(`Failed to save food: ${err.message}`);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="app">
       <main className="page">
@@ -104,7 +118,7 @@ function FeedPage() {
           error={error}
           item={oneResult}
           grams={grams}
-          onAdd={() => setShowConfirm(true)}
+          onAdd={handleAddFood}
         />
 
         <div className="floating-btn">
@@ -131,9 +145,9 @@ function FeedPage() {
             <button
               className="btn close-btn"
               onClick={() => setShowConfirm(false)}
-              aria-label="Close"
+              disabled={isSaving}
             >
-              ×
+              {isSaving ? "Adding..." : "x"}
             </button>
             <h2>Successfully Added!</h2>
             <p>You can check your ingredients in Intake!</p>
@@ -141,7 +155,7 @@ function FeedPage() {
         </div>
       )}
 
-      
+
     </div>
   );
 }
@@ -202,10 +216,10 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
 
   const scaled = item
     ? {
-        carbs: item.carbs * factor,
-        protein: item.protein * factor,
-        fat: item.fat * factor,
-      }
+      carbs: item.carbs * factor,
+      protein: item.protein * factor,
+      fat: item.fat * factor,
+    }
     : null;
 
   return (
@@ -233,7 +247,11 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
                 </div>
               </div>
 
-              <button className="btn" type="button" onClick={onAdd}>
+              <button 
+                className="btn" 
+                type="button" 
+                onClick={() => onAdd(item, scaled, g)}
+              >
                 Add
               </button>
             </div>

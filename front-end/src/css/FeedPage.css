@@ -190,6 +190,9 @@ form{ display:flex; flex-direction:column; gap: 16px; }
   padding: 24px 28px;
   z-index: var(--popup-z);
   text-align: left;
+  display: flex;
+  justify-content: flex-end;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
 .close-btn{ position:absolute; top:10px; right:10px; }
 

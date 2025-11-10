@@ -50,6 +50,55 @@ app.get("/api/fooddata", async (req, res) => {
   }
 });
 
+app.post("/api/addfooditem", async (req, res) => {
+  try {
+    const { foodName, grams, protein, fat, carbs} = req.body;
+    const histDataPath = path.join(__dirname, "temp_data", "histData.json");
+
+    //entry validation
+    if (!foodName || !grams || protein === undefined || fat === undefined || carbs === undefined) {
+      return res.status(400).json({ error: "Missing food data fields." });
+    }
+
+    const rawData = readFileSync(histDataPath, "utf-8");
+    let histData = JSON.parse(rawData); 
+
+    const todayLogIndex = histData.findIndex(log => log.id === 1);
+    if (todayLogIndex === -1) {
+      return res.status(404).json({ error: "No log found with id: 1" });
+    }
+
+    //get a temp todayData
+    let todayLog = histData[todayLogIndex];
+
+    // append to temp data
+    todayLog["Food List"].push(foodName);
+    todayLog["Gram List"].push(grams);
+    todayLog["Protein List"].push(protein);
+    todayLog["Fat List"].push(fat);
+    todayLog["Carbs List"].push(carbs);
+    
+    // Update totals to temp data
+    todayLog["Total Intake"] += protein+carbs+fat;
+    todayLog["Protein"] += protein;
+    todayLog["Carbs"] += carbs;
+    todayLog["Fat"] += fat;
+    
+    // update temp data to histDta
+    histData[todayLogIndex] = todayLog;
+
+    // 9. Write the updated array back to the file
+    writeFileSync(histDataPath, JSON.stringify(histData, null, 2));
+
+    // 10. Send the *full updated log* back to the front-end
+    res.status(200).json({ message: "Food item added successfully", updatedLog: todayLog });
+
+  } catch (error) {
+      console.error("Error adding food item:", error.message);
+      res.status(500).json({ error: "Failed to add food item" });
+  }
+});
+
 app.get("/api/userdata", async (req, res) => {
   const userData = readFileSync("./temp_data/userData.json", "utf8");
   res.json(JSON.parse(userData));
