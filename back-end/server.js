@@ -60,17 +60,20 @@ app.post("/api/addfooditem", async (req, res) => {
       return res.status(400).json({ error: "Missing food data fields." });
     }
 
+    const todayDateStr = new Date().toLocaleDateString('en-US', {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
+    });
+
     const rawData = readFileSync(histDataPath, "utf-8");
     let histData = JSON.parse(rawData); 
 
-    const todayLogIndex = histData.findIndex(log => log.id === 1);
-    if (todayLogIndex === -1) {
-      return res.status(404).json({ error: "No log found with id: 1" });
-    }
+    let todayLogIndex = histData.findIndex(log => log.Date === todayDateStr);
+    let todayLog;
+    const newTotalIntake = protein + carbs + fat;
 
-    //get a temp todayData
-    let todayLog = histData[todayLogIndex];
-
+  if (todayLogIndex !== -1) {
     // append to temp data
     todayLog["Food List"].push(foodName);
     todayLog["Gram List"].push(grams);
@@ -93,7 +96,53 @@ app.post("/api/addfooditem", async (req, res) => {
     // 10. Send the *full updated log* back to the front-end
     res.status(200).json({ message: "Food item added successfully", updatedLog: todayLog });
 
-  } catch (error) {
+  } else {
+    console.log(`No log found for ${todayDateStr}. Creating new entry.`);
+
+      histData.forEach(log => { log.id += 1; });
+
+      let defaultGoals = {
+        "Total Intake Goal": 2000, 
+        "Protein Goal": 900,
+        "Carbs Goal": 900,
+        "Fat Goal": 900
+      };
+
+      if (histData.length > 0) {
+        // Use goals from the most recent entry (which is now at index 0 and has id 2)
+        defaultGoals["Total Intake Goal"] = histData[0]["Total Intake Goal"];
+        defaultGoals["Protein Goal"] = histData[0]["Protein Goal"];
+        defaultGoals["Carbs Goal"] = histData[0]["Carbs Goal"];
+        defaultGoals["Fat Goal"] = histData[0]["Fat Goal"];
+      }
+
+      // Create the new log object, pre-filled with the new food item
+      todayLog = {
+        "id": 1,
+        "Date": todayDateStr,
+        "Total Intake": newTotalIntake,
+        "Protein": protein,
+        "Carbs": carbs,
+        "Fat": fat,
+        ...defaultGoals,
+        "Food List": [foodName],
+        "Gram List": [grams],
+        "Protein List": [protein],
+        "Fat List": [fat],
+        "Carbs List": [carbs]
+      };
+
+      // Add the new log to the *beginning* of the array
+      histData.unshift(todayLog);
+    }
+
+    // 6. Write the updated array back to the file
+    writeFileSync(histDataPath, JSON.stringify(histData, null, 2));
+
+    // 7. Send the updated log back to the front-end
+    res.status(200).json({ message: "Food item added successfully", updatedLog: todayLog });
+  }
+  catch (error) {
       console.error("Error adding food item:", error.message);
       res.status(500).json({ error: "Failed to add food item" });
   }
