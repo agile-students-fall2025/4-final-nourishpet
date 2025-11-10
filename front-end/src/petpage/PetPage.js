@@ -16,34 +16,43 @@ function PetPage() {
   });
 
   const [petData, setPetData] = useState(null);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+  axios.get("http://localhost:5000/api/userdata")
+    .then((res) => {
+      setUserData(res.data);
+    })
+    .catch((err) => console.error("Error fetching user data:", err));
+}, []);
 
     useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/petdata")
-      .then((res) => {
-        console.log(res);
-        const todayData = res.data; 
+  if (!userData) return; // wait until userData is loaded
 
-        setPetData({
-          petName: "Charlie",
-          level: 4,
-          xp: 60,
-          nutrition: {
-            calories: todayData["Total Intake"],
-            protein: todayData.Protein,
-            carbs: todayData.Carbs,
-            fat: todayData.Fat,
-          },
-          goals: {
-            calories: todayData["Total Intake Goal"],
-            protein: todayData["Protein Goal"],
-            carbs: todayData["Carbs Goal"],
-            fat: todayData["Fat Goal"],
-          },
-        });
-      })
-      .catch((err) => console.error("Error fetching mock data:", err));
-  }, []);
+  axios
+    .get("http://localhost:5000/api/home/nutrition?id=1")
+    .then((res) => {
+      const todayData = res.data;
+      setPetData({
+        petName: userData.petName, 
+        level: 4,
+        xp: 60,
+        nutrition: {
+          calories: todayData.calories,
+          protein: todayData.protein,
+          carbs: todayData.carbs,
+          fat: todayData.fat,
+        },
+        goals: {
+          calories: todayData.caloriesGoal,
+          protein: todayData.proteinGoal,
+          carbs: todayData.carbsGoal,
+          fat: todayData.fatGoal,
+        },
+      });
+    })
+    .catch((err) => console.error("Error fetching mock data:", err));
+}, [userData]); // reruns only when userData changes
 
   if (!petData) {
     return <p style={{ textAlign: "center" }}>Loading pet data...</p>;
