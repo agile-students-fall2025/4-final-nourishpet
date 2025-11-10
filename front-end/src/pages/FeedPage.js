@@ -21,13 +21,10 @@ function FeedPage() {
   const [grams, setGrams] = useState("150");
   const [showConfirm, setShowConfirm] = useState(false);
 
-<<<<<<< HEAD
   const [todayLog, setTodayLog] = useState(null); //hold log id
   const [isSaving, setIsSaving] = useState(false);
 
   // Filter then take just ONE result
-=======
->>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
     const filtered = q
@@ -155,18 +152,14 @@ function FeedPage() {
           </div>
         </div>
       )}
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
     </div>
   );
 }
 
 /* ===== child components ===== */
 
-<<<<<<< HEAD
 function FeedHeader() {
   return (
     <div className="page-header">
@@ -175,8 +168,6 @@ function FeedHeader() {
   );
 }
 
-=======
->>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
 function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
     <section className="sheet">

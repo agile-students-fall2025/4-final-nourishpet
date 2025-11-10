@@ -2,10 +2,10 @@
   {
     "id": 1,
     "Date": "Nov 08, 2025",
-    "Total Intake": 2420,
-    "Protein": 716,
-    "Carbs": 624,
-    "Fat": 97,
+    "Total Intake": 2636,
+    "Protein": 752,
+    "Carbs": 756,
+    "Fat": 145,
     "Total Intake Goal": 2283,
     "Protein Goal": 289,
     "Carbs Goal": 438,
@@ -13,47 +13,27 @@
     "Food List": [
       "Eggs",
       "Apples",
-      "Rice",
-      "Banana",
-      "Banana",
-      "Orange Juice",
-      "Orange Juice"
+      "Banana"
     ],
     "Gram List": [
       40,
       80,
-      20,
-      150,
-      150,
-      200,
-      300
+      150
     ],
     "Protein List": [
       20,
       10,
-      35,
-      18,
-      18,
-      180,
-      270
+      18
     ],
     "Fat List": [
       35,
       30,
-      10,
-      24,
-      24,
-      14,
-      21
+      24
     ],
     "Carbs List": [
       60,
       10,
-      40,
-      66,
-      66,
-      76,
-      114
+      66
     ]
   },
   {
