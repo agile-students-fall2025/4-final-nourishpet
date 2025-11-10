@@ -104,6 +104,8 @@ app.post("/api/addfooditem", async (req, res) => {
     const newTotalIntake = protein + carbs + fat;
 
   if (todayLogIndex !== -1) {
+
+    todayLog = histData[todayLogIndex]; 
     // append to temp data
     todayLog["Food List"].push(foodName);
     todayLog["Gram List"].push(grams);
