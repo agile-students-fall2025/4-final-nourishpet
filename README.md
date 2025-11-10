@@ -16,55 +16,39 @@ Make healthy eating sticky and delightful by turning daily nutrition goals into 
 ---
 
 ## Building and Testing of Project
- **Sprint 2 — Back-End Integration(Currently working)**
-Implementing Express.js routes and mock data.
-Integrating API calls into React components.
+**Sprint 2 — Back-End Integration (Currently Working)**  
+Implementing Express.js routes and mock data.  
+Integrating API calls into React components.  
 Writing Mocha/Chai unit tests for route coverage.
 
-Note:
+### Notes:
 1. **Framework:** Express.js  
 2. **Dynamic Routes:** Return mock JSON data (either hardcoded or proxied from [Mockaroo](https://mockaroo.com/))  
 3. **Static Routes:** Serve static files as needed  
 4. **Integration:** The front-end must now fetch data from the back-end via API requests  
 5. **Forms:** POST data to server routes (mock storage acceptable)  
 6. **Testing:** Unit tests with **Mocha**, **Chai**, and coverage verification via **c8** (≥10%)  
-7.  **Security:** No credentials or URIs stored in version control — use `.env` for private settings
+7. **Security:** No credentials or URIs stored in version control — use `.env` for private settings  
 
-## Navigate to the back-end folder
-cd back-end
+---
 
-## Install dependencies
-npm install
-
-## Run the server
-npm run dev
-
-## Run unit tests
-npm test
-
-## Check coverage
-npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
-2. Integrate front-end with back-end APIs.
-3. Ensure all front-end requests pull live data from the back-end.
-4. Add Mocha/Chai unit tests with at least 10% coverage verified using c8.
+### Back-End Setup
 
 ```bash
-## clone from Github Repo
-git clone https://github.com/agile-students-fall2025/4-final-nourishpet
-
-## navigate to back-end folder
+# navigate to the back-end folder
 cd back-end
 
-## install dependencies
+# install dependencies
 npm install
 
-## start back-end server
+# run the server
 npm run dev
 
-## open another terminal for front-end
-cd front-end
-npm install
-npm start
+# run unit tests
+npm test
+
+# check coverage
+npx c8 npm test
 
 
 **Sprint 1: Front-end Design(Completed)**
