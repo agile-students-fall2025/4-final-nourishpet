@@ -4,9 +4,6 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
 
-//fake nutrition and goal data fetch from db (count=7)
-const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
-
 function WeekArchive() {
 
     const [records, setRecords] = useState([]);
@@ -14,7 +11,7 @@ function WeekArchive() {
 
     useEffect(() => {
         //fetch from url
-        axios.get(mockurl)
+        axios.get('http://localhost:5000/api/histdata')
         .then(response => {
             setRecords(response.data);
         })
@@ -28,7 +25,7 @@ function WeekArchive() {
 
     //loading message
     if (loading) {
-    return <div className="loading">Loading Charlie's records...</div>;
+    return <div className="loading">Loading records...</div>;
     }
 
     return (
@@ -39,16 +36,17 @@ function WeekArchive() {
                 {records.map(record =>{
                     const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
                     const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
+                    const rowHighlighted = goalstatus ? '' : 'record-row-goal-notreached';
 
                     return (
                         
-                        <div className='record-row' key={record.id}>
+                        <div className={`record-row ${rowHighlighted}`} key={record.id}>
                         
-                            <Link to={`/archives/histrecord/${record.id}`}>
-                                {record.Date}
+                            <Link to={`/archives/histrecord/${record.id}`} className='date-link'>
+                                <div className='date-item'>{record.Date}</div>
                             </Link> 
 
-                            <div className='record-status'>
+                            <div className={`record-status`}>
                                 {statusText}
                             </div>
                         </div>

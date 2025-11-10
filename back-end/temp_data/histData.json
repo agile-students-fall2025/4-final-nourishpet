@@ -1,0 +1,266 @@
+[
+    {
+        "id": 1,
+        "Date": "Nov 08, 2025",
+        "Total Intake": 1529,
+        "Protein": 230,
+        "Carbs": 302,
+        "Fat": 14,
+        "Total Intake Goal": 2283,
+        "Protein Goal": 289,
+        "Carbs Goal": 438,
+        "Fat Goal": 257,
+        "Food List": [
+            "Eggs",
+            "Apples",
+            "Rice"
+        ],
+        "Gram List": [
+            40,
+            80,
+            20
+        ],
+        "Protein List": [
+            20,
+            10,
+            35
+        ],
+        "Fat List": [
+            35,
+            30,
+            10
+        ],
+        "Carbs List": [
+            60,
+            10,
+            40
+        ]
+    },
+    {
+        "id": 2,
+        "Date": "Nov 07, 2025",
+        "Total Intake": 2070,
+        "Protein": 458,
+        "Carbs": 362,
+        "Fat": 223,
+        "Total Intake Goal": 2070,
+        "Protein Goal": 657,
+        "Carbs Goal": 367,
+        "Fat Goal": 335,
+        "Food List": [
+            "Apples",
+            "Onions",
+            "Cheese"
+        ],
+        "Gram List": [
+            5,
+            20,
+            70
+        ],
+        "Protein List": [
+            15,
+            50,
+            25
+        ],
+        "Fat List": [
+            50,
+            5,
+            30
+        ],
+        "Carbs List": [
+            15,
+            35,
+            40
+        ]
+    },
+    {
+        "id": 3,
+        "Date": "Nov 06, 2025",
+        "Total Intake": 1789,
+        "Protein": 64,
+        "Carbs": 18,
+        "Fat": 29,
+        "Total Intake Goal": 1823,
+        "Protein Goal": 176,
+        "Carbs Goal": 292,
+        "Fat Goal": 203,
+        "Food List": [
+            "Bananas",
+            "Chicken",
+            "Onions",
+            "Rice"
+        ],
+        "Gram List": [
+            20,
+            70,
+            30,
+            10
+        ],
+        "Protein List": [
+            60,
+            30,
+            25,
+            40
+        ],
+        "Fat List": [
+            25,
+            5,
+            30,
+            15
+        ],
+        "Carbs List": [
+            25,
+            35,
+            10,
+            20
+        ]
+    },
+    {
+        "id": 4,
+        "Date": "Nov 05, 2025",
+        "Total Intake": 1912,
+        "Protein": 289,
+        "Carbs": 374,
+        "Fat": 49,
+        "Total Intake Goal": 2567,
+        "Protein Goal": 308,
+        "Carbs Goal": 401,
+        "Fat Goal": 97,
+        "Food List": [
+            "Eggs",
+            "Oranges",
+            "Cheese",
+            "Chicken",
+            "Apples"
+        ],
+        "Gram List": [
+            70,
+            60,
+            40,
+            50,
+            80
+        ],
+        "Protein List": [
+            50,
+            30,
+            25,
+            10,
+            15
+        ],
+        "Fat List": [
+            25,
+            10,
+            20,
+            35,
+            40
+        ],
+        "Carbs List": [
+            25,
+            40,
+            10,
+            50,
+            5
+        ]
+    },
+    {
+        "id": 5,
+        "Date": "Nov 04, 2025",
+        "Total Intake": 1254,
+        "Protein": 14,
+        "Carbs": 362,
+        "Fat": 185,
+        "Total Intake Goal": 1254,
+        "Protein Goal": 95,
+        "Carbs Goal": 407,
+        "Fat Goal": 303,
+        "Food List": [
+            "Onions",
+            "Milk"
+        ],
+        "Gram List": [
+            5,
+            10
+        ],
+        "Protein List": [
+            25,
+            60
+        ],
+        "Fat List": [
+            30,
+            60
+        ],
+        "Carbs List": [
+            25,
+            20
+        ]
+    },
+    {
+        "id": 6,
+        "Date": "Nov 03, 2025",
+        "Total Intake": 2431,
+        "Protein": 303,
+        "Carbs": 161,
+        "Fat": 435,
+        "Total Intake Goal": 2431,
+        "Protein Goal": 570,
+        "Carbs Goal": 265,
+        "Fat Goal": 478,
+        "Food List": [
+            "Apples",
+            "Eggs"
+        ],
+        "Gram List": [
+            20,
+            5
+        ],
+        "Protein List": [
+            35,
+            60
+        ],
+        "Fat List": [
+            30,
+            60
+        ],
+        "Carbs List": [
+            15,
+            20
+        ]
+    },
+    {
+        "id": 7,
+        "Date": "Nov 02, 2025",
+        "Total Intake": 2260,
+        "Protein": 412,
+        "Carbs": 163,
+        "Fat": 139,
+        "Total Intake Goal": 2260,
+        "Protein Goal": 430,
+        "Carbs Goal": 189,
+        "Fat Goal": 199,
+        "Food List": [
+            "Bread",
+            "Chicken",
+            "Eggs"
+        ],
+        "Gram List": [
+            60,
+            70,
+            5
+        ],
+        "Protein List": [
+            15,
+            5,
+            40
+        ],
+        "Fat List": [
+            50,
+            15,
+            25
+        ],
+        "Carbs List": [
+            60,
+            30,
+            10
+        ]
+    }
+]

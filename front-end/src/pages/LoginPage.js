@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/LoginPage.css';
+import logo from '../logo.svg';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -20,7 +21,9 @@ function LoginPage() {
     <div className="login-container">
       <div className="login-box">
         <div className="logo-container">
-          <div className="logo-placeholder">logo</div>
+          <div className="logo-placeholder">
+            <img src={logo} alt="NourishPet Logo" className="logo-image" />
+          </div>
         </div>
         
         <h1 className="login-title">Log In</h1>

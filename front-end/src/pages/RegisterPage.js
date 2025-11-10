@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/RegisterPage.css';
+import logo from '../logo.svg';
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -28,7 +29,9 @@ function RegisterPage() {
     <div className="register-container">
       <div className="register-box">
         <div className="logo-container">
-          <div className="logo-placeholder">logo</div>
+          <div className="logo-placeholder">
+            <img src={logo} alt="NourishPet Logo" className="logo-image" />
+          </div>
         </div>
         
         <h1 className="register-title">Register</h1>
