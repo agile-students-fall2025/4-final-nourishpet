@@ -5,9 +5,6 @@ import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
 import "./Archive.css";
 
-//random nutrition details for the past week (count=7)
-const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720'
-
 function HistRecord() {
     const { id } = useParams();
     const [record, setRecord] = useState(null);
@@ -16,21 +13,23 @@ function HistRecord() {
 
     useEffect(() => {
         // fake fetch from db
-        axios.get(mockurl)
+        axios.get('http://localhost:5000/api/histdata')
             .then(response => {
                 const foundRecord = response.data.find(re => re.id === parseInt(id));
-                setRecord({
-                    date: foundRecord['Date'],
-                    nutrition: { calories: foundRecord['Total Intake'], protein: foundRecord['Protein'], carbs: foundRecord['Carbs'], fat: foundRecord['Fat'] },
-                    goals: { calories: foundRecord['Total Intake Goal'], protein: foundRecord['Protein Goal'], carbs: foundRecord['Carbs Goal'], fat: foundRecord['Fat Goal'] }
-                });
-                setFoodList({
-                    foods: foundRecord['Food List'],
-                    grams: foundRecord['Gram List'],
-                    protein: foundRecord['Protein List'],
-                    carbs: foundRecord['Carbs List'],
-                    fat: foundRecord['Fat List']
-                });
+                if (foundRecord) {
+        setRecord({
+            date: foundRecord['Date'],
+            nutrition: { calories: foundRecord['Total Intake'], protein: foundRecord['Protein'], carbs: foundRecord['Carbs'], fat: foundRecord['Fat'] },
+            goals: { calories: foundRecord['Total Intake Goal'], protein: foundRecord['Protein Goal'], carbs: foundRecord['Carbs Goal'], fat: foundRecord['Fat Goal'] }
+        });
+        setFoodList({
+            foods: foundRecord['Food List'],
+            grams: foundRecord['Gram List'],
+            protein: foundRecord['Protein List'],
+            carbs: foundRecord['Carbs List'],
+            fat: foundRecord['Fat List']
+        });
+    }
             })
             .catch(error => console.error("Error fetching record:", error))
             .finally(() => setLoading(false));
@@ -50,8 +49,10 @@ function HistRecord() {
 
     return (
         <div className="archive-page">
-            <h1>{date}</h1>
             <BackButton />
+            
+            <h1>{date}</h1>
+           
             <div className="nutrition-record">
                 <GoalsPanel nutrition={nutrition} goals={goals} />
                 <StatusPie nutrition={nutrition} />
@@ -80,7 +81,7 @@ function HistRecord() {
 
 function BackButton() {
     return(
-        <Link to = '/archives'>
+        <Link to = '/archives' className="back-button">
             Back
         </Link>
     )

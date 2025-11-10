@@ -3,9 +3,10 @@
 This document explains how to contribute and the rules our team follows. Keep changes small and focused.
 
 ## Status
-Wireframes/design-first phase.
+Currently in **Sprint 2 — Back-End Integration**
 - [Figma Prototype](https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0)
 - [App Map (Figma Board)](https://www.figma.com/board/Ap3PkTRrukV8oVRh2tlZMD/App-Map?t=jhqZDDOU0ArQTD3g-0)
+
 
 ## Team Norms
 - Communicate via GitHub Issues/PRs.
@@ -15,6 +16,10 @@ Wireframes/design-first phase.
 
 
 ## What We Accept (now)
+- Back-end development with Express.js  
+- API integration with front-end  
+- Unit testing with Mocha, Chai, and c8  
+- Documentation updates
 - front-end design with React.js
 
 
