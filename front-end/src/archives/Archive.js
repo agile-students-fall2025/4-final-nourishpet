@@ -13,7 +13,10 @@ function WeekArchive() {
         //fetch from url
         axios.get('http://localhost:5000/api/histdata')
         .then(response => {
-            setRecords(response.data);
+            const weeklyRecords = response.data.filter(record => 
+                record.id >= 1 && record.id <= 7
+            );
+            setRecords(weeklyRecords);
         })
         .catch(error => {
             console.error("Error fetching nutrition data:", error);
