@@ -60,33 +60,6 @@
   letter-spacing: 0.5px;
 }
 
-.nutrition-section {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.nutrition-chart {
-  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-  padding: 35px 25px;
-  text-align: center;
-  border-radius: 20px;
-  min-height: 150px;
-  box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
-  transition: transform 0.3s ease;
-}
-
-.nutrition-chart:hover {
-  transform: translateY(-3px);
-}
-
-.nutrition-label {
-  font-weight: 600;
-  color: #2d3748;
-  font-size: 15px;
-  min-width: 120px;
-  text-align: left;
-}
-
 /* Form section */
 .form-section {
   margin: 20px 0;
@@ -120,7 +93,7 @@
   border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.9);
   color: #2d3748;
-  font-size: 15px;
+  font-size: 18px;
   transition: all 0.3s ease;
 }
 
