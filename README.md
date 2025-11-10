@@ -30,17 +30,26 @@ Note:
 6. **Testing:** Unit tests with **Mocha**, **Chai**, and coverage verification via **c8** (≥10%)  
 7.  **Security:** No credentials or URIs stored in version control — use `.env` for private settings
 
-## Navigate to the back-end folder
+### Back-End Setup
+
+```bash
+# navigate to the back-end folder
 cd back-end
 
-## Install dependencies
+# install dependencies
 npm install
 
-## Run the server
+# install express 
+npm install express
+
+# run the server
 npm run dev
 
-## Run unit tests
+# run unit tests
 npm test
+
+# check coverage
+npx c8 npm test
 
 ## Check coverage
 npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
@@ -48,23 +57,6 @@ npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
 3. Ensure all front-end requests pull live data from the back-end.
 4. Add Mocha/Chai unit tests with at least 10% coverage verified using c8.
 
-```bash
-## clone from Github Repo
-git clone https://github.com/agile-students-fall2025/4-final-nourishpet
-
-## navigate to back-end folder
-cd back-end
-
-## install dependencies
-npm install
-
-## start back-end server
-npm run dev
-
-## open another terminal for front-end
-cd front-end
-npm install
-npm start
 
 
 **Sprint 1: Front-end Design(Completed)**
