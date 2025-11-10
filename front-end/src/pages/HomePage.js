@@ -16,13 +16,19 @@ function HomePage() {
       try {
         setIsLoading(true);
         setError(null);
+        
+        console.log('Fetching from:', '/api/home/nutrition?id=' + recordId);
+        
         const { data } = await axios.get("/api/home/nutrition", {
           params: { id: recordId },
         });
+        
+        console.log('Received data:', data);
         setNutritionData(data);
       } catch (error) {
-        console.error("Error fetching nutrition data:", error.message);
-        setError("Can't load nutrients info.");
+        console.error("Error fetching nutrition data:", error);
+        console.error("Error details:", error.response?.data || error.message);
+        setError("Can't load nutrients info. Check console for details.");
       } finally {
         setIsLoading(false);
       }
@@ -72,7 +78,7 @@ function HomePage() {
             {nutritionData?.date && !error && (
               <p className="nutrition-date">Date: {nutritionData.date}</p>
             )}
-            {isLoading && <p>加载中...</p>}
+            {isLoading && <p>Loading...</p>}
             {error && !isLoading && <p className="error-text">{error}</p>}
             {!isLoading && !error && nutritionData ? (
               <>
