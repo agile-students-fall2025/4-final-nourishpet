@@ -16,15 +16,18 @@ function FeedPage() {
   const [query, setQuery] = useState("");
   const [didSearch, setDidSearch] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState([]); // flattened rows (no date)
+  const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
-  const [grams, setGrams] = useState("150"); // user-entered grams
-  const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
+  const [grams, setGrams] = useState("150");
+  const [showConfirm, setShowConfirm] = useState(false);
 
+<<<<<<< HEAD
   const [todayLog, setTodayLog] = useState(null); //hold log id
   const [isSaving, setIsSaving] = useState(false);
 
   // Filter then take just ONE result
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
     const filtered = q
@@ -102,7 +105,7 @@ function FeedPage() {
   return (
     <div className="app">
       <main className="page">
-        <FeedHeader />
+        {/* Removed FeedHeader */}
 
         <FeedSearchSection
           query={query}
@@ -126,8 +129,6 @@ function FeedPage() {
             <button className="btn">Intake</button>
           </Link>
         </div>
-
-
       </main>
 
       {/* Footer sits below main content */}
@@ -154,14 +155,18 @@ function FeedPage() {
           </div>
         </div>
       )}
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
     </div>
   );
 }
 
 /* ===== child components ===== */
 
+<<<<<<< HEAD
 function FeedHeader() {
   return (
     <div className="page-header">
@@ -170,6 +175,8 @@ function FeedHeader() {
   );
 }
 
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
 function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
     <section className="sheet">
@@ -210,7 +217,6 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
 function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
   if (!show) return null;
 
-  // scale assuming item values are per 100 g
   const g = Math.max(1, parseFloat(grams || "0"));
   const factor = g / 100;
 
