@@ -1,14 +1,13 @@
 .Archive {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
   box-sizing: border-box;
   padding-top: 40px;
   padding-bottom: 70px;
   background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
-  position: relative;
+  z-index: 0;
 }
 
 .Archive h1{
