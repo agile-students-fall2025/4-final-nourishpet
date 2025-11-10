@@ -13,7 +13,10 @@ function WeekArchive() {
         //fetch from url
         axios.get('http://localhost:5000/api/histdata')
         .then(response => {
-            setRecords(response.data);
+            const weeklyRecords = response.data.filter(record => 
+                record.id >= 1 && record.id <= 7
+            );
+            setRecords(weeklyRecords);
         })
         .catch(error => {
             console.error("Error fetching nutrition data:", error);
@@ -25,7 +28,7 @@ function WeekArchive() {
 
     //loading message
     if (loading) {
-    return <div className="loading">Loading Charlie's records...</div>;
+    return <div className="loading">Loading records...</div>;
     }
 
     return (
@@ -36,16 +39,17 @@ function WeekArchive() {
                 {records.map(record =>{
                     const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
                     const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
+                    const rowHighlighted = goalstatus ? '' : 'record-row-goal-notreached';
 
                     return (
                         
-                        <div className='record-row' key={record.id}>
+                        <div className={`record-row ${rowHighlighted}`} key={record.id}>
                         
                             <Link to={`/archives/histrecord/${record.id}`} className='date-link'>
                                 <div className='date-item'>{record.Date}</div>
                             </Link> 
 
-                            <div className='record-status'>
+                            <div className={`record-status`}>
                                 {statusText}
                             </div>
                         </div>
