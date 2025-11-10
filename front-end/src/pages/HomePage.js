@@ -2,36 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
-import logo from '../logo.svg';
 import '../css/HomePage.css';
 
 function HomePage() {
   const [nutritionData, setNutritionData] = useState(null);
-  const [petName, setPetName] = useState("Charlie");
-
-  const mockurl = 'https://api.mockaroo.com/api/e721fed0?count=7&key=927ba720';
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const petName = "Charlie";
+  const recordId = 1;
 
   useEffect(() => {
-    axios
-      .get(mockurl)
-      .then((res) => {
-        console.log('Fetched nutrition data:', res.data);
-        const todayData = res.data[0];
-        setNutritionData({
-          calories: todayData["Total Intake"],
-          caloriesGoal: todayData["Total Intake Goal"],
-          protein: todayData.Protein,
-          proteinGoal: todayData["Protein Goal"],
-          carbs: todayData.Carbs,
-          carbsGoal: todayData["Carbs Goal"],
-          fat: todayData.Fat,
-          fatGoal: todayData["Fat Goal"],
+    const fetchNutrition = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const { data } = await axios.get("/api/home/nutrition", {
+          params: { id: recordId },
         });
-      })
-      .catch((err) => {
-        console.error("Error fetching nutrition data:", err);
-      });
-  }, []);
+        setNutritionData(data);
+      } catch (error) {
+        console.error("Error fetching nutrition data:", error.message);
+        setError("Can't load nutrients info.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNutrition();
+  }, [recordId]);
 
   return (
     <div className="homepage">
@@ -68,11 +66,16 @@ function HomePage() {
         </section>
 
         {/* Nutrition chart section */}
-        <section className="nutrition-section">
+        <section className="nutrition-section" aria-live="polite">
           <div className="nutrition-chart">
-            {nutritionData ? (
+            <h3>Simple nutrition chart</h3>
+            {nutritionData?.date && !error && (
+              <p className="nutrition-date">Date: {nutritionData.date}</p>
+            )}
+            {isLoading && <p>加载中...</p>}
+            {error && !isLoading && <p className="error-text">{error}</p>}
+            {!isLoading && !error && nutritionData ? (
               <>
-                <h3>Simple nutrition chart</h3>
                 <div className="nutrition-stats">
                   <div className="nutrition-item">
                     <span className="nutrition-label">Calories:</span>
@@ -101,7 +104,8 @@ function HomePage() {
                 </div>
               </>
             ) : (
-              <p>Simple nutrition chart</p>
+              !isLoading &&
+              !error && <p>Simple nutrition chart</p>
             )}
           </div>
         </section>
