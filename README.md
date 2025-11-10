@@ -49,19 +49,19 @@ npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
 4. Add Mocha/Chai unit tests with at least 10% coverage verified using c8.
 
 ```bash
-# clone from Github Repo
+## clone from Github Repo
 git clone https://github.com/agile-students-fall2025/4-final-nourishpet
 
-# navigate to back-end folder
+## navigate to back-end folder
 cd back-end
 
-# install dependencies
+## install dependencies
 npm install
 
-# start back-end server
+## start back-end server
 npm run dev
 
-# open another terminal for front-end
+## open another terminal for front-end
 cd front-end
 npm install
 npm start
