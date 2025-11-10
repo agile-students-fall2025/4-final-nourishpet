@@ -46,12 +46,11 @@ function FeedPage() {
   const [query, setQuery] = useState("");
   const [didSearch, setDidSearch] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [rows, setRows] = useState([]); // flattened rows (no date)
+  const [rows, setRows] = useState([]);
   const [error, setError] = useState("");
-  const [grams, setGrams] = useState("150"); // user-entered grams
-  const [showConfirm, setShowConfirm] = useState(false); // confirmation popup
+  const [grams, setGrams] = useState("150");
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  // Filter then take just ONE result
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
     const filtered = q
@@ -85,7 +84,7 @@ function FeedPage() {
   return (
     <div className="app">
       <main className="page">
-        <FeedHeader />
+        {/* Removed FeedHeader */}
 
         <FeedSearchSection
           query={query}
@@ -109,8 +108,6 @@ function FeedPage() {
             <button className="btn">Intake</button>
           </Link>
         </div>
-
-
       </main>
 
       {/* Footer sits below main content */}
@@ -137,24 +134,11 @@ function FeedPage() {
           </div>
         </div>
       )}
-
-      
     </div>
   );
 }
 
 /* ===== child components ===== */
-
-function FeedHeader() {
-  return (
-    <div className="page-header">
-      <h1>Feed Page</h1>
-      <Link to="/userpage">
-        <button className="btn">User</button>
-      </Link>
-    </div>
-  );
-}
 
 function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
@@ -196,7 +180,6 @@ function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
 function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
   if (!show) return null;
 
-  // scale assuming item values are per 100 g
   const g = Math.max(1, parseFloat(grams || "0"));
   const factor = g / 100;
 

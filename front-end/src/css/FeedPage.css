@@ -2,170 +2,222 @@
 :root{
   --nav-h: 70px; /* footer height */
 }
-/* Constrain like .homepage: min-height + max-width + bottom padding */
-.app{ background-color: var(--bg); }
+
+.app{
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+  min-height: 100vh;
+}
 
 .page{
-  padding-bottom: calc(var(--nav-h) + max(24px, env(safe-area-inset-bottom)) + 48px);
+  min-height: 932px;
+  max-width: 430px;
+  margin: 0 auto;
+  padding-top: 20px; /* Slight breathing room now that header is gone */
+  padding-bottom: calc(var(--nav-h) + 80px);
+  position: relative;
 }
 
-/* ================= Header (User button like homepage) ================= */
-.page-header{
-  position: relative;              /* to anchor the User button */
-  display: flex;
-  justify-content: center;         /* center the title */
-  align-items: center;
-  padding: 15px 0;
-  margin: 0 0 20px 0;
-}
-
-.page-header h1{
-  font-size: 26px;
-  font-weight: 700;
-  margin: 0;
-  text-align: center;
-}
-
-/* User button looks like homepage .user-button and sits top-right */
-.page-header .btn{
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  background-color: #eee;
-  padding: 10px 20px;
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-}
-
-/* ================= Intake button like homepage ================= */
-/* Absolute inside .page, raised above the fixed bottom bar */
+/* ================= Intake button (floating) ================= */
 .floating-btn{
   position: fixed;
   right: 16px;
-  bottom: calc(var(--nav-h) + max(16px, env(safe-area-inset-bottom)) + 16px);
+  bottom: calc(var(--nav-h) + 16px);
   z-index: 700;
 }
+
 .floating-btn .btn{
-  background:#eee; color:#333; border:none; border-radius:4px; padding:10px 20px;
-}
-/* ================= Bottom area (looks like homepage blocks) ================= */
-/* footer also accounts for safe-area */
-.bottom-nav{
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.95);
+  color: #4db8c4;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-/* Each button looks like a block cell */
+.floating-btn .btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+/* ================= Bottom navigation ================= */
+.bottom-nav{
+  padding-bottom: 8px;
+}
+
 .bottom-nav .btn.full{
   width: 100%;
   height: 100%;
-  background: transparent;             /* let parent grey show through */
+  background: rgba(255, 255, 255, 0.7);
   color: #333;
   font-size: 14px;
   font-weight: 500;
   border: none;
-  border-right: 1px solid #fff;        /* subtle separators */
+  border-right: 1px solid #fff;
   border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
+
 .bottom-nav .btn.full:last-child{ border-right: none; }
+
+.bottom-nav .btn.full:hover{
+  background: rgba(255, 255, 255, 0.95);
+}
 
 /* ================= Form strips & list ================= */
 .sheet{
-  background: var(--panel);
-  border: 1px solid var(--ring);
-  border-radius: 12px;
-  padding: 18px;
-  margin: 0 20px 18px;                 /* side gutters like homepage main */
+  width: 90%;
+  margin: 0 auto 18px;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  padding: 24px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
 }
 
 .sheet h1{
   margin: 0 0 14px;
-  font-size: 26px;                     /* match homepage headings */
-  font-weight: 600;
-  text-align: left;
-}
-.sheet h2{
-  margin: 8px 0 12px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
-  text-align: left;
+  text-align: center;
+  color: #2d3748;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* grey strip rows like the homepage blocks */
-form{ display:flex; flex-direction:column; gap: 16px; }
+.sheet h2{
+  margin: 8px 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: left;
+  color: #2d3748;
+}
+
+form{
+  display:flex;
+  flex-direction:column;
+  gap: 16px;
+}
+
 .field{
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 12px;
-  background: #eee;
-  border: 1px solid #ddd;
-  border-radius: 6px;                  /* same radius vibe as homepage */
-  padding: 12px 14px;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
+  border-left: 4px solid #5cc4d1;
+  transition: all 0.3s ease;
 }
+
+.field:hover{
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
 .field .input{
   background: transparent;
   border: none;
   padding: 0;
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
   outline: none;
 }
+
 .field .btn{
-  background:#d1d5db;
-  color:#333;
+  background: rgba(77, 184, 196, 0.1);
+  color: #4db8c4;
   border:none;
-  border-radius:4px;
-  padding:10px 16px;
+  border-radius:8px;
+  padding:8px 16px;
   font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  transition: all 0.3s ease;
 }
+
+.field .btn:hover{
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
 .unit{
   color:#666;
   font-size:14px;
   font-weight:600;
 }
 
-/* Results container & item rows to echo homepage grey cards */
+/* ================= Results list & cards ================= */
 .list{
-  background:#eee;
-  border:1px solid #ddd;
-  border-radius:6px;
-  padding: 18px;
+  width: 90%;
+  margin: 0 auto 18px;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 24px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(252, 182, 159, 0.3);
   display:flex;
   flex-direction:column;
   gap:16px;
 }
+
 .card{
-  background:#eee;
-  border:1px solid #d7dbe2;
-  border-radius:6px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 12px;
   padding:14px 16px;
   display:grid;
   grid-template-columns: 1fr auto;
   align-items:center;
   gap:12px;
+  border-left: 4px solid #5cc4d1;
+  transition: all 0.3s ease;
 }
+
+.card:hover{
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
 .card .btn{
-  background:#d1d5db;
-  color:#333;
+  background: rgba(77, 184, 196, 0.1);
+  color:#4db8c4;
   border:none;
-  border-radius:4px;
+  border-radius:8px;
   padding:8px 12px;
   font-weight:600;
+  font-size:13px;
+  cursor:pointer;
+  transition: all 0.3s ease;
 }
-.food-name{ font-weight:700; }
-.nutri{ color:#4b5563; font-size:14px; }
 
-/* Popup (unchanged) */
+.card .btn:hover{
+  background:#ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.food-name{
+  font-weight:700;
+  color:#2d3748;
+}
+
+.nutri{
+  color:#4b5563;
+  font-size:14px;
+}
+
+/* ================= Popup ================= */
 .popup-overlay{
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;         /* vertical center */
-  justify-content: center;     /* horizontal center */
-  background: rgba(0,0,0,.45); /* a touch darker for clarity */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.45);
   z-index: var(--overlay-z);
   backdrop-filter: saturate(120%) blur(3px);
 }
@@ -173,17 +225,45 @@ form{ display:flex; flex-direction:column; gap: 16px; }
 .popup-card{
   position: relative;
   width: min(92vw, 430px);
-  background: #fff;
-  border: 1px solid var(--ring);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 20px;
   box-shadow: 0 18px 48px rgba(0,0,0,.28);
   padding: 24px 28px;
   z-index: var(--popup-z);
   text-align: left;
+  border-left: 4px solid #5cc4d1;
+  color: #2d3748;
 }
-.close-btn{ position:absolute; top:10px; right:10px; }
 
-/* Small screens: keep layout sturdy */
+.close-btn{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background: rgba(255, 255, 255, 0.8);
+  border:none;
+  border-radius:50%;
+  width:32px;
+  height:32px;
+  font-weight:700;
+  color:#4db8c4;
+  cursor:pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover{
+  background: #ffffff;
+  transform: scale(1.1);
+}
+
+/* ================= Small screens ================= */
 @media (max-width:520px){
-  .field{ grid-template-columns: 1fr auto; }
+  .sheet,
+  .list{
+    width: 92%;
+  }
+
+  .floating-btn{
+    right: 12px;
+  }
 }
