@@ -1,46 +1,16 @@
 // FeedPage.js
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/FeedPage.css";
 import Footer from "../components/Footer";
 
-/** Uses your Mockaroo endpoint directly; fetch only on Search click */
-const MOCKAROO_URL =
-  "https://api.mockaroo.com/api/e721fed0?count=7&key=9f802050";
+const foodDB = "http://localhost:5000/api/fooddata";
 
 const fmt = (n) => {
   const v = Number(n);
   if (!Number.isFinite(v)) return "—";
   return v.toFixed(1).replace(/\.0$/, ".0");
 };
-
-// Parse one day's record (matches your sample JSON keys)
-function parseDailyRecord(rec) {
-  const foods = Array.isArray(rec?.["Food List"]) ? rec["Food List"] : [];
-  const grams = Array.isArray(rec?.["Gram List"]) ? rec["Gram List"] : [];
-  const prots = Array.isArray(rec?.["Protein List"]) ? rec["Protein List"] : [];
-  const fats = Array.isArray(rec?.["Fat List"]) ? rec["Fat List"] : [];
-  const carbs = Array.isArray(rec?.["Carbs List"]) ? rec["Carbs List"] : [];
-
-  const len = Math.max(
-    foods.length,
-    grams.length,
-    prots.length,
-    fats.length,
-    carbs.length
-  );
-  const rows = [];
-  for (let i = 0; i < len; i++) {
-    rows.push({
-      food: foods[i] ?? "Unknown",
-      grams: grams[i] ?? 0,
-      protein: prots[i] ?? 0,
-      fat: fats[i] ?? 0,
-      carbs: carbs[i] ?? 0,
-    });
-  }
-  return rows;
-}
 
 function FeedPage() {
   const [query, setQuery] = useState("");
@@ -51,6 +21,13 @@ function FeedPage() {
   const [grams, setGrams] = useState("150");
   const [showConfirm, setShowConfirm] = useState(false);
 
+<<<<<<< HEAD
+  const [todayLog, setTodayLog] = useState(null); //hold log id
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Filter then take just ONE result
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
   const oneResult = useMemo(() => {
     const q = (query || "").trim().toLowerCase();
     const filtered = q
@@ -65,19 +42,63 @@ function FeedPage() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch(MOCKAROO_URL, {
+      const res = await fetch(foodDB, {
         credentials: "omit",
         headers: { Accept: "application/json" },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const flat = (Array.isArray(data) ? data : []).flatMap(parseDailyRecord);
-      setRows(flat);
+      if (!Array.isArray(data)) {
+        throw new Error("Food DB data is not an array");
+      }
+      // Your data is already the flat list of foods. Just set it.
+      setRows(data);
     } catch (err) {
-      setError(`Failed to load Mockaroo data (${err.message}).`);
+      setError(`Failed to load foodDB (${err.message}).`);
       setRows([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddFood = async (item, scaledData, grams) => {
+    // Check if the item is missing
+    if (!item || !scaledData) {
+      setError("No food item selected.");
+      return;
+    }
+
+    setIsSaving(true);
+    setError("");
+
+    const newIntake = {
+      foodName: item.food,
+      grams: parseInt(grams),
+      protein: scaledData.protein,
+      fat: scaledData.fat,
+      carbs: scaledData.carbs,
+    };
+
+    try {
+      const res = await fetch('http://localhost:5000/api/addfooditem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newIntake),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server error: ${res.statusText}`);
+      }
+
+      const result = await res.json();
+
+      setTodayLog(result.updatedLog);
+      setShowConfirm(true);
+
+    } catch (err) {
+      setError(`Failed to save food: ${err.message}`);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -100,7 +121,7 @@ function FeedPage() {
           error={error}
           item={oneResult}
           grams={grams}
-          onAdd={() => setShowConfirm(true)}
+          onAdd={handleAddFood}
         />
 
         <div className="floating-btn">
@@ -125,21 +146,37 @@ function FeedPage() {
             <button
               className="btn close-btn"
               onClick={() => setShowConfirm(false)}
-              aria-label="Close"
+              disabled={isSaving}
             >
-              ×
+              {isSaving ? "Adding..." : "x"}
             </button>
             <h2>Successfully Added!</h2>
             <p>You can check your ingredients in Intake!</p>
           </div>
         </div>
       )}
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
     </div>
   );
 }
 
 /* ===== child components ===== */
 
+<<<<<<< HEAD
+function FeedHeader() {
+  return (
+    <div className="page-header">
+      <h1>Feed Page</h1>
+    </div>
+  );
+}
+
+=======
+>>>>>>> 23abd83d404f467b560922b13a5dc804c239fafd
 function FeedSearchSection({ query, setQuery, onSearch, grams, setGrams }) {
   return (
     <section className="sheet">
@@ -185,10 +222,10 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
 
   const scaled = item
     ? {
-        carbs: item.carbs * factor,
-        protein: item.protein * factor,
-        fat: item.fat * factor,
-      }
+      carbs: item.carbs * factor,
+      protein: item.protein * factor,
+      fat: item.fat * factor,
+    }
     : null;
 
   return (
@@ -216,7 +253,11 @@ function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
                 </div>
               </div>
 
-              <button className="btn" type="button" onClick={onAdd}>
+              <button 
+                className="btn" 
+                type="button" 
+                onClick={() => onAdd(item, scaled, g)}
+              >
                 Add
               </button>
             </div>
