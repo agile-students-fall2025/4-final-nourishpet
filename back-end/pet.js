@@ -20,6 +20,37 @@ export function showPetInfo() {
   }
 }
 
+export function calculateXP(todayArchive) {
+  let totalXP = 0;
+  let goalsReached = 0;
+
+  if (todayArchive["Total Intake"] >= todayArchive["Total Intake Goal"]) {
+    totalXP += 5;
+    goalsReached++;
+  }
+
+  if (todayArchive["Protein"] >= todayArchive["Protein Goal"]) {
+    totalXP += 5;
+    goalsReached++;
+  }
+
+  if (todayArchive["Carbs"] >= todayArchive["Carbs Goal"]) {
+    totalXP += 5;
+    goalsReached++;
+  }
+
+  if (todayArchive["Fat"] >= todayArchive["Fat Goal"]) {
+    totalXP += 5;
+    goalsReached++;
+  }
+
+  if (goalsReached === 4) {
+    totalXP += 20;
+  }
+
+  return totalXP;
+}
+
 export function upgrade(xpGain) {
   try {
     const petData = showPetInfo();
