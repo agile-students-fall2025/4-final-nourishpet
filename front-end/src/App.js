@@ -24,7 +24,7 @@ function App() {
           <Route path="/petpage" element={<PetPage />} />
           <Route path="/feedpage" element={<FeedPage />} />
           <Route path="/archives" element={<Archive />} />
-          <Route path="/archives/histrecord/:id" element={<HistRecord />} />
+          <Route path="/archives/histrecord/1" element={<HistRecord />} />
         </Routes>
       </div>
     </Router>
