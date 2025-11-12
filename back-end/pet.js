@@ -58,4 +58,3 @@ export function upgrade(xpGain) {
     throw new Error("Failed to upgrade pet");
   }
 }
-
