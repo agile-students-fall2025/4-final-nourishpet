@@ -8,6 +8,7 @@ function WeekArchive() {
 
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userName, setUserName] = useState([]);
 
     useEffect(() => {
         //fetch from url
@@ -26,6 +27,20 @@ function WeekArchive() {
         });
     }, []);
 
+    useEffect(() => {
+        //fetch from url
+        axios.get('http://localhost:5000/api/userdata')
+        .then(response => {
+            setUserName(response.data.name);
+        })
+        .catch(error => {
+            console.error("Error fetching user name:", error);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
+    }, []);
+
     //loading message
     if (loading) {
     return <div className="loading">Loading records...</div>;
@@ -33,7 +48,7 @@ function WeekArchive() {
 
     return (
         <main className="Archive">
-            <h1>Charlie's Nutrition Record</h1>
+            <h1>{userName}'s Nutrition Record</h1>
             
             <div className='record-list'>
                 {records.map(record =>{

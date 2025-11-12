@@ -2,10 +2,10 @@
   {
     "id": 1,
     "Date": "Nov 10, 2025",
-    "Total Intake": 634.5,
-    "Protein": 207,
-    "Carbs": 321,
-    "Fat": 106.5,
+    "Total Intake": 616.5,
+    "Protein": 284,
+    "Carbs": 229.5,
+    "Fat": 103,
     "Total Intake Goal": 2283,
     "Protein Goal": 289,
     "Carbs Goal": 438,
@@ -13,37 +13,32 @@
     "Food List": [
       "Banana",
       "Orange Juice",
-      "Banana",
-      "Banana",
-      "Banana"
+      "Steak",
+      "Sesame Seed"
     ],
     "Gram List": [
       150,
       150,
       150,
-      150,
-      150
+      50
     ],
     "Protein List": [
       18,
       135,
-      18,
-      18,
-      18
+      130.5,
+      0.5
     ],
     "Fat List": [
       24,
       10.5,
-      24,
-      24,
-      24
+      33,
+      35.5
     ],
     "Carbs List": [
       66,
       57,
-      66,
-      66,
-      66
+      60,
+      46.5
     ]
   },
   {

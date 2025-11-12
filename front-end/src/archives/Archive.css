@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   min-height: 100vh;
   box-sizing: border-box;
   padding-top: 40px;
-  padding-bottom: 70px;
   background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
-  z-index: 0;
+  position: relative;
 }
 
 .Archive h1{
