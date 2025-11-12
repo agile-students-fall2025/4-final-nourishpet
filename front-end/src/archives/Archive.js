@@ -8,15 +8,33 @@ function WeekArchive() {
 
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userName, setUserName] = useState([]);
 
     useEffect(() => {
         //fetch from url
         axios.get('http://localhost:5000/api/histdata')
         .then(response => {
-            setRecords(response.data);
+            const weeklyRecords = response.data.filter(record => 
+                record.id >= 1 && record.id <= 7
+            );
+            setRecords(weeklyRecords);
         })
         .catch(error => {
             console.error("Error fetching nutrition data:", error);
+        })
+        .finally(() => {
+            setLoading(false);
+        });
+    }, []);
+
+    useEffect(() => {
+        //fetch from url
+        axios.get('http://localhost:5000/api/userdata')
+        .then(response => {
+            setUserName(response.data.name);
+        })
+        .catch(error => {
+            console.error("Error fetching user name:", error);
         })
         .finally(() => {
             setLoading(false);
@@ -30,7 +48,7 @@ function WeekArchive() {
 
     return (
         <main className="Archive">
-            <h1>Charlie's Nutrition Record</h1>
+            <h1>{userName}'s Nutrition Record</h1>
             
             <div className='record-list'>
                 {records.map(record =>{
