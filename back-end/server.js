@@ -158,10 +158,10 @@ app.post("/api/addfooditem", async (req, res) => {
       histData.unshift(todayLog);
     }
 
-    // 6. Write the updated array back to the file
+    // Write the updated array back to the file
     writeFileSync(histDataPath, JSON.stringify(histData, null, 2));
 
-    // 7. Send the updated log back to the front-end
+    // Send the updated log back to the front-end
     res.status(200).json({ message: "Food item added successfully", updatedLog: todayLog });
   }
   catch (error) {
@@ -181,51 +181,15 @@ app.post("/api/updateuserdata", async (req, res) => {
   res.json({ message: "User data updated successfully" });
 });
 
-/*
-function archiveTodayData() {
-  const todayPath = path.join(__dirname, "temp_data", "todayData.json");
-  const savePath = path.join(__dirname, "temp_data", "save.json");
+if (process.env.NODE_ENV !== 'test') {
 
-  try {
-    const todayData = JSON.parse(readFileSync(todayPath, "utf8"));
+  const PORT = process.env.PORT || 5000;
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+  process.on('SIGTERM', () => server.close());
 
-    writeFileSync(
-      savePath,
-      JSON.stringify(
-        {
-          date: new Date().toISOString().split("T")[0],
-          ...todayData
-        },
-        null,
-        2
-      )
-    );
-
-    const reset = {
-      "Total Intake": 0,
-      "Protein": 0,
-      "Carbs": 0,
-      "Fat": 0,
-      "Total Intake Goal": 2000,
-      "Protein Goal": 120,
-      "Carbs Goal": 250,
-      "Fat Goal": 70
-    };
-
-    writeFileSync(todayPath, JSON.stringify(reset, null, 2));
-  } catch {}
-}
-
-setInterval(() => {
-  const now = new Date();
-  if (now.getHours() === 23 && now.getMinutes() === 59) archiveTodayData();
-}, 60000);
-*/
-
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-server.on("error", (err) => {
+  server.on("error", (err) => {
   console.error("HTTP server error:", err);
 });
 
@@ -239,6 +203,7 @@ process.on("exit", (code) => {
     server.close(() => process.exit(0));
   });
 });
+}
 
 process.on("uncaughtException", (err) => {
   console.error("Uncaught exception:", err);
@@ -247,3 +212,5 @@ process.on("uncaughtException", (err) => {
 process.on("unhandledRejection", (reason) => {
   console.error("Unhandled promise rejection:", reason);
 });
+
+export default app;
