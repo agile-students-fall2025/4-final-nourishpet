@@ -1,6 +1,33 @@
 [
   {
     "id": 1,
+    "Date": "Nov 15, 2025",
+    "Total Intake": 522,
+    "Protein": 201,
+    "Carbs": 267,
+    "Fat": 54,
+    "Total Intake Goal": 2283,
+    "Protein Goal": 289,
+    "Carbs Goal": 438,
+    "Fat Goal": 257,
+    "Food List": [
+      "Duck"
+    ],
+    "Gram List": [
+      300
+    ],
+    "Protein List": [
+      201
+    ],
+    "Fat List": [
+      54
+    ],
+    "Carbs List": [
+      267
+    ]
+  },
+  {
+    "id": 2,
     "Date": "Nov 12, 2025",
     "Total Intake": 108,
     "Protein": 18,
@@ -27,7 +54,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": 3,
     "Date": "Nov 10, 2025",
     "Total Intake": 616.5,
     "Protein": 284,
@@ -69,7 +96,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": 4,
     "Date": "Nov 08, 2025",
     "Total Intake": 2636,
     "Protein": 752,
@@ -106,7 +133,7 @@
     ]
   },
   {
-    "id": 4,
+    "id": 5,
     "Date": "Nov 07, 2025",
     "Total Intake": 2070,
     "Protein": 458,
@@ -143,7 +170,7 @@
     ]
   },
   {
-    "id": 5,
+    "id": 6,
     "Date": "Nov 06, 2025",
     "Total Intake": 1789,
     "Protein": 64,
@@ -185,7 +212,7 @@
     ]
   },
   {
-    "id": 6,
+    "id": 7,
     "Date": "Nov 05, 2025",
     "Total Intake": 1912,
     "Protein": 289,
@@ -232,7 +259,7 @@
     ]
   },
   {
-    "id": 7,
+    "id": 8,
     "Date": "Nov 04, 2025",
     "Total Intake": 1254,
     "Protein": 14,
@@ -264,7 +291,7 @@
     ]
   },
   {
-    "id": 8,
+    "id": 9,
     "Date": "Nov 03, 2025",
     "Total Intake": 2431,
     "Protein": 303,
@@ -296,7 +323,7 @@
     ]
   },
   {
-    "id": 9,
+    "id": 10,
     "Date": "Nov 02, 2025",
     "Total Intake": 2260,
     "Protein": 412,
