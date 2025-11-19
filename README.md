@@ -39,6 +39,9 @@ cd back-end
 # install dependencies
 npm install
 
+#Install testing libraries
+npm install --save-dev mocha chai supertest c8
+
 # install express 
 npm install express
 
