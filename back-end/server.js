@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 import { readFileSync, writeFileSync } from "fs";
 import path from 'path'
 import { fileURLToPath } from 'url'
 import morgan from "morgan";
+
+dotenv.config(); 
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -12,6 +16,19 @@ const app = express();
 app.use(morgan("dev"));
 app.use(cors()); 
 app.use(express.json());
+
+// ---------- MONGODB CONNECTION ----------
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Atlas connected");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
+
+connectDB();
 
 const readJson = (fileName) => {
   const rawData = readFileSync(path.join(__dirname, "temp_data", fileName), "utf-8");
