@@ -193,7 +193,7 @@ app.post("/api/addfooditem", async (req, res) => {
 app.get("/api/userdata", async (req, res) => {
   try{
     const userId = req.headers.authorization;
-    const userData = findUserById(userId);
+    const userData = await findUserById(userId);
     if (!userData){
       return res.status(404).json({error: "User not found"})
     }
