@@ -191,18 +191,21 @@ app.post("/api/addfooditem", async (req, res) => {
 });
 
 app.get("/api/userdata", async (req, res) => {
-  try{
+  try {
     const userId = req.headers.authorization;
-    const userData = findUserById(userId);
-    if (!userData){
-      return res.status(404).json({error: "User not found"})
+    const userData = await findUserById(userId); 
+
+    if (!userData) {
+      return res.status(404).json({ error: "User not found" });
     }
+
     res.json(userData);
-  } catch(error){
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 app.post("/api/updateuserdata", async (req, res) => {
   try {
