@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+const calculate_bmi = function(height, weight){
+  return weight / (height * height / 10000)
+}
+
 const UserSchema = new mongoose.Schema({
 
   name: { type: String, required: true },
@@ -19,5 +23,12 @@ const UserSchema = new mongoose.Schema({
   carbs_goal: { type: Number, default: 900 },
 
 }, { timestamps: true });
+
+UserSchema.pre('save', function(next) {
+  if (this.height > 0 && this.weight > 0) {
+    this.bmi = calculate_bmi(this.height, this.weight);
+  }
+  next();
+});
 
 export default mongoose.model("User", UserSchema);
