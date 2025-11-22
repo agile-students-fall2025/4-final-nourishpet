@@ -6,7 +6,8 @@ import { readFileSync, writeFileSync } from "fs";
 import path from 'path'
 import { fileURLToPath } from 'url'
 import morgan from "morgan";
-
+import AuthUser from "./schemas/AuthUser.js";
+import NutritionUser from "./schemas/User.js";
 dotenv.config(); 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -29,6 +30,103 @@ const connectDB = async () => {
 };
 
 connectDB();
+
+// --------------------- AUTH -------------------------
+app.post("/auth/signup", async (req, res) => {
+  try {
+    const { username, password, name } = req.body;
+
+    if (!username || !password || !name) {
+      return res.status(400).json({
+        success: false,
+        message: "username, password, and name required.",
+      });
+    }
+
+    // check username exists
+    const exists = await AuthUser.findOne({ username });
+    if (exists) {
+      return res.status(409).json({
+        success: false,
+        message: "Username already exists.",
+      });
+    }
+
+    // create nutrition profile
+    const nutritionUser = await new NutritionUser({ name }).save();
+
+    // create auth user
+    const auth = await new AuthUser({
+      username,
+      password,
+      nutrition_user_id: nutritionUser._id,
+    }).save();
+
+    const token = auth.generateJWT();
+
+    res.json({
+      success: true,
+      token,
+      username: auth.username,
+      nutrition_user_id: nutritionUser._id,
+    });
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ success: false, message: "Signup failed." });
+  }
+});
+
+
+// --------------------- LOGIN -------------------------
+app.post("/auth/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "username and password required.",
+      });
+    }
+
+    const user = await AuthUser.findOne({ username });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    if (!user.validPassword(password)) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password.",
+      });
+    }
+
+    const token = user.generateJWT();
+
+    res.json({
+      success: true,
+      token,
+      username: user.username,
+      nutrition_user_id: user.nutrition_user_id,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ success: false, message: "Login failed." });
+  }
+});
+
+
+// --------------------- LOGOUT -------------------------
+app.get("/auth/logout", (req, res) => {
+  res.json({
+    success: true,
+    message: "Delete your token on the client to logout.",
+  });
+});
+
 
 const readJson = (fileName) => {
   const rawData = readFileSync(path.join(__dirname, "temp_data", fileName), "utf-8");
