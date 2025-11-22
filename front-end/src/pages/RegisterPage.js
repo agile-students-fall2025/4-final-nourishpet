@@ -1,28 +1,57 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import '../css/RegisterPage.css';
-import logo from '../logo.svg';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../css/RegisterPage.css";
+import logo from "../logo.svg";
 
 function RegisterPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  // -----------------------
+  //        REGISTER
+  // -----------------------
+  const handleRegister = async (e) => {
     e.preventDefault();
-    
-    // Check if passwords match
+
+    // Check matching passwords
     if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+      alert("Passwords do not match!");
       return;
     }
-    
-    // Registration functionality will be implemented when backend is ready
-    console.log('Registration attempted with:', { username, password });
-    // TODO: Add registration logic here
-    
-    navigate('/');
+
+    try {
+      const response = await fetch("http://localhost:5000/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          name: username, // backend requires name, so reuse username
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        alert(data.message || "Signup failed.");
+        return;
+      }
+
+      // Save user session
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("nutrition_user_id", data.nutrition_user_id);
+
+      // Redirect to home
+      navigate("/");
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("Network or server error during signup.");
+    }
   };
 
   return (
@@ -33,9 +62,9 @@ function RegisterPage() {
             <img src={logo} alt="NourishPet Logo" className="logo-image" />
           </div>
         </div>
-        
+
         <h1 className="register-title">Register</h1>
-        
+
         <form onSubmit={handleRegister} className="register-form">
           <div className="input-group">
             <input
@@ -47,7 +76,7 @@ function RegisterPage() {
               required
             />
           </div>
-          
+
           <div className="input-group">
             <input
               type="password"
@@ -58,7 +87,7 @@ function RegisterPage() {
               required
             />
           </div>
-          
+
           <div className="input-group">
             <input
               type="password"
@@ -69,14 +98,17 @@ function RegisterPage() {
               required
             />
           </div>
-          
+
           <button type="submit" className="register-button">
             Sign up
           </button>
         </form>
-        
+
         <div className="login-link">
-          Already have an account? <Link to="/login" className="link-text">Click here to log in</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="link-text">
+            Click here to log in
+          </Link>
         </div>
       </div>
     </div>
@@ -84,4 +116,3 @@ function RegisterPage() {
 }
 
 export default RegisterPage;
-
