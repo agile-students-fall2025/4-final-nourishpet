@@ -8,6 +8,8 @@ import { fileURLToPath } from 'url'
 import morgan from "morgan";
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
+import {creatUser, getAllUsers, findUserById, updateUserById} from "./db/userDB.js";
+import { error } from "console";
 dotenv.config(); 
 
 const __filename = fileURLToPath(import.meta.url)
@@ -285,15 +287,38 @@ app.post("/api/addfooditem", async (req, res) => {
   }
 });
 
+
 app.get("/api/userdata", async (req, res) => {
-  const userData = readJson("userData.json");
-  res.json(userData);
+  try{
+    const userId = req.headers.authorization;
+    const userData = findUserById(userId);
+    if (!userData){
+      return res.status(404).json({error: "User not found"})
+    }
+    res.json(userData);
+  } catch(error){
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 app.post("/api/updateuserdata", async (req, res) => {
-  const userData = req.body;
-  writeFileSync(path.join(__dirname, "temp_data", "userData.json"), JSON.stringify(userData, null, 2));
-  res.json({ message: "User data updated successfully" });
+  try {
+    const userData = req.body;
+    const userId = req.headers.authorization;
+
+    const response = await updateUserById(userId, userData);
+
+    if (!response) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({ message: "User data updated successfully" });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
 if (process.env.NODE_ENV !== 'test') {
