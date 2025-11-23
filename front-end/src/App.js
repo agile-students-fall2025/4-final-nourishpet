@@ -10,12 +10,14 @@ import PetPage from './petpage/PetPage.js';
 import FeedPage from './pages/FeedPage.js';
 import Archive from './archives/Archive.js';
 import HistRecord from './archives/HistRecord.js';
+import { Navigate } from "react-router-dom";
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
