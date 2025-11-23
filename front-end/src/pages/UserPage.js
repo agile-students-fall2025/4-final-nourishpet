@@ -11,19 +11,23 @@ function UserPage(){
 
     useEffect(() => {
       axios
-        .get("http://localhost:5000/api/userdata")
+        .get("http://localhost:5000/api/userdata", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
         .then((res) => {
           console.log(res.data);
           const userData = res.data; 
 
           setUserData({
             name: userData.name,
-            petName: userData.petName,
+            // petName: userData.petName,
             age: userData.age,
             gender: userData.gender,
             height: userData.height,
-            currentWeight: userData.currentWeight,
-            targetWeight: userData.targetWeight,
+            weight: userData.weight,
+            target_weight: userData.target_weight,
             bmi: userData.bmi,
           });
           setLoading(false);
@@ -69,12 +73,12 @@ function UserInfoDisplay({ userData }){
                 <h2 className="app-title" style={{marginTop: '20px', marginBottom: '15px'}}>{userData.name}</h2>
                 
                 <div className="user-details-simple">
-                    <p><span className="detail-label">Pet Name:</span> <span className="detail-value">{userData.petName}</span></p>
+                    {/* <p><span className="detail-label">Pet Name:</span> <span className="detail-value">{userData.petName}</span></p> */}
                     <p><span className="detail-label">Age:</span> <span className="detail-value">{userData.age}</span></p>
                     <p><span className="detail-label">Gender:</span> <span className="detail-value">{userData.gender}</span></p>
                     <p><span className="detail-label">Height:</span> <span className="detail-value">{userData.height}cm</span></p>
-                    <p><span className="detail-label">Current Weight:</span> <span className="detail-value">{userData.currentWeight}kg</span></p>
-                    <p><span className="detail-label">Target Weight:</span> <span className="detail-value">{userData.targetWeight}kg</span></p>
+                    <p><span className="detail-label">Current Weight:</span> <span className="detail-value">{userData.weight}kg</span></p>
+                    <p><span className="detail-label">Target Weight:</span> <span className="detail-value">{userData.target_weight}kg</span></p>
                     <p><span className="detail-label">BMI:</span> <span className="detail-value">{userData.bmi}</span></p>
                 </div>
             </div>

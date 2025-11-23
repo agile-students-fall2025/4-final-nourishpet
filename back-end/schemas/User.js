@@ -6,7 +6,7 @@ const calculate_bmi = function(height, weight){
 
 const UserSchema = new mongoose.Schema({
 
-  name: { type: String, required: true },
+  name: { type: String, default: "UserName" },
   age: { type: Number, default: 0 },
   gender: { type: String, default: "" },
 
@@ -26,7 +26,8 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function(next) {
   if (this.height > 0 && this.weight > 0) {
-    this.bmi = calculate_bmi(this.height, this.weight);
+    const calculatedBmi = calculate_bmi(this.height, this.weight);
+    this.bmi = Math.round(calculatedBmi * 10) / 10;
   }
   next();
 });
