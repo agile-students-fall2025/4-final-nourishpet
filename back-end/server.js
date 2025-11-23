@@ -31,6 +31,10 @@ app.use(express.json());
 // ---------- MONGODB CONNECTION ----------
 const connectDB = async () => {
   try {
+    if (mongoose.connection.readyState === 1) {
+      console.log("MongoDB already connected");
+      return;
+    }
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
   } catch (error) {
@@ -38,7 +42,6 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
-connectDB();
 
 // ==========================================================
 // 🔐 AUTH MIDDLEWARE — requires JWT for protected routes
@@ -93,13 +96,24 @@ app.post("/auth/signup", async (req, res) => {
       });
     }
 
-    const nutritionUser = await new NutritionUser({ name }).save();
-
     const auth = await new AuthUser({
       username,
       password,
-      nutrition_user_id: nutritionUser._id,
     }).save();
+
+    console.log("AuthUser created:", auth._id);
+
+    try {
+      const nutritionUser = await creatUser({
+        _id: auth._id,
+        name: name
+      });
+      console.log("User created:", nutritionUser._id);
+    } catch (userErr) {
+      console.error("Failed to create User:", userErr);
+      await AuthUser.findByIdAndDelete(auth._id);
+      throw new Error(`Failed to create user profile: ${userErr.message}`);
+    }
 
     const token = auth.generateJWT();
 
@@ -107,11 +121,16 @@ app.post("/auth/signup", async (req, res) => {
       success: true,
       token,
       username: auth.username,
-      nutrition_user_id: nutritionUser._id,
+      id: auth._id,
     });
   } catch (err) {
     console.error("Signup error:", err);
-    res.status(500).json({ success: false, message: "Signup failed." });
+    console.error("Error details:", err.message);
+    res.status(500).json({ 
+      success: false, 
+      message: err.message || "Signup failed.",
+      error: process.env.NODE_ENV === "development" ? err.stack : undefined
+    });
   }
 });
 
@@ -148,7 +167,7 @@ app.post("/auth/login", async (req, res) => {
       success: true,
       token,
       username: user.username,
-      nutrition_user_id: user.nutrition_user_id,
+      id: user._id,
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -319,7 +338,7 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
 
     res.json({ message: "User data updated successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error in update user data route:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -330,15 +349,20 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
 if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 5000;
 
-  const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-
-  ["SIGINT", "SIGTERM"].forEach((signal) => {
-    process.on(signal, () => {
-      console.log(`Received ${signal}, shutting down server...`);
-      server.close(() => process.exit(0));
+  connectDB().then(() => {
+    const server = app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
+
+    ["SIGINT", "SIGTERM"].forEach((signal) => {
+      process.on(signal, () => {
+        console.log(`Received ${signal}, shutting down server...`);
+        server.close(() => process.exit(0));
+      });
+    });
+  }).catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
   });
 }
 

@@ -44,10 +44,10 @@ function RegisterPage() {
       // Save user session
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);
-      localStorage.setItem("nutrition_user_id", data.nutrition_user_id);
+      localStorage.setItem("userId", data.id);
 
       // Redirect to home
-      navigate("/");
+      navigate("/editUserInfo");
     } catch (error) {
       console.error("Signup error:", error);
       alert("Network or server error during signup.");

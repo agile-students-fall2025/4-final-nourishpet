@@ -18,13 +18,6 @@ const AuthUserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
-  // link to nutrition profile
-  nutrition_user_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: false,
-  },
 });
 
 // Hash password before saving
@@ -46,7 +39,6 @@ AuthUserSchema.methods.generateJWT = function () {
     {
       id: this._id,
       username: this.username,
-      nutrition_user_id: this.nutrition_user_id,
     },
     JWT_SECRET,
     { expiresIn: "7d" }

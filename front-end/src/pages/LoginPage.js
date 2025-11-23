@@ -33,7 +33,7 @@ const handleLogin = async (e) => {
     // Save token + user data
     localStorage.setItem("token", data.token);
     localStorage.setItem("username", data.username);
-    localStorage.setItem("nutrition_user_id", data.nutrition_user_id);
+    localStorage.setItem("userId", data.id);
 
     // Redirect
     navigate("/home");
