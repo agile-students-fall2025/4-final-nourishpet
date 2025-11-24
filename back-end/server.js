@@ -7,6 +7,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import morgan from "morgan";
 
+
 import {creatUser, getAllUsers, findUserById, updateUserById} from "./db/userDB.js"
 import { error } from "console";
 
@@ -32,6 +33,22 @@ const connectDB = async () => {
 };
 
 connectDB();
+function getUserIdFromRequest(req) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.substring(7)
+    : authHeader;
+
+  if (!token) return null;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded.userId;
+  } catch {
+    return null;
+  }
+}
+
 
 const readJson = (fileName) => {
   const rawData = readFileSync(path.join(__dirname, "temp_data", fileName), "utf-8");

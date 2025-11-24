@@ -6,6 +6,7 @@ import GoalsPanel from "./GoalsPanel";
 import StatusPie from "./StatusPie";
 import "./PetPage.css";
 import Footer from "../components/Footer";
+import { Navigate } from "react-router-dom";
 
 function PetPage() {
   const today = new Date().toLocaleDateString("en-US", {
@@ -18,41 +19,59 @@ function PetPage() {
   const [petData, setPetData] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  const token = localStorage.getItem("token");
+
+  // ✅ 没 token 直接踢回登录
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // ---------- 获取用户数据 ----------
   useEffect(() => {
-  axios.get("http://localhost:5000/api/userdata")
+    axios.get("http://localhost:5000/api/userdata", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     .then((res) => {
       setUserData(res.data);
     })
     .catch((err) => console.error("Error fetching user data:", err));
-}, []);
+  }, [token]);
 
-    useEffect(() => {
-  if (!userData) return; // wait until userData is loaded
+  // ---------- 获取宠物 & 营养数据 ----------
+  useEffect(() => {
+    if (!userData) return;
 
-  axios
-    .get("http://localhost:5000/api/home/nutrition?id=1")
-    .then((res) => {
-      const todayData = res.data;
-      setPetData({
-        petName: userData.petName, 
-        level: 4,
-        xp: 60,
-        nutrition: {
-          calories: todayData.calories,
-          protein: todayData.protein,
-          carbs: todayData.carbs,
-          fat: todayData.fat,
-        },
-        goals: {
-          calories: todayData.caloriesGoal,
-          protein: todayData.proteinGoal,
-          carbs: todayData.carbsGoal,
-          fat: todayData.fatGoal,
-        },
-      });
-    })
-    .catch((err) => console.error("Error fetching mock data:", err));
-}, [userData]); // reruns only when userData changes
+    axios
+      .get("http://localhost:5000/api/home/nutrition?id=1", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then((res) => {
+        const todayData = res.data;
+
+        setPetData({
+          petName: userData.petName || "My Pet",
+          level: userData.level || 1,
+          xp: userData.xp || 0,
+          nutrition: {
+            calories: todayData.calories,
+            protein: todayData.protein,
+            carbs: todayData.carbs,
+            fat: todayData.fat,
+          },
+          goals: {
+            calories: todayData.caloriesGoal,
+            protein: todayData.proteinGoal,
+            carbs: todayData.carbsGoal,
+            fat: todayData.fatGoal,
+          },
+        });
+      })
+      .catch((err) => console.error("Error fetching pet data:", err));
+  }, [userData, token]);
 
   if (!petData) {
     return <p style={{ textAlign: "center" }}>Loading pet data...</p>;
@@ -69,13 +88,10 @@ function PetPage() {
       <XPBar xp={xp} level={level} />
 
       <div className="mid-section">
-        <div className="goals-panel">
         <GoalsPanel nutrition={nutrition} goals={goals} />
-        </div>
-        <div className="status-panel">
         <StatusPie nutrition={nutrition} />
-        </div>
       </div>
+
       <Footer />
     </div>
   );

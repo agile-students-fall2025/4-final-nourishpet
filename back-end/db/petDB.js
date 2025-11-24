@@ -16,7 +16,7 @@ function calcLevelFromXp(xp) {
  *
  * 1 - 33  -> stage1
  * 34 - 66 -> stage2
- * 67+    -> stage3 (封顶)
+ * 67+     -> stage3 (封顶)
  */
 function calcStatusFromLevel(level) {
   if (level <= 33) return "stage1";
@@ -24,7 +24,9 @@ function calcStatusFromLevel(level) {
   return "stage3"; // 超过也固定为 stage3
 }
 
-// 获取宠物信息
+/**
+ * 获取宠物信息
+ */
 export async function showPetInfo(userId) {
   const pet = await Pet.findOne({ user_id: userId }).lean();
 
@@ -42,7 +44,9 @@ export async function showPetInfo(userId) {
   };
 }
 
-// 增加经验并自动升级
+/**
+ * 给某个用户的宠物增加经验并自动升级
+ */
 export async function upgrade(userId, gainedXp) {
   const pet = await Pet.findOne({ user_id: userId });
 
@@ -53,10 +57,8 @@ export async function upgrade(userId, gainedXp) {
   // 增加经验
   pet.xp += gainedXp;
 
-  // 重新计算 level
+  // 重新计算 level & stage
   pet.level = calcLevelFromXp(pet.xp);
-
-  // 根据 level 计算 stage
   pet.status = calcStatusFromLevel(pet.level);
 
   await pet.save();
