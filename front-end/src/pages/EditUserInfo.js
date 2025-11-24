@@ -15,20 +15,24 @@ function EditUserInfo(){
     const hasInitialized = useRef(false);
     useEffect(() => {
       axios
-        .get("http://localhost:5000/api/userdata")
+        .get("http://localhost:5000/api/userdata", {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token")
+            }
+          })
         .then((res) => {
           console.log(res.data);
           const userData = res.data; 
 
           setUserData({
             name: userData.name,
-            petName: userData.petName,
+            // petName: userData.petName,
             age: userData.age,
             gender: userData.gender,
             height: userData.height,
-            currentWeight: userData.currentWeight,
-            targetWeight: userData.targetWeight,
-            bmi: userData.bmi,
+            weight: userData.weight,
+            target_weight: userData.target_weight,
+            // bmi: userData.bmi,
           });
           setLoading(false);
         })
@@ -37,7 +41,8 @@ function EditUserInfo(){
 
     useEffect(() => {
       if (userData) {
-        const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'currentWeight', 'targetWeight'];
+        // const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
+        const requiredFields = ['name', 'age', 'gender', 'height', 'weight', 'target_weight'];
         const hasEmptyField = requiredFields.some(field => {
           const value = userData[field];
           return value === null || value === undefined || value === '' || (typeof value === 'number' && isNaN(value));
@@ -73,7 +78,11 @@ function EditUserInfo(){
             return;
         }
         axios
-            .post("http://localhost:5000/api/updateuserdata", userData)
+            .post("http://localhost:5000/api/updateuserdata", userData, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token")
+            }
+          })
             .then((res) => {
                 console.log(res.data);
             })
@@ -124,7 +133,7 @@ function UserInfo({ formData, onInputChange }){
                         />
                     </div>
                     
-                    <div className="form-row">
+                    {/* <div className="form-row">
                         <label>Pet name:</label>
                         <input 
                             type="text" 
@@ -132,7 +141,7 @@ function UserInfo({ formData, onInputChange }){
                             onChange={(e) => onInputChange('petName', e.target.value)}
                             className="form-input-simple"
                         />
-                    </div>
+                    </div> */}
 
                     <div className="form-row">
                         <label>Gender:</label>
@@ -172,8 +181,8 @@ function UserInfo({ formData, onInputChange }){
                         <div className="input-with-unit-simple">
                             <input 
                                 type="number" 
-                                value={formData.currentWeight}
-                                onChange={(e) => onInputChange('currentWeight', e.target.value)}
+                                value={formData.weight}
+                                onChange={(e) => onInputChange('weight', e.target.value)}
                                 className="form-input-simple"
                             />
                             <span className="unit-simple">kg</span>
@@ -185,8 +194,8 @@ function UserInfo({ formData, onInputChange }){
                         <div className="input-with-unit-simple">
                             <input 
                                 type="number" 
-                                value={formData.targetWeight}
-                                onChange={(e) => onInputChange('targetWeight', e.target.value)}
+                                value={formData.target_weight}
+                                onChange={(e) => onInputChange('target_weight', e.target.value)}
                                 className="form-input-simple"
                             />
                             <span className="unit-simple">kg</span>
