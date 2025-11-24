@@ -6,6 +6,9 @@ import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
+import jwt from "jsonwebtoken";
+
+
 
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
@@ -43,149 +46,23 @@ const connectDB = async () => {
   }
 };
 
-// ==========================================================
-// 🔐 AUTH MIDDLEWARE — requires JWT for protected routes
-// ==========================================================
-import jwt from "jsonwebtoken";
+connectDB();
+function getUserIdFromRequest(req) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.substring(7)
+    : authHeader;
 
-function authMiddleware(req, res, next) {
-  const header = req.headers.authorization;
-
-  if (!header) {
-    return res.status(401).json({
-      success: false,
-      message: "No token provided.",
-    });
-  }
-
-  const token = header.replace("Bearer ", "");
+  if (!token) return null;
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // user info from token
-    next();
-  } catch (err) {
-    return res.status(401).json({
-      success: false,
-      message: "Invalid or expired token.",
-    });
+    return decoded.userId;
+  } catch {
+    return null;
   }
 }
 
-// ==========================================================
-// 🔐 AUTH ROUTES
-// ==========================================================
-
-// --------------------- SIGNUP -------------------------
-app.post("/auth/signup", async (req, res) => {
-  try {
-    const { username, password, name } = req.body;
-
-    if (!username || !password || !name) {
-      return res.status(400).json({
-        success: false,
-        message: "username, password, and name required.",
-      });
-    }
-
-    const exists = await AuthUser.findOne({ username });
-    if (exists) {
-      return res.status(409).json({
-        success: false,
-        message: "Username already exists.",
-      });
-    }
-
-    const auth = await new AuthUser({
-      username,
-      password,
-    }).save();
-
-    console.log("AuthUser created:", auth._id);
-
-    try {
-      const nutritionUser = await creatUser({
-        _id: auth._id,
-        name: name
-      });
-      console.log("User created:", nutritionUser._id);
-    } catch (userErr) {
-      console.error("Failed to create User:", userErr);
-      await AuthUser.findByIdAndDelete(auth._id);
-      throw new Error(`Failed to create user profile: ${userErr.message}`);
-    }
-
-    const token = auth.generateJWT();
-
-    res.json({
-      success: true,
-      token,
-      username: auth.username,
-      id: auth._id,
-    });
-  } catch (err) {
-    console.error("Signup error:", err);
-    console.error("Error details:", err.message);
-    res.status(500).json({ 
-      success: false, 
-      message: err.message || "Signup failed.",
-      error: process.env.NODE_ENV === "development" ? err.stack : undefined
-    });
-  }
-});
-
-// --------------------- LOGIN -------------------------
-app.post("/auth/login", async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "username and password required.",
-      });
-    }
-
-    const user = await AuthUser.findOne({ username });
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
-
-    if (!user.validPassword(password)) {
-      return res.status(401).json({
-        success: false,
-        message: "Incorrect password.",
-      });
-    }
-
-    const token = user.generateJWT();
-
-    res.json({
-      success: true,
-      token,
-      username: user.username,
-      id: user._id,
-    });
-  } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ success: false, message: "Login failed." });
-  }
-});
-
-// --------------------- LOGOUT -------------------------
-app.get("/auth/logout", (req, res) => {
-  res.json({
-    success: true,
-    message: "Delete your token on the client to logout.",
-  });
-});
-
-// ==========================================================
-// 🔐 PROTECTED NUTRITION API ROUTES
-// ==========================================================
 
 const readJson = (fileName) => {
   const rawData = readFileSync(
@@ -264,11 +141,10 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   }
 });
 
-// USER DATA
-app.get("/api/userdata", authMiddleware, async (req, res) => {
+app.get("/api/userdata", async (req, res) => {
   try {
-    const userId = req.user.id;
-    const userData = await await findUserById(userId);
+    const userId = req.headers.authorization;
+    const userData = await findUserById(userId); 
 
     if (!userData) {
       return res.status(404).json({ error: "User not found" });
@@ -281,8 +157,8 @@ app.get("/api/userdata", authMiddleware, async (req, res) => {
   }
 });
 
-// UPDATE USER DATA
-app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
+
+app.post("/api/updateuserdata", async (req, res) => {
   try {
     const userId = req.user.id;
     const userData = req.body;

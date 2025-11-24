@@ -1,84 +1,56 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import PetImage from "./PetImage";
 import XPBar from "./XPBar";
-import GoalsPanel from "./GoalsPanel";
 import StatusPie from "./StatusPie";
-import "./PetPage.css";
-import Footer from "../components/Footer";
+import PetImage from "./PetImage";
+import GoalsPanel from "./GoalsPanel";
 
-function PetPage() {
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+const PetPage = () => {
+  const [pet, setPet] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [petData, setPetData] = useState(null);
-  const [userData, setUserData] = useState(null);
-
+  // ✅ 所有 hooks 都在最外层
   useEffect(() => {
-  axios.get("http://localhost:5000/api/userdata")
-    .then((res) => {
-      setUserData(res.data);
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.warn("No token found");
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:5000/api/pet", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-    .catch((err) => console.error("Error fetching user data:", err));
-}, []);
-
-    useEffect(() => {
-  if (!userData) return; // wait until userData is loaded
-
-  axios
-    .get("http://localhost:5000/api/home/nutrition?id=1")
-    .then((res) => {
-      const todayData = res.data;
-      setPetData({
-        petName: userData.petName, 
-        level: 4,
-        xp: 60,
-        nutrition: {
-          calories: todayData.calories,
-          protein: todayData.protein,
-          carbs: todayData.carbs,
-          fat: todayData.fat,
-        },
-        goals: {
-          calories: todayData.caloriesGoal,
-          protein: todayData.proteinGoal,
-          carbs: todayData.carbsGoal,
-          fat: todayData.fatGoal,
-        },
+      .then(res => res.json())
+      .then(data => {
+        setPet(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Fetch pet failed:", err);
+        setLoading(false);
       });
-    })
-    .catch((err) => console.error("Error fetching mock data:", err));
-}, [userData]); // reruns only when userData changes
+  }, []);
 
-  if (!petData) {
-    return <p style={{ textAlign: "center" }}>Loading pet data...</p>;
-  }
-
-  const { petName, level, xp, nutrition, goals } = petData;
+  // ✅ 条件渲染只放在 return 阶段
+  if (loading) return <div>Loading pet...</div>;
+  if (!pet) return <div>No pet data</div>;
 
   return (
-    <div className="pet-page">
-      <h1>Pet Page</h1>
-      <p id="date-top-right">{today}</p>
+    <div className="pet-container">
+      <h1>{pet.name}</h1>
 
-      <PetImage petName={petName} />
-      <XPBar xp={xp} level={level} />
+      <PetImage stage={pet.stage} />
+      <XPBar xp={pet.xp} level={pet.level} />
+      <StatusPie status={pet.status} />
+      <GoalsPanel />
 
-      <div className="mid-section">
-        <div className="goals-panel">
-        <GoalsPanel nutrition={nutrition} goals={goals} />
-        </div>
-        <div className="status-panel">
-        <StatusPie nutrition={nutrition} />
-        </div>
-      </div>
-      <Footer />
+      <p>Level: {pet.level}</p>
+      <p>Stage: {pet.stage}</p>
+      <p>XP: {pet.xp}</p>
     </div>
   );
-}
+};
 
 export default PetPage;
