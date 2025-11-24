@@ -1,100 +1,56 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import PetImage from "./PetImage";
 import XPBar from "./XPBar";
-import GoalsPanel from "./GoalsPanel";
 import StatusPie from "./StatusPie";
-import "./PetPage.css";
-import Footer from "../components/Footer";
-import { Navigate } from "react-router-dom";
+import PetImage from "./PetImage";
+import GoalsPanel from "./GoalsPanel";
 
-function PetPage() {
-  const today = new Date().toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric"
-  });
+const PetPage = () => {
+  const [pet, setPet] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [petData, setPetData] = useState(null);
-  const [userData, setUserData] = useState(null);
-
-  const token = localStorage.getItem("token");
-
-  // ✅ 没 token 直接踢回登录
-  if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // ---------- 获取用户数据 ----------
+  // ✅ 所有 hooks 都在最外层
   useEffect(() => {
-    axios.get("http://localhost:5000/api/userdata", {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.warn("No token found");
+      setLoading(false);
+      return;
+    }
+
+    fetch("http://localhost:5000/api/pet", {
       headers: {
         Authorization: `Bearer ${token}`
       }
     })
-    .then((res) => {
-      setUserData(res.data);
-    })
-    .catch((err) => console.error("Error fetching user data:", err));
-  }, [token]);
-
-  // ---------- 获取宠物 & 营养数据 ----------
-  useEffect(() => {
-    if (!userData) return;
-
-    axios
-      .get("http://localhost:5000/api/home/nutrition?id=1", {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      .then(res => res.json())
+      .then(data => {
+        setPet(data);
+        setLoading(false);
       })
-      .then((res) => {
-        const todayData = res.data;
+      .catch(err => {
+        console.error("Fetch pet failed:", err);
+        setLoading(false);
+      });
+  }, []);
 
-        setPetData({
-          petName: userData.petName || "My Pet",
-          level: userData.level || 1,
-          xp: userData.xp || 0,
-          nutrition: {
-            calories: todayData.calories,
-            protein: todayData.protein,
-            carbs: todayData.carbs,
-            fat: todayData.fat,
-          },
-          goals: {
-            calories: todayData.caloriesGoal,
-            protein: todayData.proteinGoal,
-            carbs: todayData.carbsGoal,
-            fat: todayData.fatGoal,
-          },
-        });
-      })
-      .catch((err) => console.error("Error fetching pet data:", err));
-  }, [userData, token]);
-
-  if (!petData) {
-    return <p style={{ textAlign: "center" }}>Loading pet data...</p>;
-  }
-
-  const { petName, level, xp, nutrition, goals } = petData;
+  // ✅ 条件渲染只放在 return 阶段
+  if (loading) return <div>Loading pet...</div>;
+  if (!pet) return <div>No pet data</div>;
 
   return (
-    <div className="pet-page">
-      <h1>Pet Page</h1>
-      <p id="date-top-right">{today}</p>
+    <div className="pet-container">
+      <h1>{pet.name}</h1>
 
-      <PetImage petName={petName} />
-      <XPBar xp={xp} level={level} />
+      <PetImage stage={pet.stage} />
+      <XPBar xp={pet.xp} level={pet.level} />
+      <StatusPie status={pet.status} />
+      <GoalsPanel />
 
-      <div className="mid-section">
-        <GoalsPanel nutrition={nutrition} goals={goals} />
-        <StatusPie nutrition={nutrition} />
-      </div>
-
-      <Footer />
+      <p>Level: {pet.level}</p>
+      <p>Stage: {pet.stage}</p>
+      <p>XP: {pet.xp}</p>
     </div>
   );
-}
+};
 
 export default PetPage;
