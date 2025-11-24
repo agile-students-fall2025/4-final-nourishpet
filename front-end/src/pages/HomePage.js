@@ -6,36 +6,45 @@ import '../css/HomePage.css';
 
 function HomePage() {
   const [nutritionData, setNutritionData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const petName = "Charlie";
-  const recordId = 1;
+  const getToken = () => localStorage.getItem("token");
 
   useEffect(() => {
-    const fetchNutrition = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        console.log('Fetching from:', '/api/home/nutrition?id=' + recordId);
-        
-        const { data } = await axios.get("/api/home/nutrition", {
-          params: { id: recordId },
-        });
-        
-        console.log('Received data:', data);
-        setNutritionData(data);
-      } catch (error) {
-        console.error("Error fetching nutrition data:", error);
-        console.error("Error details:", error.response?.data || error.message);
-        setError("Can't load nutrients info. Check console for details.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const token = getToken();
 
-    fetchNutrition();
-  }, [recordId]);
+    Promise.all([
+      axios.get('http://localhost:5000/api/home/nutrition', {
+        headers: { Authorization: `Bearer ${token}` }
+      }),
+      axios.get('http://localhost:5000/api/userdata', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    ])
+    .then(([nutritionResponse, userResponse]) => {
+      setNutritionData(nutritionResponse.data);
+
+      const foundUserData = userResponse.data;
+      if (foundUserData) {
+        setUserData({
+          pet_name: foundUserData.pet_name || "Your Pet", 
+          total_intake_goal: foundUserData.total_intake_goal || 2000, 
+          protein_goal: foundUserData.protein_goal || 150,
+          carbs_goal: foundUserData.carbs_goal || 250,
+          fat_goal: foundUserData.fat_goal || 70
+        });
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching data:", error);
+      setError("Failed to load data.");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+
+  }, []);
 
   return (
     <div className="homepage">
@@ -60,7 +69,7 @@ function HomePage() {
         <section className="pet-section">
           <Link to="/petpage" className="pet-image-link">
             <div className="pet-image-circle">
-              <p className="pet-name">{petName}</p>
+              <p className="pet-name">{userData ? userData.pet_name : "Loading..."}</p>
               <img
                 src="https://picsum.photos/200/200"
                 alt="Pet"
@@ -80,31 +89,31 @@ function HomePage() {
             )}
             {isLoading && <p>Loading...</p>}
             {error && !isLoading && <p className="error-text">{error}</p>}
-            {!isLoading && !error && nutritionData ? (
+            {!isLoading && !error && nutritionData && userData ? (
               <>
                 <div className="nutrition-stats">
                   <div className="nutrition-item">
                     <span className="nutrition-label">Calories:</span>
                     <span className="nutrition-value">
-                      {nutritionData.calories} / {nutritionData.caloriesGoal}
+                      {nutritionData.total_intake} / {userData.total_intake_goal}
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Protein:</span>
                     <span className="nutrition-value">
-                      {nutritionData.protein}g / {nutritionData.proteinGoal}g
+                      {nutritionData.protein}g / {userData.protein_goal}g
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Carbs:</span>
                     <span className="nutrition-value">
-                      {nutritionData.carbs}g / {nutritionData.carbsGoal}g
+                      {nutritionData.carbs}g / {userData.carbs_goal}g
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Fat:</span>
                     <span className="nutrition-value">
-                      {nutritionData.fat}g / {nutritionData.fatGoal}g
+                      {nutritionData.fat}g / {userData.fat_goal}g
                     </span>
                   </div>
                 </div>

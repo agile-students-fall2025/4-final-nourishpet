@@ -15,6 +15,7 @@ import {
   findUserById,
   updateUserById,
 } from "./db/userDB.js";
+import * as ArchiveDB from "./db/archiveDB.js"
 
 dotenv.config();
 
@@ -37,6 +38,10 @@ const connectDB = async () => {
     }
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
+        // --- 🔍 DEBUGGING: PRINT DB INFO ---
+    console.log("---------------------------------------");
+    console.log("📂 Current Database Name:", mongoose.connection.name);
+    console.log("------------------------------------------------");
   } catch (error) {
     console.error("MongoDB connection error:", error);
     process.exit(1);
@@ -198,14 +203,22 @@ const readJson = (fileName) => {
 // HOME PAGE
 app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
   try {
-    const histData = readJson("histData.json");
-    const recordId = Number(req.query.id) || 1;
-    const todayData = histData.find((entry) => entry.id === recordId);
+    const userId = req.user.id;
+    const histData = await ArchiveDB.getWeeklyLogs(userId);
+    const dateObj = new Date();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const todayString = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+    const todayData = histData.find((entry) => entry.date === todayString);
 
     if (!todayData) {
-      return res
-        .status(404)
-        .json({ error: `No nutrition record found for id ${recordId}` });
+      return res.json({
+        date: todayString,
+        total_intake: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      })
     }
 
     res.json(todayData);
@@ -218,7 +231,8 @@ app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
 // HISTORY
 app.get("/api/histdata", authMiddleware, async (req, res) => {
   try {
-    const histData = await ArchiveDB.getHistory(userId);
+    const userId = req.user.id;
+    const histData = await ArchiveDB.getWeeklyLogs(userId);
     res.json(histData);
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -243,6 +257,7 @@ app.get("/api/fooddata", authMiddleware, async (req, res) => {
 // ADD FOOD ENTRY
 app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   try {
+    const userId = req.user.id;
     const { foodName, grams, protein, fat, carbs } = req.body;
 
     const foodItem = {
