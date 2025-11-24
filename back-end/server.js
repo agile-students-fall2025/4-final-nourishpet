@@ -218,7 +218,7 @@ app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
 // HISTORY
 app.get("/api/histdata", authMiddleware, async (req, res) => {
   try {
-    const histData = readJson("histData.json");
+    const histData = await ArchiveDB.getHistory(userId);
     res.json(histData);
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -245,62 +245,19 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   try {
     const { foodName, grams, protein, fat, carbs } = req.body;
 
-    const histDataPath = path.join(__dirname, "temp_data", "histData.json");
-    let histData = JSON.parse(readFileSync(histDataPath, "utf-8"));
-
-    const todayDateStr = new Date().toLocaleDateString("en-US", {
-      month: "short",
-      day: "2-digit",
-      year: "numeric",
-    });
-
-    let index = histData.findIndex((log) => log.Date === todayDateStr);
-    let todayLog;
-    const newTotalIntake = protein + carbs + fat;
-
-    if (index !== -1) {
-      todayLog = histData[index];
-      todayLog["Food List"].push(foodName);
-      todayLog["Gram List"].push(grams);
-      todayLog["Protein List"].push(protein);
-      todayLog["Fat List"].push(fat);
-      todayLog["Carbs List"].push(carbs);
-
-      todayLog["Total Intake"] += newTotalIntake;
-      todayLog["Protein"] += protein;
-      todayLog["Carbs"] += carbs;
-      todayLog["Fat"] += fat;
-
-      histData[index] = todayLog;
-    } else {
-      histData.forEach((log) => (log.id += 1));
-
-      todayLog = {
-        id: 1,
-        Date: todayDateStr,
-        "Total Intake": newTotalIntake,
-        Protein: protein,
-        Carbs: carbs,
-        Fat: fat,
-        "Total Intake Goal": 2000,
-        "Protein Goal": 900,
-        "Carbs Goal": 900,
-        "Fat Goal": 900,
-        "Food List": [foodName],
-        "Gram List": [grams],
-        "Protein List": [protein],
-        "Fat List": [fat],
-        "Carbs List": [carbs],
-      };
-
-      histData.unshift(todayLog);
-    }
-
-    writeFileSync(histDataPath, JSON.stringify(histData, null, 2));
+    const foodItem = {
+      name: foodName,
+      grams: Number(grams),
+      p: Number(protein),
+      f: Number(fat),
+      c: Number(carbs)
+    };
+    
+    const updatedLog = await ArchiveDB.addFoodEntry(userId, foodItem);
 
     res
       .status(200)
-      .json({ message: "Food item added successfully", updatedLog: todayLog });
+      .json({ message: "Food item added successfully", updatedLog});
   } catch (error) {
     console.error("Error adding food item:", error.message);
     res.status(500).json({ error: "Failed to add food item" });
