@@ -9,6 +9,7 @@ function WeekArchive() {
     const [records, setRecords] = useState([]);
     const [loading, setLoading] = useState(true);
     const [userName, setUserName] = useState([]);
+    const [userGoal, setUserGoal] = useState(null);
     const getToken = () => localStorage.getItem("token");
 
     useEffect(() => {
@@ -28,15 +29,19 @@ function WeekArchive() {
             setLoading(false);
         });
 
-        //fetch from url
+        //fetch username
         axios.get('http://localhost:5000/api/userdata', {
             headers: { Authorization: `Bearer ${token}` } 
         })
         .then(response => {
-            setUserName(response.data.name);
+            const foundUserGoal = response.data
+                if (foundUserGoal) {
+                    setUserGoal(foundUserGoal.total_intake_goal);
+                    setUserName(response.data.name);
+                }
         })
         .catch(error => {
-            console.error("Error fetching user name:", error);
+            console.error("Error fetching user data:", error);
         })
         .finally(() => {
             setLoading(false);
@@ -56,8 +61,8 @@ function WeekArchive() {
                 {records.map(record =>{
                     const currentIntake = record.total_intake || 0;
                     
-                    const goalstatus = (record['Total Intake'] >=record['Total Intake Goal'])
-                    const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached'
+                    const goalstatus = (currentIntake >=userGoal);
+                    const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached';
                     const rowHighlighted = goalstatus ? '' : 'record-row-goal-notreached';
 
                     return (
