@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
 import jwt from "jsonwebtoken";
+import AuthUser from "./schemas/AuthUser.js";
 
 import {
   creatUser,
@@ -38,11 +39,11 @@ const connectDB = async () => {
     console.log("------------------------------------------------");
   } catch (error) {
     console.error("MongoDB connection error:", error);
-    throw error; // 让启动逻辑决定是否退出
+    throw error; 
   }
 };
 
-// ---------- JWT: 从请求头里拿 userId ----------
+// ---------- JWT: get userId from req----------
 function getUserIdFromRequest(req) {
   const authHeader = req.headers.authorization || "";
   const token = authHeader.startsWith("Bearer ")
@@ -53,15 +54,156 @@ function getUserIdFromRequest(req) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // 登录时应该签的是 { userId: user._id }
+    // it should be { userId: user._id }
     return decoded.userId;
   } catch (err) {
     console.error("JWT verify failed:", err.message);
     return null;
   }
 }
+// ==========================================================
+// 🔐 AUTH MIDDLEWARE — requires JWT for protected routes
+// ==========================================================
+function authMiddleware(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).json({
+      success: false,
+      message: "No token provided.",
+    });
+  }
 
-// ---------- 工具：读取本地 JSON ----------
+  const token = header.replace("Bearer ", "");
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // user info from token (e.g. { userId: ... })
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid or expired token.",
+    });
+  }
+}
+
+// ==========================================================
+// 🔐 AUTH ROUTES
+// ==========================================================
+
+// --------------------- SIGNUP -------------------------
+app.post("/auth/signup", async (req, res) => {
+  try {
+    const { username, password, name } = req.body;
+
+    if (!username || !password || !name) {
+      return res.status(400).json({
+        success: false,
+        message: "username, password, and name required.",
+      });
+    }
+
+    const exists = await AuthUser.findOne({ username });
+    if (exists) {
+      return res.status(409).json({
+        success: false,
+        message: "Username already exists.",
+      });
+    }
+
+    const auth = await new AuthUser({
+      username,
+      password,
+    }).save();
+
+    console.log("AuthUser created:", auth._id);
+
+    try {
+      const nutritionUser = await creatUser({
+        _id: auth._id,
+        name: name,
+      });
+      console.log("User created:", nutritionUser._id);
+    } catch (userErr) {
+      console.error("Failed to create User:", userErr);
+      await AuthUser.findByIdAndDelete(auth._id);
+      throw new Error(`Failed to create user profile: ${userErr.message}`);
+    }
+
+    const token = auth.generateJWT();
+
+    res.json({
+      success: true,
+      token,
+      username: auth.username,
+      id: auth._id,
+    });
+  } catch (err) {
+    console.error("Signup error:", err);
+    console.error("Error details:", err.message);
+    res.status(500).json({
+      success: false,
+      message: err.message || "Signup failed.",
+      error:
+        process.env.NODE_ENV === "development" ? err.stack : undefined,
+    });
+  }
+});
+
+// --------------------- LOGIN -------------------------
+app.post("/auth/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "username and password required.",
+      });
+    }
+
+    const user = await AuthUser.findOne({ username });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    if (!user.validPassword(password)) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password.",
+      });
+    }
+
+    const token = user.generateJWT();
+
+    res.json({
+      success: true,
+      token,
+      username: user.username,
+      id: user._id,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ success: false, message: "Login failed." });
+  }
+});
+
+// --------------------- LOGOUT -------------------------
+app.get("/auth/logout", (req, res) => {
+  res.json({
+    success: true,
+    message: "Delete your token on the client to logout.",
+  });
+});
+
+// ==========================================================
+// 🔐 PROTECTED NUTRITION API ROUTES
+// ==========================================================
+
+// ---------- get JSON ----------
 const readJson = (fileName) => {
   const rawData = readFileSync(
     path.join(__dirname, "temp_data", fileName),
@@ -70,9 +212,8 @@ const readJson = (fileName) => {
   return JSON.parse(rawData);
 };
 
-// ============== 现有 API ==============
-
-// 首页营养数据
+// ============== API ==============
+// nurtition
 app.get("/api/home/nutrition", async (req, res) => {
   try {
     const userId = req.user.id;
@@ -121,7 +262,7 @@ app.get("/api/histdata", async (req, res) => {
   }
 });
 
-// 食物列表
+// food list
 app.get("/api/fooddata", async (req, res) => {
   try {
     const rawData = readFileSync(
@@ -136,7 +277,7 @@ app.get("/api/fooddata", async (req, res) => {
   }
 });
 
-// 添加一条食物记录
+// add record
 app.post("/api/addfooditem", async (req, res) => {
   try {
     const userId = req.user.id;
@@ -208,12 +349,12 @@ app.post("/api/addfooditem", async (req, res) => {
       }
 
       todayLog = {
-        id: 1,
-        Date: todayDateStr,
-        Total Intake: newTotalIntake,
-        Protein: protein,
-        Carbs: carbs,
-        Fat: fat,
+        'id': 1,
+        'Date': todayDateStr,
+        'Total Intake': newTotalIntake,
+        'Protein': protein,
+        'Carbs': carbs,
+        'Fat': fat,
         ...defaultGoals,
         "Food List": [foodName],
         "Gram List": [grams],
@@ -237,7 +378,7 @@ app.post("/api/addfooditem", async (req, res) => {
   }
 });
 
-// ============== User API（用 token 解 userId） ==============
+// ============== User API（use token to get userId） ==============
 
 app.get("/api/userdata", async (req, res) => {
   try {
@@ -282,7 +423,7 @@ app.post("/api/updateuserdata", async (req, res) => {
 
 // ============== Pet API ==============
 
-// GET /api/pet —— 根据 token 拿到 userId，返回 / 创建宠物
+// GET /api/pet —— back to pet
 app.get("/api/pet", async (req, res) => {
   try {
     const userId = getUserIdFromRequest(req);
@@ -290,7 +431,7 @@ app.get("/api/pet", async (req, res) => {
       return res.status(401).json({ error: "Invalid or missing token" });
     }
 
-    // 先尝试从 DB 找
+    // get from DB 
     let pet = await Pet.findOne({ user_id: userId });
 
     // 如果没有宠物，就从 pet_seed.json 初始化一只
@@ -327,7 +468,7 @@ app.get("/api/pet", async (req, res) => {
   }
 });
 
-// POST /api/pet/xp —— 增加 XP，并按规则自动升级 & 更新 stage(status)
+// POST /api/pet/xp 
 app.post("/api/pet/xp", async (req, res) => {
   try {
     const userId = getUserIdFromRequest(req);
@@ -350,7 +491,7 @@ app.post("/api/pet/xp", async (req, res) => {
   }
 });
 
-// ============== Server 启动与错误处理 ==============
+// ============== Server ==============
 
 if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 5000;
@@ -361,7 +502,6 @@ if (process.env.NODE_ENV !== "test") {
         console.log(`Server running on port ${PORT}`);
       });
 
-      // 正常退出信号处理
       ["SIGINT", "SIGTERM"].forEach((signal) => {
         process.on(signal, () => {
           console.log(`Received ${signal}, shutting down server...`);
@@ -369,7 +509,7 @@ if (process.env.NODE_ENV !== "test") {
         });
       });
 
-      // HTTP server 错误
+      // HTTP server error
       server.on("error", (err) => {
         console.error("HTTP server error:", err);
       });
@@ -384,7 +524,6 @@ if (process.env.NODE_ENV !== "test") {
     });
 }
 
-// 全局错误兜底
 process.on("uncaughtException", (err) => {
   console.error("Uncaught exception:", err);
 });
