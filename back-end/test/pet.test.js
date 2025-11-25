@@ -10,15 +10,14 @@ describe("Pet Functions (MongoDB)", function () {
   let userId;
 
   before(async function () {
-    // 启动内存 MongoDB
+    //  MongoDB
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     await mongoose.connect(uri);
 
-    // 模拟一个 user_id
+    //  user_id
     userId = new mongoose.Types.ObjectId();
 
-    // 插入初始宠物数据：和原测试里保持一致
     await Pet.create({
       name: "Charlie",
       user_id: userId,
@@ -46,7 +45,7 @@ describe("Pet Functions (MongoDB)", function () {
   it("should upgrade pet", async function () {
     const result = await upgrade(userId, 100); // 190 + 100 = 290 xp
 
-    // level 计算规则：floor(290 / 50) + 1 = 6
+    // level floor(290 / 50) + 1 = 6
     expect(result.level).to.equal(6);
     expect(result.xp).to.equal(290);
   });

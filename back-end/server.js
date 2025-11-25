@@ -1,3 +1,4 @@
+ // ================== SERVER.JS (UPDATED) ==================
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -7,31 +8,41 @@ import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
 import jwt from "jsonwebtoken";
+
+
 import AuthUser from "./schemas/AuthUser.js";
+import Pet from "./schemas/Pet.js";
+import { upgrade } from "./db/petDB.js";
+import * as ArchiveDB from "./db/archiveDB.js"; 
+
 
 
 
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
 import {
-  creatUser,
-  getAllUsers,
-  findUserById,
-  updateUserById,
+creatUser,
+getAllUsers,
+findUserById,
+updateUserById,
 } from "./db/userDB.js";
-import * as ArchiveDB from "./db/archiveDB.js"
+import Pet from "./schemas/Pet.js";
+import { upgrade } from "./db/petDB.js";
 
 dotenv.config();
+
 
 // ---------- PATH SETUP ----------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 // ---------- APP ----------
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+
 
 // ---------- MONGODB CONNECTION ----------
 const connectDB = async () => {
@@ -52,23 +63,28 @@ const connectDB = async () => {
   }
 };
 
-// ---------- JWT: get userId from req----------
-function getUserIdFromRequest(req) {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ")
-    ? authHeader.substring(7)
-    : authHeader;
 
-  if (!token) return null;
+// ================= JWT UTILS =================
+function getUserIdFromRequest(req) {
+const authHeader = req.headers.authorization || "";
+const token = authHeader.startsWith("Bearer ")
+? authHeader.substring(7)
+: authHeader;
+
+
+if (!token) return null;
+
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // it should be { userId: user._id }
     return decoded.userId;
-  } catch {
+  } catch (err) {
+    console.error("JWT verify failed:", err.message);
     return null;
   }
 }
+
 // ==========================================================
 // 🔐 AUTH MIDDLEWARE — requires JWT for protected routes
 // ==========================================================
