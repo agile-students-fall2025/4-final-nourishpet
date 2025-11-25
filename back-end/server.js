@@ -13,24 +13,31 @@ import jwt from "jsonwebtoken";
 import AuthUser from "./schemas/AuthUser.js";
 import Pet from "./schemas/Pet.js";
 import { upgrade } from "./db/petDB.js";
-import * as ArchiveDB from "./db/archiveDB.js"; // ✅ KEEP teammate archive logic
+import * as ArchiveDB from "./db/archiveDB.js"; 
 
 
+
+
+import AuthUser from "./schemas/AuthUser.js";
+import NutritionUser from "./schemas/User.js";
 import {
 creatUser,
 getAllUsers,
 findUserById,
 updateUserById,
 } from "./db/userDB.js";
-
+import Pet from "./schemas/Pet.js";
+import { upgrade } from "./db/petDB.js";
 
 dotenv.config();
 
 
+// ---------- PATH SETUP ----------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+// ---------- APP ----------
 const app = express();
 app.use(morgan("dev"));
 app.use(cors());
@@ -40,6 +47,10 @@ app.use(express.json());
 // ---------- MONGODB CONNECTION ----------
 const connectDB = async () => {
   try {
+    if (mongoose.connection.readyState === 1) {
+      console.log("MongoDB already connected");
+      return;
+    }
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
         // --- 🔍 DEBUGGING: PRINT DB INFO ---
@@ -64,13 +75,14 @@ const token = authHeader.startsWith("Bearer ")
 if (!token) return null;
 
 
-try {
-const decoded = jwt.verify(token, process.env.JWT_SECRET);
-return decoded.userId;
-} catch (err) {
-  console.error("JWT verify failed:", err.message);
-return null;
-}
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // it should be { userId: user._id }
+    return decoded.userId;
+  } catch (err) {
+    console.error("JWT verify failed:", err.message);
+    return null;
+  }
 }
 
 // ==========================================================
@@ -246,27 +258,18 @@ app.get("/api/home/nutrition", async (req, res) => {
       })
     }
 
-    res.json({
-      date: todayData["Date"],
-      calories: todayData["Total Intake"],
-      caloriesGoal: todayData["Total Intake Goal"],
-      protein: todayData["Protein"],
-      proteinGoal: todayData["Protein Goal"],
-      carbs: todayData["Carbs"],
-      carbsGoal: todayData["Carbs Goal"],
-      fat: todayData["Fat"],
-      fatGoal: todayData["Fat Goal"],
-    });
+    res.json(todayData);
   } catch (error) {
     console.error("Error fetching home page nutrition data:", error.message);
     res.status(500).json({ error: "Failed to fetch home page data" });
   }
 });
 
-// 历史数据
-app.get("/api/histdata", async (req, res) => {
+// HISTORY
+app.get("/api/histdata", authMiddleware, async (req, res) => {
   try {
-    const histData = readJson("histData.json");
+    const userId = req.user.id;
+    const histData = await ArchiveDB.getWeeklyLogs(userId);
     res.json(histData);
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -281,8 +284,7 @@ app.get("/api/fooddata", async (req, res) => {
       path.join(__dirname, "temp_data", "foodData.json"),
       "utf-8"
     );
-    const foodData = JSON.parse(rawData);
-    res.json(foodData);
+    res.json(JSON.parse(rawData));
   } catch (error) {
     console.error("Error fetching data:", error.message);
     res.status(500).json({ error: "Failed to fetch data" });
@@ -378,12 +380,19 @@ app.post("/api/addfooditem", async (req, res) => {
       histData.unshift(todayLog);
     }
 
-    // Write the updated array back to the file
-    writeFileSync(histDataPath, JSON.stringify(histData, null, 2));
+    const foodItem = {
+      name: foodName,
+      grams: Number(grams),
+      p: Number(protein),
+      f: Number(fat),
+      c: Number(carbs)
+    };
+    
+    const updatedLog = await ArchiveDB.addFoodEntry(userId, foodItem);
 
     res
       .status(200)
-      .json({ message: "Food item added successfully", updatedLog: todayLog });
+      .json({ message: "Food item added successfully", updatedLog});
   } catch (error) {
     console.error("Error adding food item:", error.message);
     res.status(500).json({ error: "Failed to add food item" });
@@ -394,12 +403,8 @@ app.post("/api/addfooditem", async (req, res) => {
 
 app.get("/api/userdata", async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid or missing token" });
-    }
-
-    const userData = await findUserById(userId);
+    const userId = req.headers.authorization;
+    const userData = await findUserById(userId); 
 
     if (!userData) {
       return res.status(404).json({ error: "User not found" });
@@ -412,23 +417,21 @@ app.get("/api/userdata", async (req, res) => {
   }
 });
 
+
 app.post("/api/updateuserdata", async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid or missing token" });
-    }
-
+    const userId = req.user.id;
     const userData = req.body;
-    const response = await updateUserById(userId, userData);
 
-    if (!response) {
+    const updated = await updateUserById(userId, userData);
+
+    if (!updated) {
       return res.status(404).json({ error: "User not found" });
     }
 
     res.json({ message: "User data updated successfully" });
   } catch (error) {
-    console.error(error);
+    console.error("Error in update user data route:", error);
     res.status(500).json({ error: "Server error" });
   }
 });
@@ -526,14 +529,16 @@ if (process.env.NODE_ENV !== "test") {
         console.error("HTTP server error:", err);
       });
 
-      process.on("exit", (code) => {
-        console.log(`Server process exiting with code ${code}`);
+    ["SIGINT", "SIGTERM"].forEach((signal) => {
+      process.on(signal, () => {
+        console.log(`Received ${signal}, shutting down server...`);
+        server.close(() => process.exit(0));
       });
-    })
-    .catch((error) => {
-      console.error("Failed to start server:", error);
-      process.exit(1);
     });
+  }).catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  });
 }
 
 process.on("uncaughtException", (err) => {
