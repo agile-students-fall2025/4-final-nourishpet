@@ -1,4 +1,5 @@
 import Nutrition from '../schemas/Nutrition.js'
+import mongoose from 'mongoose'
 
 const getTodayStr = () => new Date().toLocaleDateString('en-US', {
     year: 'numeric', month: 'short', day: 'numeric'
@@ -11,8 +12,12 @@ export const getWeeklyLogs = async (userId) => {
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     sevenDaysAgo.setHours(0, 0, 0, 0);
 
+    console.log("Querying for User ID:", userId);
+
+    const objectIdUser = new mongoose.Types.ObjectId(userId);
+
     return await Nutrition.find({
-        user_id: userId,
+        user_id: objectIdUser,
         createdAt: { $gte: sevenDaysAgo }
     })
         .sort({ createdAt: -1 }); // Sort by date desc

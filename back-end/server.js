@@ -32,6 +32,10 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
+        // --- 🔍 DEBUGGING: PRINT DB INFO ---
+    console.log("---------------------------------------");
+    console.log("📂 Current Database Name:", mongoose.connection.name);
+    console.log("------------------------------------------------");
   } catch (error) {
     console.error("MongoDB connection error:", error);
     throw error; // 让启动逻辑决定是否退出
@@ -71,14 +75,22 @@ const readJson = (fileName) => {
 // 首页营养数据
 app.get("/api/home/nutrition", async (req, res) => {
   try {
-    const histData = readJson("histData.json");
-    const recordId = Number(req.query.id) || 1;
-    const todayData = histData.find((entry) => entry.id === recordId);
+    const userId = req.user.id;
+    const histData = await ArchiveDB.getWeeklyLogs(userId);
+    const dateObj = new Date();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const todayString = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+    const todayData = histData.find((entry) => entry.date === todayString);
 
     if (!todayData) {
-      return res
-        .status(404)
-        .json({ error: `No nutrition record found for id ${recordId}` });
+      return res.json({
+        date: todayString,
+        total_intake: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      })
     }
 
     res.json({
@@ -127,6 +139,7 @@ app.get("/api/fooddata", async (req, res) => {
 // 添加一条食物记录
 app.post("/api/addfooditem", async (req, res) => {
   try {
+    const userId = req.user.id;
     const { foodName, grams, protein, fat, carbs } = req.body;
     const histDataPath = path.join(__dirname, "temp_data", "histData.json");
 

@@ -25,6 +25,8 @@ const NutritionSchema = new mongoose.Schema({
   fat_list: { type: [Number], default: [] },
   carbs_list: { type: [Number], default: [] }
 
-}, { timestamps: true });
+}, { timestamps: true,
+  collection: 'nutritions'
+ });
 
 export default mongoose.model("Nutrition", NutritionSchema);

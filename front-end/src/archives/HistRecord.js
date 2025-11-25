@@ -8,34 +8,75 @@ import "./Archive.css";
 function HistRecord() {
     const { id } = useParams();
     const [record, setRecord] = useState(null);
+    const [userGoal, setUserGoal] = useState(null);
     const [foodlist, setFoodList] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const getToken = () => localStorage.getItem("token");
 
     useEffect(() => {
-        // fake fetch from db
-        axios.get('http://localhost:5000/api/histdata')
-            .then(response => {
-                const foundRecord = response.data.find(re => re.id === parseInt(id));
-                if (foundRecord) {
-        setRecord({
-            date: foundRecord['Date'],
-            nutrition: { calories: foundRecord['Total Intake'], protein: foundRecord['Protein'], carbs: foundRecord['Carbs'], fat: foundRecord['Fat'] },
-            goals: { calories: foundRecord['Total Intake Goal'], protein: foundRecord['Protein Goal'], carbs: foundRecord['Carbs Goal'], fat: foundRecord['Fat Goal'] }
+        const token = getToken();
+
+        const fetchHistory = axios.get('http://localhost:5000/api/histdata', {
+            headers: { Authorization: `Bearer ${token}` }
         });
-        setFoodList({
-            foods: foundRecord['Food List'],
-            grams: foundRecord['Gram List'],
-            protein: foundRecord['Protein List'],
-            carbs: foundRecord['Carbs List'],
-            fat: foundRecord['Fat List']
+
+        const fetchUserGoals = axios.get('http://localhost:5000/api/userdata', {
+            headers: { Authorization: `Bearer ${token}` }
         });
-    }
+
+        Promise.all([fetchHistory, fetchUserGoals])
+            .then(([histResponse, userResponse]) => {
+                
+                const allRecords = histResponse.data;
+ 
+                const specificRecord = allRecords.find(item => 
+                    // use date as id
+                    String(item._id) === String(id) || item.date === id 
+                );
+
+                if (specificRecord) {
+                    setRecord({
+                        date: specificRecord.date,
+                        nutrition: { 
+                            calories: specificRecord.total_intake, 
+                            protein: specificRecord.protein, 
+                            carbs: specificRecord.carbs, 
+                            fat: specificRecord.fat 
+                        },
+                    });
+                    setFoodList({
+                        foods: specificRecord.food_list || [], // Fallback to empty array if null
+                        grams: specificRecord.grams || [],
+                        protein: specificRecord.protein_list || [],
+                        carbs: specificRecord.carbs_list || [],
+                        fat: specificRecord.fat_list || []
+                    });
+                } else {
+                    console.warn("Record not found in ID search");
+                }
+
+                const foundUserGoal = userResponse.data;
+                if (foundUserGoal) {
+                    setUserGoal({
+                        goals: {
+                            calories: foundUserGoal.total_intake_goal, 
+                            protein: foundUserGoal.protein_goal, 
+                            carbs: foundUserGoal.carbs_goal, 
+                            fat: foundUserGoal.fat_goal 
+                        }
+                    });
+                }
             })
-            .catch(error => console.error("Error fetching record:", error))
-            .finally(() => setLoading(false));
+            .catch(err => {
+                console.error("Error fetching data:", err);
+                setError("Could not load data.");
+            })
+            .finally(() => {
+                setLoading(false);
+            });
 
-    }, [id]); // Re-run this effect if the ID in the URL changes
-
+    }, [id]);
 
     if (loading) {
         return <div>Loading record details...</div>;
@@ -45,22 +86,20 @@ function HistRecord() {
         return <div>Record not found...</div>;
     }
 
-    const { date, nutrition, goals } = record;
-
     return (
         <div className="archive-page">
             <BackButton />
-            
-            <h1>{date}</h1>
-           
+
+            <h1>{record.date}</h1>
+
             <div className="nutrition-record">
-                <GoalsPanel nutrition={nutrition} goals={goals} />
-                <StatusPie nutrition={nutrition} />
+                <GoalsPanel nutrition={record.nutrition} goals={userGoal.goals} />
+                <StatusPie nutrition={record.nutrition} />
             </div>
 
             <div className="food-details">
                 <p>Detailed Intake List</p>
-                
+
                 {foodlist.foods.map((foodName, index) => (
 
                     // Use the index to get the matching item from the other arrays
@@ -74,14 +113,14 @@ function HistRecord() {
 
                 ))}
             </div>
-           
+
         </div>
     );
 }
 
 function BackButton() {
-    return(
-        <Link to = '/archives' className="back-button">
+    return (
+        <Link to='/archives' className="back-button">
             Back
         </Link>
     )
