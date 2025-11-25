@@ -245,28 +245,99 @@ app.post("/api/updateuserdata", async (req, res) => {
   }
 });
 
-if (process.env.NODE_ENV !== 'test') {
+// ============== Pet API ==============
 
+// GET /api/pet  —— 根据 token 拿到 userId，返回 / 创建宠物
+app.get("/api/pet", async (req, res) => {
+  try {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or missing token" });
+    }
+
+    // 先尝试从 DB 找
+    let pet = await Pet.findOne({ user_id: userId });
+
+    // 如果没有宠物，就从 pet_seed.json 初始化一只
+    if (!pet) {
+      const seedPath = path.join(__dirname, "temp_data", "pet_seed.json");
+      const seedArray = JSON.parse(readFileSync(seedPath, "utf-8"));
+      const seed = seedArray[0] || {
+        name: "My Pet",
+        xp: 0,
+        level: 1,
+        status: "stage1",
+      };
+
+      pet = await Pet.create({
+        user_id: userId,
+        name: seed.name,
+        xp: seed.xp,
+        level: seed.level,
+        status: seed.status,
+      });
+    }
+
+    res.json({
+      id: pet._id.toString(),
+      name: pet.name,
+      user_id: pet.user_id.toString(),
+      xp: pet.xp,
+      level: pet.level,
+      status: pet.status,
+    });
+  } catch (error) {
+    console.error("Error fetching pet:", error);
+    res.status(500).json({ error: "Failed to load pet" });
+  }
+});
+
+// POST /api/pet/xp —— 增加 XP，并按规则自动升级 & 更新 stage(status)
+app.post("/api/pet/xp", async (req, res) => {
+  try {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or missing token" });
+    }
+
+    const { gainedXp } = req.body;
+
+    if (typeof gainedXp !== "number") {
+      return res.status(400).json({ error: "gainedXp must be a number" });
+    }
+
+    const updatedPet = await upgrade(userId, gainedXp);
+
+    res.json(updatedPet);
+  } catch (error) {
+    console.error("Error upgrading pet:", error);
+    res.status(500).json({ error: "Failed to update pet XP" });
+  }
+});
+
+// ============== Server 启动与错误处理 ==============
+
+if (process.env.NODE_ENV !== "test") {
   const PORT = process.env.PORT || 5000;
   const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
-  process.on('SIGTERM', () => server.close());
+  process.on("SIGTERM", () => server.close());
 
   server.on("error", (err) => {
-  console.error("HTTP server error:", err);
-});
-
-process.on("exit", (code) => {
-  console.log(`Server process exiting with code ${code}`);
-});
-
-["SIGINT", "SIGTERM"].forEach((signal) => {
-  process.on(signal, () => {
-    console.log(`Received ${signal}, shutting down server...`);
-    server.close(() => process.exit(0));
+    console.error("HTTP server error:", err);
   });
-});
+
+  process.on("exit", (code) => {
+    console.log(`Server process exiting with code ${code}`);
+  });
+
+  ["SIGINT", "SIGTERM"].forEach((signal) => {
+    process.on(signal, () => {
+      console.log(`Received ${signal}, shutting down server...`);
+      server.close(() => process.exit(0));
+    });
+  });
 }
 
 process.on("uncaughtException", (err) => {
