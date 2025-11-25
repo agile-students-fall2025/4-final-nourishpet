@@ -8,14 +8,40 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // Login functionality will be implemented when backend is ready
-    console.log('Login attempted with:', { username, password });
-    // TODO: Add authentication logic here
+const handleLogin = async (e) => {
+  e.preventDefault();
 
-    navigate('/');
-  };
+  try {
+    const response = await fetch("http://localhost:5000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert(data.message || "Login failed.");
+      return;
+    }
+
+    // Save token + user data
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("username", data.username);
+    localStorage.setItem("userId", data.id);
+
+    // Redirect
+    navigate("/home");
+  } catch (err) {
+    console.error("Login error:", err);
+    alert("Network or server error during login.");
+  }
+};
 
   return (
     <div className="login-container">
