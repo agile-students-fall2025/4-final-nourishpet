@@ -1,4 +1,3 @@
- // ================== SERVER.JS (UPDATED) ==================
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -9,25 +8,18 @@ import { fileURLToPath } from "url";
 import morgan from "morgan";
 import jwt from "jsonwebtoken";
 
-
 import AuthUser from "./schemas/AuthUser.js";
 import Pet from "./schemas/Pet.js";
+import NutritionUser from "./schemas/User.js"; // if you actually use it
 import { upgrade } from "./db/petDB.js";
-import * as ArchiveDB from "./db/archiveDB.js"; 
-
-
-
-
-import AuthUser from "./schemas/AuthUser.js";
-import NutritionUser from "./schemas/User.js";
+import * as ArchiveDB from "./db/archiveDB.js";
 import {
-creatUser,
-getAllUsers,
-findUserById,
-updateUserById,
+  creatUser,
+  getAllUsers,
+  findUserById,
+  updateUserById,
 } from "./db/userDB.js";
-import Pet from "./schemas/Pet.js";
-import { upgrade } from "./db/petDB.js";
+
 
 dotenv.config();
 
