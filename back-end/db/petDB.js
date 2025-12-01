@@ -1,74 +1,40 @@
 // back-end/db/petDB.js
-import Pet from "../schemas/Pet.js";
+import mongoose from "mongoose";
+import Pet from "../schemas/Pet.js";   // ✅ 修正路径！
 
-/**
- * 每 50 XP 升 1 Level
- * level = floor(xp / 50) + 1
- */
-function calcLevelFromXp(xp) {
-  if (xp < 0) xp = 0;
-  return Math.floor(xp / 50) + 1;
-}
+// each 50 XP upgrades 1 level
+const XP_PER_LEVEL = 50;
 
-/**
- * Stage 规则：
- * 每 33 level 升一个 stage，最多 stage3
- *
- * 1 - 33  -> stage1
- * 34 - 66 -> stage2
- * 67+     -> stage3 (封顶)
- */
-function calcStatusFromLevel(level) {
-  if (level <= 33) return "stage1";
-  if (level <= 66) return "stage2";
-  return "stage3"; // 超过也固定为 stage3
-}
-
-/**
- * 获取宠物信息
- */
+// ---------- pet info ----------
 export async function showPetInfo(userId) {
-  const pet = await Pet.findOne({ user_id: userId }).lean();
+  if (!userId) throw new Error("userId is required");
 
-  if (!pet) {
-    throw new Error("Pet not found for this user");
-  }
-
-  return {
-    id: pet._id.toString(),
-    name: pet.name,
-    user_id: pet.user_id.toString(),
-    xp: pet.xp,
-    level: pet.level,
-    status: pet.status,
-  };
-}
-
-/**
- * 给某个用户的宠物增加经验并自动升级
- */
-export async function upgrade(userId, gainedXp) {
   const pet = await Pet.findOne({ user_id: userId });
 
-  if (!pet) {
-    throw new Error("Pet not found for this user");
-  }
+  if (!pet) return null;
 
-  // 增加经验
+  return pet;
+}
+
+// ---------- upgrade  ----------
+export async function upgrade(userId, gainedXp) {
+  if (!userId) throw new Error("userId is required");
+
+  const pet = await Pet.findOne({ user_id: userId });
+  if (!pet) throw new Error("Pet not found");
+
   pet.xp += gainedXp;
 
-  // 重新计算 level & stage
-  pet.level = calcLevelFromXp(pet.xp);
-  pet.status = calcStatusFromLevel(pet.level);
+  // Level ：floor(xp/50)+1
+  const newLevel = Math.floor(pet.xp / XP_PER_LEVEL) + 1;
+  pet.level = newLevel;
+
+  //  Stage 33 elvel -> one stage
+  if (newLevel <= 33) pet.status = "stage1";
+  else if (newLevel <= 66) pet.status = "stage2";
+  else pet.status = "stage3";
 
   await pet.save();
 
-  return {
-    id: pet._id.toString(),
-    name: pet.name,
-    user_id: pet.user_id.toString(),
-    xp: pet.xp,
-    level: pet.level,
-    status: pet.status,
-  };
+  return pet;
 }
