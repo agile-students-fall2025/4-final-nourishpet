@@ -19,7 +19,6 @@ import {
   findUserById,
   updateUserById,
 } from "./db/userDB.js";
-import { getFoods } from "./db/foodDB.js";
 
 
 dotenv.config();
@@ -273,14 +272,14 @@ app.get("/api/histdata", authMiddleware, async (req, res) => {
 // food list
 app.get("/api/fooddata", async (req, res) => {
   try {
-    const searchQuery = req.query.search || null;
-    const limit = parseInt(req.query.limit) || 100;
-    
-    const foods = await getFoods(searchQuery, limit);
-    res.json(foods);
+    const rawData = readFileSync(
+      path.join(__dirname, "temp_data", "foodData.json"),
+      "utf-8"
+    );
+    res.json(JSON.parse(rawData));
   } catch (error) {
-    console.error("Error fetching food data:", error.message);
-    res.status(500).json({ error: "Failed to fetch food data" });
+    console.error("Error fetching data:", error.message);
+    res.status(500).json({ error: "Failed to fetch data" });
   }
 });
 
