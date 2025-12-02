@@ -326,9 +326,9 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
     }
 
     // Update pet name if provided
-    if (petName !== undefined) {
-      await updatePetByUserId(userId, { name: petName });
-    }
+    // if (petName !== undefined) {
+    //   await updatePetByUserId(userId, { name: petName });
+    // }
 
     res.json({ message: "User data updated successfully" });
   } catch (error) {

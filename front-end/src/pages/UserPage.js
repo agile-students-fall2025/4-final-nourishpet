@@ -22,7 +22,7 @@ function UserPage(){
 
           setUserData({
             name: userData.name,
-            // petName: userData.petName,
+            petName: userData.petName,
             age: userData.age,
             gender: userData.gender,
             height: userData.height,
@@ -73,7 +73,7 @@ function UserInfoDisplay({ userData }){
                 <h2 className="app-title" style={{marginTop: '20px', marginBottom: '15px'}}>{userData.name}</h2>
                 
                 <div className="user-details-simple">
-                    {/* <p><span className="detail-label">Pet Name:</span> <span className="detail-value">{userData.petName}</span></p> */}
+                    <p><span className="detail-label">Pet Name:</span> <span className="detail-value">{userData.petName}</span></p>
                     <p><span className="detail-label">Age:</span> <span className="detail-value">{userData.age}</span></p>
                     <p><span className="detail-label">Gender:</span> <span className="detail-value">{userData.gender}</span></p>
                     <p><span className="detail-label">Height:</span> <span className="detail-value">{userData.height}cm</span></p>
