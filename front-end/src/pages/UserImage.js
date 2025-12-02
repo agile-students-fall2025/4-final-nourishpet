@@ -5,7 +5,7 @@ function UserImage(){
         <div className='user-portrait'>
             <div className="portrait-placeholder">
                 <img
-                    src='https://picsum.photos/200/200'
+                    src='../logo.svg'
                     alt='UserImage'
                     className="user-photo"
                 />
