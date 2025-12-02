@@ -294,6 +294,7 @@ app.get("/api/userdata", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const userData = await await findUserById(userId);
+    const petData = await showPetInfo(userId);
 
     if (!userData) {
       return res.status(404).json({ error: "User not found" });
