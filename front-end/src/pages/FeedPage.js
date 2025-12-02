@@ -62,13 +62,7 @@ function FeedPage() {
     return () => clearTimeout(timerId);
   }, [query]);
 
-  // Filter then take just ONE result
-  const oneResult = useMemo(() => {
-    // If we have rows from a search, use them.
-    // The backend search returns exact matches or partial matches.
-    // We just take the first one if available.
-    return rows.length > 0 ? rows[0] : null;
-  }, [rows]);
+
 
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
@@ -123,10 +117,10 @@ function FeedPage() {
 
     const newIntake = {
       foodName: item.food,
-      grams: parseInt(grams),
-      protein: scaledData.protein,
-      fat: scaledData.fat,
-      carbs: scaledData.carbs,
+      grams: parseFloat(parseFloat(grams).toFixed(1)),
+      protein: parseFloat(scaledData.protein.toFixed(1)),
+      fat: parseFloat(scaledData.fat.toFixed(1)),
+      carbs: parseFloat(scaledData.carbs.toFixed(1)),
     };
 
     try {
@@ -173,11 +167,11 @@ function FeedPage() {
           onSuggestionClick={handleSuggestionClick}
         />
 
-        <FeedOneResult
+        <FeedResultsList
           show={didSearch}
           loading={loading}
           error={error}
-          item={oneResult}
+          items={rows}
           grams={grams}
           onAdd={handleAddFood}
         />
@@ -287,6 +281,7 @@ function FeedSearchSection({
             id="grams"
             type="number"
             min="1"
+            step="0.1"
             value={grams}
             onChange={(e) => setGrams(e.target.value)}
           />
@@ -297,54 +292,54 @@ function FeedSearchSection({
   );
 }
 
-function FeedOneResult({ show, loading, error, item, grams, onAdd }) {
+function FeedResultsList({ show, loading, error, items, grams, onAdd }) {
   if (!show) return null;
 
   const g = Math.max(1, parseFloat(grams || "0"));
   const factor = g / 100;
 
-  const scaled = item
-    ? {
-      carbs: item.carbs * factor,
-      protein: item.protein * factor,
-      fat: item.fat * factor,
-    }
-    : null;
-
   return (
-    <section className="sheet">
+    <section className="sheet results-sheet">
       <h2>Nutrition facts</h2>
 
       {loading && <div className="loading">Loading…</div>}
       {!loading && error && <div className="error">{error}</div>}
 
       {!loading && !error && (
-        <div className="list">
-          {!item && <div className="muted">No results.</div>}
+        <div className="results-list">
+          {items.length === 0 && <div className="muted">No results.</div>}
 
-          {item && (
-            <div className="card">
-              <div className="meta">
-                <div className="food-name">{item.food}</div>
-                <div className="nutri">
-                  Per 100 g — Carbs: {fmt(item.carbs)} g · Protein:{" "}
-                  {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
+          {items.map((item) => {
+            const scaled = {
+              carbs: item.carbs * factor,
+              protein: item.protein * factor,
+              fat: item.fat * factor,
+            };
+
+            return (
+              <div className="card" key={item._id}>
+                <div className="meta">
+                  <div className="food-name">{item.food}</div>
+                  <div className="nutri">
+                    Per 100 g — Carbs: {fmt(item.carbs)} g · Protein:{" "}
+                    {fmt(item.protein)} g · Fat: {fmt(item.fat)} g
+                  </div>
+                  <div className="nutri">
+                    For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein:{" "}
+                    {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
+                  </div>
                 </div>
-                <div className="nutri">
-                  For {fmt(g)} g — Carbs: {fmt(scaled.carbs)} g · Protein:{" "}
-                  {fmt(scaled.protein)} g · Fat: {fmt(scaled.fat)} g
-                </div>
+
+                <button
+                  className="btn"
+                  type="button"
+                  onClick={() => onAdd(item, scaled, g)}
+                >
+                  Add
+                </button>
               </div>
-
-              <button
-                className="btn"
-                type="button"
-                onClick={() => onAdd(item, scaled, g)}
-              >
-                Add
-              </button>
-            </div>
-          )}
+            );
+          })}
         </div>
       )}
     </section>
