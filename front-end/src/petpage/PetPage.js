@@ -2,6 +2,7 @@ import XPBar from "./XPBar";
 import StatusPie from "./StatusPie";
 import PetImage from "./PetImage";
 import GoalsPanel from "./GoalsPanel";
+import { useState, useEffect } from "react";
 
 const PetPage = () => {
   const [pet, setPet] = useState(null);
