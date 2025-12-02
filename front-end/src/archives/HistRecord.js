@@ -125,18 +125,26 @@ function HistRecord() {
                 <div className="food-details">
                     <p>Detailed Intake List</p>
 
-                    {foodlist.foods.map((foodName, index) => (
-
-                        // Use the index to get the matching item from the other arrays
-                        <div key={index} className="food-row">
-                            <span className="food-name">{foodName}</span>
-                            <span className="food-gram">{foodlist.grams?.[index]}g</span>
-                            <span className="food-protein">Protein: {foodlist.protein?.[index]}g</span>
-                            <span className="food-carbs">Carbs: {foodlist.carbs?.[index]}g</span>
-                            <span className="food-fat">Fat: {foodlist.fat?.[index]}g</span>
-                        </div>
-
-                    ))}
+                    <table className="food-table">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Protein</th>
+                                <th>Carb</th>
+                                <th>Fat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foodlist.foods.map((foodName, index) => (
+                                <tr key={index}>
+                                    <td className="food-name">{foodName}: {foodlist.grams?.[index]}g</td>
+                                    <td className="food-protein">{foodlist.protein?.[index]}g</td>
+                                    <td className="food-carbs">{foodlist.carbs?.[index]}g</td>
+                                    <td className="food-fat">{foodlist.fat?.[index]}g</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </main>
             <Footer />
