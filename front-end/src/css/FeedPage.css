@@ -182,15 +182,30 @@ form {
 }
 
 /* ================= Results list & cards ================= */
-.list {
+.results-list {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 15px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  border-left: 4px solid #5cc4d1;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  /* Limit height to allow scrolling */
+  overflow-y: auto;
+  /* Enable vertical scrolling */
+  padding-right: 5px;
+  /* Space for scrollbar */
+}
+
+/* Custom scrollbar for results list */
+.results-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.results-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 20px;
 }
 
 .card {
@@ -198,8 +213,9 @@ form {
   border: 1px solid #d7dbe2;
   border-radius: 6px;
   padding: 14px 16px;
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  /* Changed from grid to flex */
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
   border-left: 4px solid #5cc4d1;
