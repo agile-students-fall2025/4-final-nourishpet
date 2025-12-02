@@ -9,3 +9,13 @@ export async function showPetInfo(userId) {
         const pet = await Pet.findOne({ user_id: userId });
         return pet || null;
     };
+
+export async function updatePetByUserId(userId, updateData) {
+    if (!userId) throw new Error("userId is required");
+    const updatedPet = await Pet.findOneAndUpdate(
+        { user_id: userId },
+        updateData,
+        { new: true }
+    );
+    return updatedPet;
+}
