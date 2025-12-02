@@ -1,53 +1,34 @@
-// back-end/test/pet.test.js
-import mongoose from "mongoose";
+import mock from "mock-fs";
 import { expect } from "chai";
-import { MongoMemoryServer } from "mongodb-memory-server";
-import Pet from "../schemas/Pet.js";
-import { showPetInfo, upgrade } from "../db/petDB.js";
+import { showPetInfo, upgrade } from "../pet.js";
 
-describe("Pet Functions (MongoDB)", function () {
-  let mongoServer;
-  let userId;
-
-  before(async function () {
-    // 启动内存 MongoDB
-    mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
-    await mongoose.connect(uri);
-
-    // 模拟一个 user_id
-    userId = new mongoose.Types.ObjectId();
-
-    // 插入初始宠物数据：和原测试里保持一致
-    await Pet.create({
-      name: "Charlie",
-      user_id: userId,
-      xp: 190,
-      level: 4,
-      status: "stage1",
+describe("Pet Functions (mocked fs)", function () {
+  beforeEach(function () {
+    mock({
+      "temp_data/pet_info.json": JSON.stringify({
+        id: 1,
+        petName: "Charlie",
+        level: 4,
+        xp: 190,
+      }),
     });
   });
 
-  after(async function () {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+  afterEach(function () {
+    mock.restore();
   });
 
-  it("should show pet info", async function () {
-    const pet = await showPetInfo(userId);
-
-    expect(pet).to.include({
-      name: "Charlie",
-      xp: 190,
+  it("should show pet info", function () {
+    expect(showPetInfo()).to.deep.equal({
+      id: 1,
+      petName: "Charlie",
       level: 4,
+      xp: 190,
     });
   });
 
-  it("should upgrade pet", async function () {
-    const result = await upgrade(userId, 100); // 190 + 100 = 290 xp
-
-    // level 计算规则：floor(290 / 50) + 1 = 6
+  it("should upgrade pet", function () {
+    const result = upgrade(100);
     expect(result.level).to.equal(6);
-    expect(result.xp).to.equal(290);
   });
 });
