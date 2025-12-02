@@ -11,7 +11,7 @@ const PetPage = () => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // 如果你之后要做 “吃东西加经验”，可以把当前这一步抽出来复用
+const API_BASE = "http://localhost:5000";
   const fetchPet = async (token) => {
     try {
       const res = await fetch(`${API_BASE}/api/pet`, {
