@@ -5,9 +5,6 @@ import XPBar from "./XPBar";
 import StatusPie from "./StatusPie";
 import PetImage from "./PetImage";
 import GoalsPanel from "./GoalsPanel";
-import "./PetPage.css";
-
-const API_BASE = "http://localhost:5000";
 
 const PetPage = () => {
   const [pet, setPet] = useState(null);
