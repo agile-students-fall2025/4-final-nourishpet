@@ -324,6 +324,84 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+// Pet API 
+
+function mapPetToResponse(pet) {
+  const status = pet.status || "stage1";
+  const stage =
+    status === "stage1" ? 1 :
+    status === "stage2" ? 2 :
+    3; // 默认 3
+
+  return {
+    id: pet._id.toString(),
+    name: pet.name,
+    user_id: pet.user_id.toString(),
+    xp: pet.xp,
+    level: pet.level,
+    stage,      
+    status,      
+  };
+}
+
+// GET /api/pet 
+app.get("/api/pet", async (req, res) => {
+  try {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or missing token" });
+    }
+
+    let pet = await Pet.findOne({ user_id: userId });
+
+    if (!pet) {
+      const seedPath = path.join(__dirname, "temp_data", "pet_seed.json");
+      const seedArray = JSON.parse(readFileSync(seedPath, "utf-8"));
+      const seed = seedArray[0] || {
+        name: "My Pet",
+        xp: 0,
+        level: 1,
+        status: "stage1",
+      };
+
+      pet = await Pet.create({
+        user_id: userId,
+        name: seed.name,
+        xp: seed.xp,
+        level: seed.level,
+        status: seed.status,
+      });
+    }
+
+    res.json(mapPetToResponse(pet));
+  } catch (error) {
+    console.error("Error fetching pet:", error);
+    res.status(500).json({ error: "Failed to load pet" });
+  }
+});
+
+// POST /api/pet/xp
+app.post("/api/pet/xp", async (req, res) => {
+  try {
+    const userId = getUserIdFromRequest(req);
+    if (!userId) {
+      return res.status(401).json({ error: "Invalid or missing token" });
+    }
+
+    const { gainedXp } = req.body;
+
+    if (typeof gainedXp !== "number") {
+      return res.status(400).json({ error: "gainedXp must be a number" });
+    }
+
+    const updatedPet = await upgrade(userId, gainedXp);
+
+    res.json(mapPetToResponse(updatedPet));
+  } catch (error) {
+    console.error("Error upgrading pet:", error);
+    res.status(500).json({ error: "Failed to update pet XP" });
+  }
+});
 
 // ==========================================================
 // SERVER START
