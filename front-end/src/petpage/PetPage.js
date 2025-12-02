@@ -6,52 +6,89 @@ import { useState, useEffect } from "react";
 
 const PetPage = () => {
   const [pet, setPet] = useState(null);
+  const [nutrition, setNutrition] = useState(null);
+  const [userGoal, setUserGoal] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ 所有 hooks 都在最外层
   useEffect(() => {
     const token = localStorage.getItem("token");
+    if (!token) return setLoading(false);
 
-    if (!token) {
-      console.warn("No token found");
-      setLoading(false);
-      return;
-    }
+    // fetch pet
+    const petFetch = fetch("http://localhost:5000/api/pet", {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => res.json());
 
-    fetch("http://localhost:5000/api/pet", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setPet(data);
+    // fetch today's nutrition
+    const nutritionFetch = fetch("http://localhost:5000/api/home/nutrition", {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => res.json());
+
+    // fetch user goals
+    const goalFetch = fetch("http://localhost:5000/api/userdata", {
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => res.json());
+
+    Promise.all([petFetch, nutritionFetch, goalFetch])
+      .then(([petData, nutritionData, goalData]) => {
+        setPet(petData);
+
+        setNutrition({
+          calories: nutritionData.total_intake,
+          protein: nutritionData.protein,
+          carbs: nutritionData.carbs,
+          fat: nutritionData.fat
+        });
+
+        setUserGoal({
+          calories: goalData.total_intake_goal,
+          protein: goalData.protein_goal,
+          carbs: goalData.carbs_goal,
+          fat: goalData.fat_goal
+        });
+
         setLoading(false);
       })
       .catch(err => {
-        console.error("Fetch pet failed:", err);
+        console.error("PetPage error:", err);
         setLoading(false);
       });
   }, []);
 
-  // ✅ 条件渲染只放在 return 阶段
   if (loading) return <div>Loading pet...</div>;
-  if (!pet) return <div>No pet data</div>;
+  if (!pet) return <div>No pet found</div>;
 
   return (
-    <div className="pet-container">
+    <div className="pet-page">
+
+      {/* Show date in top right */}
+      <p id="date-top-right">{new Date().toDateString()}</p>
+
       <h1>{pet.name}</h1>
 
       <PetImage stage={pet.stage} />
-      <XPBar xp={pet.xp} level={pet.level} />
-      <StatusPie status={pet.status} />
-      <GoalsPanel />
 
-      <p>Level: {pet.level}</p>
-      <p>Stage: {pet.stage}</p>
-      <p>XP: {pet.xp}</p>
+      <div className="xp-container">
+        <XPBar xp={pet.xp} level={pet.level} />
+      </div>
+
+      {/* mid section: goals + pie */}
+      <div className="mid-section">
+        <div className="goals-panel">
+          {userGoal && nutrition && (
+            <GoalsPanel nutrition={nutrition} goals={userGoal} />
+          )}
+        </div>
+
+        <div className="status-pie">
+          {nutrition && <StatusPie nutrition={nutrition} />}
+        </div>
+      </div>
+
     </div>
   );
 };
 
 export default PetPage;
+
+
