@@ -130,7 +130,7 @@ function HistRecord() {
                             <tr>
                                 <th>Food</th>
                                 <th>Protein</th>
-                                <th>Carb</th>
+                                <th>Carbs</th>
                                 <th>Fat</th>
                             </tr>
                         </thead>
