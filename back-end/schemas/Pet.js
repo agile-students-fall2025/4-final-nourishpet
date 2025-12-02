@@ -1,21 +1,27 @@
+// back-end/schemas/Pet.js
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema({
+const PetSchema = new mongoose.Schema(
+  {
 
-  name: { type: String, required: true },
-  age: { type: Number, default: 0 },
-  gender: { type: String, default: "" },
-  height: { type: Number, default: 0 },    // cm
-  weight: { type: Number, default: 0 },    // kg
-  target_weight: { type: Number, default: 0 },
-  bmi: { type: Number, default: 0 },
+    name: { type: String, default: "Your Pet" },
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 
-  // Nutrition goals
-  total_intake_goal: { type: Number, default: 2000 },
-  protein_goal: { type: Number, default: 900 },
-  fat_goal: { type: Number, default: 900 },
-  carbs_goal: { type: Number, default: 900 },
+    xp: { type: Number, default: 0 },
 
-}, { timestamps: true });
 
-export default mongoose.model("User", UserSchema);
+    level: { type: Number, default: 1 },
+    status: {
+      type: String,
+      enum: ["stage1", "stage2", "stage3"],
+      default: "stage1",
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Pet", PetSchema);

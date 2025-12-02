@@ -17,7 +17,7 @@ import {
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
-import { showPetInfo, updatePetByUserId } from "./db/petDB.js"
+import { showPetInfo, updatePetByUserId, createPet } from "./db/petDB.js"
 
 dotenv.config();
 
@@ -116,6 +116,14 @@ app.post("/auth/signup", async (req, res) => {
         name: name
       });
       console.log("User created:", nutritionUser._id);
+      
+      // Create pet for the new user
+      try {
+        await createPet(auth._id);
+      } catch (petErr) {
+        console.error("Failed to create Pet:", petErr);
+        // Don't fail signup if pet creation fails, but log it
+      }
     } catch (userErr) {
       console.error("Failed to create User:", userErr);
       await AuthUser.findByIdAndDelete(auth._id);
@@ -296,11 +304,14 @@ app.get("/api/userdata", authMiddleware, async (req, res) => {
     const userId = req.user.id;
     const userData = await findUserById(userId);
     const petData = await showPetInfo(userId);
-    const userDataWithPet = { ...userData, petName: petData?.name || "" };
 
     if (!userData) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    // Convert Mongoose document to plain object
+    const userDataObj = userData.toObject ? userData.toObject() : userData;
+    const userDataWithPet = { ...userDataObj, petName: petData?.name || "" };
 
     res.json(userDataWithPet);
   } catch (error) {
@@ -326,9 +337,9 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
     }
 
     // Update pet name if provided
-    // if (petName !== undefined) {
-    //   await updatePetByUserId(userId, { name: petName });
-    // }
+    if (petName !== undefined) {
+      await updatePetByUserId(userId, { name: petName });
+    }
 
     res.json({ message: "User data updated successfully" });
   } catch (error) {
