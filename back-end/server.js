@@ -6,6 +6,9 @@ import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
+import { upgrade } from "./db/petDB.js";
+import Pet from "./schemas/Pet.js"; 
+
 
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
@@ -324,7 +327,8 @@ app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-// Pet API 
+// FIXED PET API -----------------------------------------
+
 function mapPetToResponse(pet) {
   const status = pet.status || "stage1";
   const stage =
@@ -343,14 +347,13 @@ function mapPetToResponse(pet) {
   };
 }
 
-// GET /api/pet
+// GET /api/pet (protected)
 app.get("/api/pet", authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id;   // ⭐ FIX: 从 JWT 获取 userId
+    const userId = req.user.id;   // ⭐ FIXED — use JWT user.id
 
     let pet = await Pet.findOne({ user_id: userId });
 
-    // 如果没有宠物，则创建一个初始宠物
     if (!pet) {
       const seedPath = path.join(__dirname, "temp_data", "pet_seed.json");
       const seedArray = JSON.parse(readFileSync(seedPath, "utf-8"));
@@ -372,16 +375,16 @@ app.get("/api/pet", authMiddleware, async (req, res) => {
 
     res.json(mapPetToResponse(pet));
 
-  } catch (error) {
-    console.error("Error fetching pet:", error);
+  } catch (err) {
+    console.error("Error fetching pet:", err);
     res.status(500).json({ error: "Failed to load pet" });
   }
 });
 
-// POST /api/pet/xp
+// POST /api/pet/xp (protected)
 app.post("/api/pet/xp", authMiddleware, async (req, res) => {
   try {
-    const userId = req.user.id;   // ⭐ FIX
+    const userId = req.user.id;  // ⭐ FIXED
     const { gainedXp } = req.body;
 
     if (typeof gainedXp !== "number") {
@@ -392,8 +395,8 @@ app.post("/api/pet/xp", authMiddleware, async (req, res) => {
 
     res.json(mapPetToResponse(updatedPet));
 
-  } catch (error) {
-    console.error("Error updating pet xp:", error);
+  } catch (err) {
+    console.error("Error updating pet XP:", err);
     res.status(500).json({ error: "Failed to update pet XP" });
   }
 });
