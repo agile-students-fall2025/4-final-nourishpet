@@ -16,6 +16,7 @@ import {
   updateUserById,
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
+import * as FoodDB from "./db/foodDB.js"
 
 dotenv.config();
 
@@ -240,17 +241,26 @@ app.get("/api/histdata", authMiddleware, async (req, res) => {
   }
 });
 
-// FOOD TABLE
+// FOOD TABLE - Get all foods from MongoDB
 app.get("/api/fooddata", authMiddleware, async (req, res) => {
   try {
-    const rawData = readFileSync(
-      path.join(__dirname, "temp_data", "foodData.json"),
-      "utf-8"
-    );
-    res.json(JSON.parse(rawData));
+    const foods = await FoodDB.getAllFoods();
+    res.json(foods);
   } catch (error) {
-    console.error("Error fetching data:", error.message);
-    res.status(500).json({ error: "Failed to fetch data" });
+    console.error("Error fetching food data:", error.message);
+    res.status(500).json({ error: "Failed to fetch food data" });
+  }
+});
+
+// FOOD SEARCH - Search foods by name
+app.get("/api/foods/search", authMiddleware, async (req, res) => {
+  try {
+    const { q } = req.query;
+    const foods = await FoodDB.searchFoods(q);
+    res.json(foods);
+  } catch (error) {
+    console.error("Error searching foods:", error.message);
+    res.status(500).json({ error: "Failed to search foods" });
   }
 });
 

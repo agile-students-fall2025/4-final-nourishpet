@@ -1,4 +1,3 @@
-
 .footer {
   display: flex;
   justify-content: space-around;
@@ -16,12 +15,15 @@
   border-image-slice: 1;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(10px);
+  z-index: 1000;
 }
 
 .footer-link {
   flex: 1;
   text-decoration: none;
   color: #4a5568;
+  color: #333;
+  flex: 1;
   text-align: center;
   transition: all 0.3s ease;
   position: relative;
@@ -45,10 +47,10 @@
 }
 
 .footer-item {
-  font-size: 13px;
-  padding: 12px 10px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  transition: color 0.2s;
   letter-spacing: 0.3px;
 }
 
@@ -59,4 +61,38 @@
 
 .footer-link:active .footer-item {
   transform: translateY(0);
+}
+
+.logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  /* Remove padding to allow max size */
+  transform: none;
+  /* Reset position to sit inside footer */
+  background: white;
+  border-radius: 50%;
+  /* Keep circular crop */
+  box-shadow: none;
+  /* Remove shadow as it's flat now */
+  width: 64px;
+  /* Fit within 70px footer */
+  height: 64px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.footer-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Fill the container */
+  transform: scale(1.4);
+  /* Zoom in significantly to fill the circle */
+  transition: transform 0.2s;
+}
+
+.footer-link:hover .footer-logo {
+  transform: scale(1.5);
 }

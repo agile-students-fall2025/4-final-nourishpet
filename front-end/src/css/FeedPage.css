@@ -1,30 +1,41 @@
-
 /* ================= Match homepage container ================= */
-:root{
-  --nav-h: 70px; /* footer height */
+:root {
+  --nav-h: 70px;
+  /* footer height */
 }
 
-.app{
+.feedpage {
+  min-height: 932px;
+  padding-bottom: 80px;
+  max-width: 430px;
+  margin: 0 auto;
   background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
-  min-height: 100vh;
+  position: relative;
 }
 
-.page{
-  padding-bottom: calc(var(--nav-h) + max(24px, env(safe-area-inset-bottom)) + 48px);
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+.feedpage-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+  gap: 20px;
+  padding: 15px 0;
 }
 
 /* ================= Header (User button like homepage) ================= */
-.page-header{
-  position: relative;              /* to anchor the User button */
+.page-header {
+  position: relative;
+  /* to anchor the User button */
   display: flex;
-  justify-content: center;         /* center the title */
+  justify-content: center;
+  /* center the title */
   align-items: center;
   padding: 15px 0;
   margin: 0 0 20px 0;
 }
 
-.page-header h1{
+.page-header h1 {
   margin: 0;
   text-align: center;
   padding: 20px 25px;
@@ -38,14 +49,15 @@
 
 /* ================= Intake button like homepage ================= */
 /* Absolute inside .page, raised above the fixed bottom bar */
-.floating-btn{
+.floating-btn {
   position: fixed;
   right: 16px;
-  bottom: calc(var(--nav-h) + 16px);
+  bottom: calc(var(--nav-h) + 30px);
+  /* Increased from 16px to 30px to avoid overlap */
   z-index: 700;
 }
 
-.floating-btn .btn{
+.floating-btn .btn {
   background: rgba(255, 255, 255, 0.95);
   padding: 10px 24px;
   text-decoration: none;
@@ -57,13 +69,14 @@
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
 /* ================= Bottom area (looks like homepage blocks) ================= */
 /* footer also accounts for safe-area */
-.bottom-nav{
+.bottom-nav {
   padding-bottom: max(8px, env(safe-area-inset-bottom));
 }
 
-.bottom-nav .btn.full{
+.bottom-nav .btn.full {
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.7);
@@ -77,23 +90,26 @@
   transition: all 0.2s ease;
 }
 
-.bottom-nav .btn.full:last-child{ border-right: none; }
+.bottom-nav .btn.full:last-child {
+  border-right: none;
+}
 
-.bottom-nav .btn.full:hover{
+.bottom-nav .btn.full:hover {
   background: rgba(255, 255, 255, 0.95);
 }
 
 /* ================= Form strips & list ================= */
-.sheet{
-  width: 90%;
+.sheet {
+  width: 100%;
   margin: 0 auto 18px;
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   padding: 24px 20px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(168, 237, 234, 0.3);
+  box-sizing: border-box;
 }
 
-.sheet h1{
+.sheet h1 {
   margin: 0 0 14px;
   font-size: 20px;
   font-weight: 700;
@@ -102,7 +118,7 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.sheet h2{
+.sheet h2 {
   margin: 8px 0 12px;
   font-size: 18px;
   font-weight: 600;
@@ -110,13 +126,13 @@
   color: #2d3748;
 }
 
-form{
-  display:flex;
-  flex-direction:column;
+form {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
-.field{
+.field {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -127,12 +143,12 @@ form{
   border-left: 4px solid #5cc4d1;
 }
 
-.field:hover{
+.field:hover {
   background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.field .input{
+.field .input {
   background: transparent;
   border: none;
   padding: 0;
@@ -141,7 +157,7 @@ form{
   outline: none;
 }
 
-.field .btn{
+.field .btn {
   background: rgba(255, 255, 255, 0.95);
   padding: 10px 24px;
   text-decoration: none;
@@ -154,19 +170,19 @@ form{
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.field .btn:hover{
+.field .btn:hover {
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.unit{
-  color:#666;
-  font-size:14px;
-  font-weight:600;
+.unit {
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* ================= Results list & cards ================= */
-.list{
+.list {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -177,26 +193,26 @@ form{
   border-left: 4px solid #5cc4d1;
 }
 
-.card{
-  background:white;
-  border:1px solid #d7dbe2;
-  border-radius:6px;
-  padding:14px 16px;
-  display:grid;
+.card {
+  background: white;
+  border: 1px solid #d7dbe2;
+  border-radius: 6px;
+  padding: 14px 16px;
+  display: grid;
   grid-template-columns: 1fr auto;
-  align-items:center;
-  gap:12px;
+  align-items: center;
+  gap: 12px;
   border-left: 4px solid #5cc4d1;
   transition: all 0.3s ease;
 }
 
-.card:hover{
+.card:hover {
   background: rgba(255, 255, 255, 0.95);
   transform: translateX(5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.card .btn{
+.card .btn {
   background: rgba(255, 255, 255, 0.95);
   padding: 10px 24px;
   text-decoration: none;
@@ -209,39 +225,39 @@ form{
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.card .btn:hover{
-  background:#ffffff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.card .btn:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.food-name{
-  font-weight:700;
-  color:#2d3748;
+.food-name {
+  font-weight: 700;
+  color: #2d3748;
 }
 
-.nutri{
-  color:#4b5563;
-  font-size:14px;
+.nutri {
+  color: #4b5563;
+  font-size: 14px;
 }
 
 /* ================= Popup ================= */
-.popup-overlay{
+.popup-overlay {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,.45);
+  background: rgba(0, 0, 0, .45);
   z-index: var(--overlay-z);
   backdrop-filter: saturate(120%) blur(3px);
 }
 
-.popup-card{
+.popup-card {
   position: relative;
   width: min(92vw, 430px);
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   border-radius: 20px;
-  box-shadow: 0 18px 48px rgba(0,0,0,.28);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .28);
   padding: 24px 28px;
   z-index: var(--popup-z);
   text-align: left;
@@ -250,36 +266,106 @@ form{
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
 
-.close-btn{
-  position:absolute;
-  top:10px;
-  right:10px;
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   background: rgba(255, 255, 255, 0.8);
-  border:none;
-  border-radius:50%;
-  width:32px;
-  height:32px;
-  font-weight:700;
-  color:#4db8c4;
-  cursor:pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-weight: 700;
+  color: #4db8c4;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
-.close-btn:hover{
+.close-btn:hover {
   background: #ffffff;
   transform: scale(1.1);
 }
 
 /* ================= Small screens ================= */
-@media (max-width:520px){
+@media (max-width:520px) {
+
   .sheet,
-  .list{
+  .list {
     width: 92%;
   }
 
-  .floating-btn{
+  .floating-btn {
     right: 12px;
   }
 
+}
+
+/* ================= Suggestions Dropdown ================= */
+.search-field {
+  overflow: visible;
+  /* Ensure dropdown isn't clipped */
+}
+
+.input-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  /* To make input fill width */
+}
+
+.input-wrapper .input {
+  width: 100%;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 16px;
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  margin-top: 10px;
+  list-style: none;
+  padding: 8px;
+  /* Scrollbar styling for webkit */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 transparent;
+}
+
+.suggestions-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestions-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.suggestions-list::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0;
+  border-radius: 20px;
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  color: #4a5568;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.suggestion-item:hover {
+  background: #e6fffa;
+  /* Very light teal to match brand */
+  color: #38b2ac;
+  transform: translateX(4px);
 }

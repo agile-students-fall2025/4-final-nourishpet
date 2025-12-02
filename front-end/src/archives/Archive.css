@@ -1,37 +1,25 @@
-.Archive {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 100vh;
-  box-sizing: border-box;
-  padding-top: 40px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
-  position: relative;
-}
-
-.Archive h1{
-  text-align: center;
-  padding: 20px 25px;
-  transition: transform 0.3s ease;
+.archive-title {
+  margin: 0 0 10px 0;
   color: #2d3748;
-  font-size: 27px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 700;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
 .record-list {
-  max-width: 400px;
   width: 100%;
   margin: 20px auto;
-  padding: 10px 20px;
+  padding: 10px 0;
+  /* Reduced side padding to prevent overflow if box-sizing isn't enough, but box-sizing is key */
+  box-sizing: border-box;
 }
 
 .record-row {
   display: flex;
-  justify-content: space-between; /* Puts space between the two items */
-  align-items: center;            /* Vertically centers them */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
   padding: 12px 15px;
   background: rgba(255, 255, 255, 0.7);
@@ -41,11 +29,10 @@
   background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
 
-
 .record-row-goal-notreached {
   display: flex;
-  justify-content: space-between; /* Puts space between the two items */
-  align-items: center;            /* Vertically centers them */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 8px;
   padding: 12px 15px;
   background: rgba(255, 255, 255, 0.7);
@@ -55,9 +42,8 @@
   background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
 }
 
-
 .date-link {
-  flex: 2;                 /* Gives this column 1 "part" of the space */
+  flex: 2;
   text-decoration: none;
   text-align: center;
   background: rgba(255, 255, 255, 0.95);
@@ -83,34 +69,10 @@
 }
 
 .record-status {
-  flex: 3;                 /* Gives this column 2 "parts" of the space */
-  text-align: center;        /* Aligns text to the left */
+  flex: 3;
+  text-align: center;
   padding-left: 20px;
   font-weight: 500;
-}
-
-.archive-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  box-sizing: border-box;
-  padding-top: 40px;
-  padding-bottom: 70px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
-  position: relative;
-}
-
-.archive-page h1 {
-  text-align: center;
-  padding: 20px 25px;
-  transition: transform 0.3s ease;
-  color: #2d3748;
-  font-size: 27px;
-  font-weight: 600;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  letter-spacing: 0.5px;
 }
 
 .nutrition-record {
@@ -142,10 +104,10 @@
 
 .food-row {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 15px;
-  padding: 10px 5px; 
+  padding: 10px 5px;
   align-items: left;
   text-align: center;
 }
@@ -158,31 +120,15 @@
 .food-name {
   font-weight: bold;
   color: #000;
-  min-width: 120px; 
+  min-width: 120px;
 }
 
-.food-gram{
+.food-gram {
   text-align: center;
 }
 
 .status-pie {
-  width: 250px;   
+  width: 250px;
   height: 400px;
   margin: auto;
-}
-
-.back-button {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 10px 24px;
-  text-decoration: none;
-  color: #4db8c4;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  position: absolute;
-  top: 20px;
-  right: 20px;
 }
