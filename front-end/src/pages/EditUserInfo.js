@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchUserData, updateUserData } from '../services/mockApi';
+// import { fetchUserData, updateUserData } from '../services/mockApi';
 import UserImage from './UserImage';
 import '../css/EditUserInfo.css';
 import Footer from '../components/Footer.js'
@@ -145,12 +145,15 @@ function UserInfo({ formData, onInputChange }){
 
                     <div className="form-row">
                         <label>Gender:</label>
-                        <input 
-                            type="text" 
-                            value={formData.gender}
+                        <select 
+                            value={formData.gender || ''}
                             onChange={(e) => onInputChange('gender', e.target.value)}
                             className="form-input-simple"
-                        />
+                        >
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
                     </div>
 
                     <div className="form-row">
