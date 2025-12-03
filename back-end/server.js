@@ -17,7 +17,8 @@ import {
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
-import { showPetInfo, updatePetByUserId, createPet } from "./db/petDB.js"
+import { showPetInfo, updatePetByUserId, createPet, upgrade } from "./db/petDB.js"
+import Pet from "./schemas/Pet.js"
 
 dotenv.config();
 
@@ -368,9 +369,9 @@ function mapPetToResponse(pet) {
 }
 
 // GET /api/pet 
-app.get("/api/pet", async (req, res) => {
+app.get("/api/pet", authMiddleware, async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
+    const userId = req.user.id;
     if (!userId) {
       return res.status(401).json({ error: "Invalid or missing token" });
     }
@@ -404,9 +405,9 @@ app.get("/api/pet", async (req, res) => {
 });
 
 // POST /api/pet/xp
-app.post("/api/pet/xp", async (req, res) => {
+app.post("/api/pet/xp", authMiddleware, async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
+    const userId = req.user.id;
     if (!userId) {
       return res.status(401).json({ error: "Invalid or missing token" });
     }

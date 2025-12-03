@@ -3,6 +3,7 @@ import StatusPie from "./StatusPie";
 import PetImage from "./PetImage";
 import GoalsPanel from "./GoalsPanel";
 import { useState, useEffect } from "react";
+import Footer from '../components/Footer.js'
 
 const PetPage = () => {
   const [pet, setPet] = useState(null);
@@ -85,6 +86,7 @@ const PetPage = () => {
         </div>
       </div>
 
+      < Footer/>
     </div>
   );
 };
