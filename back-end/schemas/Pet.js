@@ -1,6 +1,9 @@
 // back-end/schemas/Pet.js
+// back-end/schemas/Pet.js
 import mongoose from "mongoose";
 
+const PetSchema = new mongoose.Schema(
+  {
 const PetSchema = new mongoose.Schema(
   {
 
@@ -23,5 +26,15 @@ const PetSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+    level: { type: Number, default: 1 },
+    status: {
+      type: String,
+      enum: ["stage1", "stage2", "stage3"],
+      default: "stage1",
+    },
+  },
+  { timestamps: true }
+);
 
+export default mongoose.model("Pet", PetSchema);
 export default mongoose.model("Pet", PetSchema);
