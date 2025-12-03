@@ -26,7 +26,7 @@ function EditUserInfo(){
 
           setUserData({
             name: userData.name,
-            // petName: userData.petName,
+            petName: userData.petName,
             age: userData.age,
             gender: userData.gender,
             height: userData.height,
@@ -42,7 +42,7 @@ function EditUserInfo(){
     useEffect(() => {
       if (userData) {
         // const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
-        const requiredFields = ['name', 'age', 'gender', 'height', 'weight', 'target_weight'];
+        const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
         const hasEmptyField = requiredFields.some(field => {
           const value = userData[field];
           return value === null || value === undefined || value === '' || (typeof value === 'number' && isNaN(value));
@@ -133,7 +133,7 @@ function UserInfo({ formData, onInputChange }){
                         />
                     </div>
                     
-                    {/* <div className="form-row">
+                    <div className="form-row">
                         <label>Pet name:</label>
                         <input 
                             type="text" 
@@ -141,7 +141,7 @@ function UserInfo({ formData, onInputChange }){
                             onChange={(e) => onInputChange('petName', e.target.value)}
                             className="form-input-simple"
                         />
-                    </div> */}
+                    </div>
 
                     <div className="form-row">
                         <label>Gender:</label>

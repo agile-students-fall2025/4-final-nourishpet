@@ -17,6 +17,8 @@ import {
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
+import { showPetInfo, updatePetByUserId, createPet, upgrade } from "./db/petDB.js"
+import Pet from "./schemas/Pet.js"
 
 dotenv.config();
 
@@ -115,6 +117,14 @@ app.post("/auth/signup", async (req, res) => {
         name: name
       });
       console.log("User created:", nutritionUser._id);
+      
+      // Create pet for the new user
+      try {
+        await createPet(auth._id);
+      } catch (petErr) {
+        console.error("Failed to create Pet:", petErr);
+        // Don't fail signup if pet creation fails, but log it
+      }
     } catch (userErr) {
       console.error("Failed to create User:", userErr);
       await AuthUser.findByIdAndDelete(auth._id);
@@ -293,13 +303,18 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
 app.get("/api/userdata", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const userData = await await findUserById(userId);
+    const userData = await findUserById(userId);
+    const petData = await showPetInfo(userId);
 
     if (!userData) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json(userData);
+    // Convert Mongoose document to plain object
+    const userDataObj = userData.toObject ? userData.toObject() : userData;
+    const userDataWithPet = { ...userDataObj, petName: petData?.name || "" };
+
+    res.json(userDataWithPet);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Server error" });
@@ -310,12 +325,21 @@ app.get("/api/userdata", authMiddleware, async (req, res) => {
 app.post("/api/updateuserdata", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    const userData = req.body;
+    const data = req.body;
 
+    // Separate petName from userData
+    const { petName, ...userData } = data;
+
+    // Update user data
     const updated = await updateUserById(userId, userData);
 
     if (!updated) {
       return res.status(404).json({ error: "User not found" });
+    }
+
+    // Update pet name if provided
+    if (petName !== undefined) {
+      await updatePetByUserId(userId, { name: petName });
     }
 
     res.json({ message: "User data updated successfully" });
@@ -345,9 +369,9 @@ function mapPetToResponse(pet) {
 }
 
 // GET /api/pet 
-app.get("/api/pet", async (req, res) => {
+app.get("/api/pet", authMiddleware, async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
+    const userId = req.user.id;
     if (!userId) {
       return res.status(401).json({ error: "Invalid or missing token" });
     }
@@ -381,9 +405,9 @@ app.get("/api/pet", async (req, res) => {
 });
 
 // POST /api/pet/xp
-app.post("/api/pet/xp", async (req, res) => {
+app.post("/api/pet/xp", authMiddleware, async (req, res) => {
   try {
-    const userId = getUserIdFromRequest(req);
+    const userId = req.user.id;
     if (!userId) {
       return res.status(401).json({ error: "Invalid or missing token" });
     }

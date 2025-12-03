@@ -1,10 +1,11 @@
 // back-end/schemas/Pet.js
+
 import mongoose from "mongoose";
 
 const PetSchema = new mongoose.Schema(
   {
 
-    name: { type: String, required: true },
+    name: { type: String, default: "Your Pet" },
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
