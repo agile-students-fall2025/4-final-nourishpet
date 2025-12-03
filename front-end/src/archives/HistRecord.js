@@ -18,6 +18,11 @@ function HistRecord() {
     const [error, setError] = useState(null);
     const getToken = () => localStorage.getItem("token");
 
+    const fmt = (n) => {
+        const v = Number(n);
+        return Number.isFinite(v) ? v.toFixed(1) : "0.0";
+    };
+
     useEffect(() => {
         const token = getToken();
 
@@ -59,10 +64,10 @@ function HistRecord() {
                     setRecord({
                         date: specificRecord.date,
                         nutrition: {
-                            calories: specificRecord.total_intake,
-                            protein: specificRecord.protein,
-                            carbs: specificRecord.carbs,
-                            fat: specificRecord.fat
+                            calories: parseFloat(Number(specificRecord.total_intake).toFixed(1)),
+                            protein: parseFloat(Number(specificRecord.protein).toFixed(1)),
+                            carbs: parseFloat(Number(specificRecord.carbs).toFixed(1)),
+                            fat: parseFloat(Number(specificRecord.fat).toFixed(1))
                         },
                     });
                     setFoodList({
@@ -137,10 +142,10 @@ function HistRecord() {
                         <tbody>
                             {foodlist.foods.map((foodName, index) => (
                                 <tr key={index}>
-                                    <td className="food-name">{foodName}: {foodlist.grams?.[index]}g</td>
-                                    <td className="food-protein">{foodlist.protein?.[index]}g</td>
-                                    <td className="food-carbs">{foodlist.carbs?.[index]}g</td>
-                                    <td className="food-fat">{foodlist.fat?.[index]}g</td>
+                                    <td className="food-name">{foodName}: {fmt(foodlist.grams?.[index])}g</td>
+                                    <td className="food-protein">{fmt(foodlist.protein?.[index])}g</td>
+                                    <td className="food-carbs">{fmt(foodlist.carbs?.[index])}g</td>
+                                    <td className="food-fat">{fmt(foodlist.fat?.[index])}g</td>
                                 </tr>
                             ))}
                         </tbody>

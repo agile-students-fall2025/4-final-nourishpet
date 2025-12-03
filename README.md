@@ -16,7 +16,7 @@ Make healthy eating sticky and delightful by turning daily nutrition goals into 
 ---
 
 ## Building and Testing of Project
- **Sprint 2 — Back-End Integration(Currently working)**
+ **Sprint 2 — Back-End Integration (Completed)**
 Implementing Express.js routes and mock data.
 Integrating API calls into React components.
 Writing Mocha/Chai unit tests for route coverage.
@@ -29,6 +29,17 @@ Note:
 5. **Forms:** POST data to server routes (mock storage acceptable)  
 6. **Testing:** Unit tests with **Mocha**, **Chai**, and coverage verification via **c8** (≥10%)  
 7.  **Security:** No credentials or URIs stored in version control — use `.env` for private settings
+
+### Configuration
+To run the back-end, you must create a `.env` file in the `back-end` directory. This file is git-ignored to protect sensitive credentials.
+
+**Required Variables:**
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/nourishpet
+JWT_SECRET=your_super_secret_key
+PORT=5000
+```
+*Ask the team for the shared development credentials.*
 
 ### Back-End Setup
 
