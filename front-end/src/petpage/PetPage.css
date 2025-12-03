@@ -20,12 +20,14 @@
   width: 200px;
   margin: auto;
   border-radius: 6px;
+  overflow: hidden;
 }
 
 .xp-bar-fill {
   height: 12px;
   background: #6fa3ef;
   border-radius: 6px;
+  overflow: hidden;
 }
 
 .mid-section {
@@ -51,12 +53,14 @@
   width: 120px;
   height: 8px;
   border-radius: 4px;
+  overflow: hidden;
 }
 
 .goal-bar-fill {
   background: #6fa3ef;
   height: 8px;
   border-radius: 4px;
+  overflow: hidden;
 }
 
 #date-top-right {
