@@ -4,9 +4,25 @@ import axios from 'axios';
 import Footer from '../components/Footer';
 import '../css/HomePage.css';
 
+import stage1Img from "../petpage/pet_stage1.jpg";
+import stage2Img from "../petpage/pet_stage2.jpg";
+import stage3Img from "../petpage/pet_stage3.jpg";
+
+const stageImages = {
+  1: stage1Img,
+  2: stage2Img,
+  3: stage3Img,
+};
+
+const fmt = (n) => {
+  const v = Number(n);
+  return Number.isFinite(v) ? v.toFixed(1) : "0.0";
+};
+
 function HomePage() {
   const [nutritionData, setNutritionData] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [petData, setPetData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const getToken = () => localStorage.getItem("token");
@@ -20,29 +36,33 @@ function HomePage() {
       }),
       axios.get('http://localhost:5000/api/userdata', {
         headers: { Authorization: `Bearer ${token}` }
+      }),
+      axios.get('http://localhost:5000/api/pet', {
+        headers: { Authorization: `Bearer ${token}` }
       })
     ])
-    .then(([nutritionResponse, userResponse]) => {
-      setNutritionData(nutritionResponse.data);
+      .then(([nutritionResponse, userResponse, petResponse]) => {
+        setNutritionData(nutritionResponse.data);
+        setPetData(petResponse.data);
 
-      const foundUserData = userResponse.data;
-      if (foundUserData) {
-        setUserData({
-          pet_name: foundUserData.pet_name || "Your Pet", 
-          total_intake_goal: foundUserData.total_intake_goal || 2000, 
-          protein_goal: foundUserData.protein_goal || 150,
-          carbs_goal: foundUserData.carbs_goal || 250,
-          fat_goal: foundUserData.fat_goal || 70
-        });
-      }
-    })
-    .catch(error => {
-      console.error("Error fetching data:", error);
-      setError("Failed to load data.");
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
+        const foundUserData = userResponse.data;
+        if (foundUserData) {
+          setUserData({
+            pet_name: foundUserData.pet_name || "Your Pet",
+            total_intake_goal: foundUserData.total_intake_goal || 2000,
+            protein_goal: foundUserData.protein_goal || 150,
+            carbs_goal: foundUserData.carbs_goal || 250,
+            fat_goal: foundUserData.fat_goal || 70
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+        setError("Failed to load data.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
 
   }, []);
 
@@ -71,7 +91,7 @@ function HomePage() {
             <div className="pet-image-circle">
               <p className="pet-name">{userData ? userData.pet_name : "Loading..."}</p>
               <img
-                src="https://picsum.photos/200/200"
+                src={petData ? (stageImages[petData.stage] || stage1Img) : stage1Img}
                 alt="Pet"
                 className="pet-photo-circle"
               />
@@ -95,25 +115,25 @@ function HomePage() {
                   <div className="nutrition-item">
                     <span className="nutrition-label">Calories:</span>
                     <span className="nutrition-value">
-                      {nutritionData.total_intake} / {userData.total_intake_goal}
+                      {fmt(nutritionData.total_intake)} / {fmt(userData.total_intake_goal)}
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Protein:</span>
                     <span className="nutrition-value">
-                      {nutritionData.protein}g / {userData.protein_goal}g
+                      {fmt(nutritionData.protein)}g / {fmt(userData.protein_goal)}g
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Carbs:</span>
                     <span className="nutrition-value">
-                      {nutritionData.carbs}g / {userData.carbs_goal}g
+                      {fmt(nutritionData.carbs)}g / {fmt(userData.carbs_goal)}g
                     </span>
                   </div>
                   <div className="nutrition-item">
                     <span className="nutrition-label">Fat:</span>
                     <span className="nutrition-value">
-                      {nutritionData.fat}g / {userData.fat_goal}g
+                      {fmt(nutritionData.fat)}g / {fmt(userData.fat_goal)}g
                     </span>
                   </div>
                 </div>
