@@ -11,7 +11,7 @@ function StatusPie({nutrition}){
         datasets: [
             {
                 data: [nutrition.protein,nutrition.carbs,nutrition.fat],
-                backgroundColor: ["#6fa3ef", "#ffd166", "#ef6f6c"]
+                backgroundColor: ["#a8edea", "#fcb69f", "#fed6e3"]
             }
         ]
     }
