@@ -46,20 +46,24 @@ export async function updatePetByUserId(userId, updateData) {
     return updatedPet;
 }
 
-// upgrade
-export async function upgrade(userId, gainedXp) {
+export async function applyDailyNutritionXP(userId, nutrition, goals) {
   if (!userId) throw new Error("userId is required");
 
+  // 1. Compute XP
+  const gainedXp = computeDailyXP(nutrition, goals);
+
+  // 2. Load pet
   const pet = await Pet.findOne({ user_id: userId });
   if (!pet) throw new Error("Pet not found");
 
+  // 3. Apply XP
   pet.xp += gainedXp;
 
-  // Level：floor(xp / 50) + 1
+  // 4. Recalculate level
   const newLevel = Math.floor(pet.xp / XP_PER_LEVEL) + 1;
   pet.level = newLevel;
 
-  // Stage
+  // 5. Recalculate stage
   if (newLevel <= LEVELS_PER_STAGE) {
     pet.status = "stage1";
   } else if (newLevel <= LEVELS_PER_STAGE * 2) {
@@ -68,6 +72,31 @@ export async function upgrade(userId, gainedXp) {
     pet.status = "stage3";
   }
 
+  // 6. Save pet
   await pet.save();
-  return pet;
+
+  return { updatedPet: pet, gainedXp };
+}
+
+
+export function computeDailyXP(nutrition, goals) {
+  let xp = 0;
+  let goalsReached = 0;
+
+  if (nutrition.total_intake >= goals.total_intake_goal) {
+    xp += 5; goalsReached++;
+  }
+  if (nutrition.protein >= goals.protein_goal) {
+    xp += 5; goalsReached++;
+  }
+  if (nutrition.carbs >= goals.carbs_goal) {
+    xp += 5; goalsReached++;
+  }
+  if (nutrition.fat >= goals.fat_goal) {
+    xp += 5; goalsReached++;
+  }
+
+  if (goalsReached === 4) xp += 20;
+
+  return xp;
 }

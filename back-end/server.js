@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
-
+import { applyDailyNutritionXP } from "./db/petDB.js";
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
 import {
@@ -17,7 +17,7 @@ import {
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
-import { showPetInfo, updatePetByUserId, createPet, upgrade } from "./db/petDB.js"
+import { showPetInfo, updatePetByUserId, createPet} from "./db/petDB.js"
 import Pet from "./schemas/Pet.js"
 
 dotenv.config();
@@ -274,12 +274,13 @@ app.get("/api/foods/search", authMiddleware, async (req, res) => {
   }
 });
 
-// ADD FOOD ENTRY
 app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
+    const token = req.headers.authorization;
     const { foodName, grams, protein, fat, carbs } = req.body;
 
+    // 1. Insert food item
     const foodItem = {
       name: foodName,
       grams: Number(grams),
@@ -287,14 +288,48 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
       f: Number(fat),
       c: Number(carbs)
     };
-    
+
     const updatedLog = await ArchiveDB.addFoodEntry(userId, foodItem);
 
-    res
-      .status(200)
-      .json({ message: "Food item added successfully", updatedLog});
+    // 2. Fetch today's nutrition (same logic as frontend)
+    const today = await fetch("http://localhost:5000/api/home/nutrition", {
+      headers: { Authorization: token }
+    }).then(res => res.json());
+
+    // 3. Fetch user goals (same logic as frontend)
+    const goals = await fetch("http://localhost:5000/api/userdata", {
+      headers: { Authorization: token }
+    }).then(res => res.json());
+
+    // 4. Use DB service to calculate XP + upgrade pet
+    const { updatedPet, gainedXp } = await applyDailyNutritionXP(
+      userId,
+      {
+        total_intake: today.total_intake,
+        protein: today.protein,
+        carbs: today.carbs,
+        fat: today.fat
+      },
+      {
+        total_intake_goal: goals.total_intake_goal,
+        protein_goal: goals.protein_goal,
+        carbs_goal: goals.carbs_goal,
+        fat_goal: goals.fat_goal
+      }
+    );
+
+    // 5. Respond with full update
+    res.json({
+      message: "Food item added",
+      updatedLog,
+      todayNutrition: today,
+      userGoals: goals,
+      updatedPet,
+      gainedXp
+    });
+
   } catch (error) {
-    console.error("Error adding food item:", error.message);
+    console.error("Food add error:", error);
     res.status(500).json({ error: "Failed to add food item" });
   }
 });
@@ -401,29 +436,6 @@ app.get("/api/pet", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Error fetching pet:", error);
     res.status(500).json({ error: "Failed to load pet" });
-  }
-});
-
-// POST /api/pet/xp
-app.post("/api/pet/xp", authMiddleware, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    if (!userId) {
-      return res.status(401).json({ error: "Invalid or missing token" });
-    }
-
-    const { gainedXp } = req.body;
-
-    if (typeof gainedXp !== "number") {
-      return res.status(400).json({ error: "gainedXp must be a number" });
-    }
-
-    const updatedPet = await upgrade(userId, gainedXp);
-
-    res.json(mapPetToResponse(updatedPet));
-  } catch (error) {
-    console.error("Error upgrading pet:", error);
-    res.status(500).json({ error: "Failed to update pet XP" });
   }
 });
 
