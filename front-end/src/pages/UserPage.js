@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import UserImage from './UserImage';
 import '../css/UserPage.css';
-import Footer from '../components/Footer.js'
+import Footer from '../components/Footer.js';
 import axios from "axios";
 import { API } from "../api";
 
