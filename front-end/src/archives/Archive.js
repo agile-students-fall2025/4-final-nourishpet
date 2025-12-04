@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
-
+import { API } from "../api";
 import '../css/HomePage.css';
 
 function WeekArchive() {
@@ -18,7 +18,7 @@ function WeekArchive() {
         const token = getToken();
 
         //fetch from url
-        axios.get('http://localhost:5000/api/histdata', {
+        axios.get(`${API}/api/histdata`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
@@ -32,7 +32,7 @@ function WeekArchive() {
             });
 
         //fetch username
-        axios.get('http://localhost:5000/api/userdata', {
+        axios.get(`${API}/api/userdata`, {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then(response => {
