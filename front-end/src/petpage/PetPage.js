@@ -3,7 +3,8 @@ import StatusPie from "./StatusPie";
 import PetImage from "./PetImage";
 import GoalsPanel from "./GoalsPanel";
 import { useState, useEffect } from "react";
-import Footer from '../components/Footer.js'
+import Footer from '../components/Footer.js';
+import { API } from "../api";
 
 const PetPage = () => {
   const [pet, setPet] = useState(null);
@@ -16,17 +17,17 @@ const PetPage = () => {
     if (!token) return setLoading(false);
 
     // fetch pet
-    const petFetch = fetch("http://localhost:5000/api/pet", {
+    const petFetch = fetch(`${API}/api/pet`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json());
 
     // fetch today's nutrition
-    const nutritionFetch = fetch("http://localhost:5000/api/home/nutrition", {
+    const nutritionFetch = fetch(`${API}/api/home/nutrition`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json());
 
     // fetch user goals
-    const goalFetch = fetch("http://localhost:5000/api/userdata", {
+    const goalFetch = fetch(`${API}/api/userdata`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json());
 
