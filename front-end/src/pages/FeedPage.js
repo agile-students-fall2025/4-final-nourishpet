@@ -2,9 +2,10 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/FeedPage.css";
 import Footer from "../components/Footer";
+import { API } from "../api";
 
-const foodDB = "http://localhost:5000/api/fooddata";
-const searchAPI = "http://localhost:5000/api/foods/search";
+const foodDB = `${API}/api/fooddata`;
+const searchAPI = `${API}/api/foods/search`;
 
 const fmt = (n) => {
   const v = Number(n);
@@ -125,7 +126,7 @@ function FeedPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch('http://localhost:5000/api/addfooditem', {
+      const res = await fetch(`${API}/api/addfooditem`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

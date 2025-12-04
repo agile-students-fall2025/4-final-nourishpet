@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../css/RegisterPage.css";
 import logo from "../logo.svg";
+import { API } from "../api";
 
 function RegisterPage() {
   const [username, setUsername] = useState("");
@@ -22,7 +23,7 @@ function RegisterPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/auth/signup", {
+      const response = await fetch(`${API}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

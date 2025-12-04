@@ -4,6 +4,7 @@ import UserImage from './UserImage';
 import '../css/UserPage.css';
 import Footer from '../components/Footer.js'
 import axios from "axios";
+import { API } from "../api";
 
 function UserPage(){
     const [userData, setUserData] = useState(null);
@@ -11,7 +12,7 @@ function UserPage(){
 
     useEffect(() => {
       axios
-        .get("http://localhost:5000/api/userdata", {
+        .get(`${API}/api/userdata`, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
           }

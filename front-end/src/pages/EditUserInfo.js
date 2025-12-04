@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
+import { API } from "../api";
 // import { fetchUserData, updateUserData } from '../services/mockApi';
 import UserImage from './UserImage';
 import '../css/EditUserInfo.css';
@@ -15,7 +16,7 @@ function EditUserInfo(){
     const hasInitialized = useRef(false);
     useEffect(() => {
       axios
-        .get("http://localhost:5000/api/userdata", {
+        .get(`${API}/api/userdata`, {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token")
             }
@@ -78,7 +79,7 @@ function EditUserInfo(){
             return;
         }
         axios
-            .post("http://localhost:5000/api/updateuserdata", userData, {
+            .post(`${API}/api/updateuserdata`, userData, {
             headers: {
               Authorization: "Bearer " + localStorage.getItem("token")
             }

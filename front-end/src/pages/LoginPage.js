@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../css/LoginPage.css';
 import logo from '../logo.svg';
+import { API } from "../api";
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -12,7 +13,7 @@ const handleLogin = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch("http://localhost:5000/auth/login", {
+    const response = await fetch(`${API}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

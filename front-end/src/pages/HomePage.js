@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Footer from '../components/Footer';
 import '../css/HomePage.css';
+import { API } from "../api";
 
 function HomePage() {
   const [nutritionData, setNutritionData] = useState(null);
@@ -15,10 +16,10 @@ function HomePage() {
     const token = getToken();
 
     Promise.all([
-      axios.get('http://localhost:5000/api/home/nutrition', {
+      axios.get(`${API}/api/home/nutrition`, {
         headers: { Authorization: `Bearer ${token}` }
       }),
-      axios.get('http://localhost:5000/api/userdata', {
+      axios.get(`${API}/api/userdata`, {
         headers: { Authorization: `Bearer ${token}` }
       })
     ])
