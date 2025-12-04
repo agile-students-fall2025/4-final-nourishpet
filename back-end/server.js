@@ -211,6 +211,7 @@ const readJson = (fileName) => {
   return JSON.parse(rawData);
 };
 
+
 // HOME PAGE
 app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
   try {
@@ -292,14 +293,29 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
     const updatedLog = await ArchiveDB.addFoodEntry(userId, foodItem);
 
     // 2. Fetch today's nutrition (same logic as frontend)
-    const today = await fetch("http://localhost:5000/api/home/nutrition", {
-      headers: { Authorization: token }
-    }).then(res => res.json());
+    const histData = await ArchiveDB.getWeeklyLogs(userId);
+    const dateObj = new Date();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const todayString = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+
+    const today = histData.find(entry => entry.date === todayString) || {
+      total_intake: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+    };
 
     // 3. Fetch user goals (same logic as frontend)
-    const goals = await fetch("http://localhost:5000/api/userdata", {
-      headers: { Authorization: token }
-    }).then(res => res.json());
+    const userData = await findUserById(userId);
+
+    const goals = {
+      total_intake_goal: userData.total_intake_goal,
+      protein_goal: userData.protein_goal,
+      carbs_goal: userData.carbs_goal,
+      fat_goal: userData.fat_goal
+    };
 
     // 4. Use DB service to calculate XP + upgrade pet
     const { updatedPet, gainedXp } = await applyDailyNutritionXP(
