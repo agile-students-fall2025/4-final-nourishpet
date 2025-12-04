@@ -39,9 +39,26 @@ npm install
 #start front-end
 npm start
 ```
+## Building and Testing of Project
+ **Sprint 2 — Back-End Integration (Completed)**
+Implementing Express.js routes and mock data.
+Integrating API calls into React components.
+Writing Mocha/Chai unit tests for route coverage.
 
 
 ## Back-End Setup
+### Configuration
+To run the back-end, you must create a `.env` file in the `back-end` directory. This file is git-ignored to protect sensitive credentials.
+
+**Required Variables:**
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/nourishpet
+JWT_SECRET=your_super_secret_key
+PORT=5000
+```
+*Ask the team for the shared development credentials.*
+
+### Back-End Setup
 
 ```bash
 # navigate to the back-end folder

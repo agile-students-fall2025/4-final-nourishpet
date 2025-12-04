@@ -3,7 +3,7 @@
 This document explains how to contribute and the rules our team follows. Keep changes small and focused.
 
 ## Status
-Currently in **Sprint 2 — Back-End Integration**
+Currently in **Sprint 2 — Back-End Integration** (Database Integration Phase)
 - [Figma Prototype](https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0)
 - [App Map (Figma Board)](https://www.figma.com/board/Ap3PkTRrukV8oVRh2tlZMD/App-Map?t=jhqZDDOU0ArQTD3g-0)
 
@@ -27,6 +27,7 @@ Currently in **Sprint 2 — Back-End Integration**
 Default branch: `master`
 
 - Work on your own branch (branch naming details see below); do not commit directly to `master`.
+- **NEVER commit `.env` files or secrets.**
 - Commit messages: **one line**, meaningful and concise (what changed + why).
 - Open a Pull Request to `master`; **at least 1 peer review is required** before merge.
 
