@@ -4,7 +4,7 @@ import axios from 'axios';
 import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
 import "./Archive.css";
-
+import { API } from "../api";
 import '../css/HomePage.css';
 
 import Footer from '../components/Footer';
@@ -29,18 +29,18 @@ function HistRecord() {
         // If ID is "today", fetch from home/nutrition endpoint
         let fetchRecordPromise;
         if (id === 'today') {
-            fetchRecordPromise = axios.get('http://localhost:5000/api/home/nutrition', {
+            fetchRecordPromise = axios.get(`${API}/api/home/nutrition`, {
                 headers: { Authorization: `Bearer ${token}` }
             }).then(res => {
                 return { data: [res.data] };
             });
         } else {
-            fetchRecordPromise = axios.get('http://localhost:5000/api/histdata', {
+            fetchRecordPromise = axios.get(`${API}/api/histdata`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
         }
 
-        const fetchUserGoals = axios.get('http://localhost:5000/api/userdata', {
+        const fetchUserGoals = axios.get(`${API}/api/userdata`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
