@@ -7,12 +7,15 @@ import { API } from "../api";
 
 function EditRecord() {
     const { id } = useParams();
-    
-    const [items, setItems] = useState([]); 
+
+    const [items, setItems] = useState([]);
     const [recordDate, setRecordDate] = useState("");
     const [recordId, setRecordId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showConfirm, setShowConfirm] = useState(false); //handle delete confirmation
+    const [deleteIndex, setDeleteIndex] = useState(null);
+    const [isSaving, setIsSaving] = useState(false);
 
     const getToken = () => localStorage.getItem("token");
 
@@ -25,8 +28,6 @@ function EditRecord() {
         const token = getToken();
         let fetchPromise;
 
-        // We still fetch from two different places depending on context
-        // This part is fine and doesn't need to change
         if (id === 'today') {
             fetchPromise = axios.get(`${API}/api/home/nutrition`, {
                 headers: { Authorization: `Bearer ${token}` }
@@ -41,10 +42,10 @@ function EditRecord() {
             .then(res => {
                 let specificRecord;
                 if (id === 'today') {
-                    specificRecord = res.data; 
+                    specificRecord = res.data;
                 } else {
                     const allRecords = res.data;
-                    specificRecord = allRecords.find(item => 
+                    specificRecord = allRecords.find(item =>
                         String(item._id) === String(id) || item.date === id
                     );
                 }
@@ -81,14 +82,17 @@ function EditRecord() {
 
     }, [id]);
 
-    const handleInstantDelete = async (indexToRemove) => {
-        const itemToDelete = items[indexToRemove];
-        
-        if (!window.confirm(`Delete ${itemToDelete.name}? This will update your log immediately.`)) {
-            return; 
-        }
+    const initiateDelete = (index) => {
+        setDeleteIndex(index);
+        setShowConfirm(true);  // show confirmation popup
+    };
 
-        const newItems = items.filter((_, index) => index !== indexToRemove);
+    const confirmDelete = async () => {
+        if (deleteIndex === null) return;
+
+        setIsSaving(true);
+
+        const newItems = items.filter((_, index) => index !== deleteIndex);
 
         const newTotalIntake = newItems.reduce((acc, curr) => acc + (curr.protein * 4) + (curr.carbs * 4) + (curr.fat * 9), 0);
         const newProtein = newItems.reduce((acc, curr) => acc + curr.protein, 0);
@@ -109,10 +113,10 @@ function EditRecord() {
             fat: newFat
         };
 
-        // Send to the SINGLE Backend Endpoint
+        // Send to the backend endpoint
         try {
             const token = getToken();
-            
+
             const endpoint = `${API}/api/update_record`;
 
             await axios.post(endpoint, payload, {
@@ -120,6 +124,8 @@ function EditRecord() {
             });
 
             setItems(newItems);
+            setShowConfirm(false);
+            setDeleteIndex(null);
 
         } catch (err) {
             console.error("Failed to delete:", err);
@@ -127,12 +133,17 @@ function EditRecord() {
         }
     };
 
+    const cancelDelete = () => {
+        setShowConfirm(false);
+        setDeleteIndex(null);
+    }
+
     if (loading) return <div className="homepage">Loading...</div>;
     if (error) return <div className="homepage">{error}</div>;
 
     return (
         <div className="homepage">
-            <header className="homepage-header" style={{ justifyContent: 'center' }}>
+            <header className="homepage-header">
                 <Link to="/archives" className="user-button">
                     Back
                 </Link>
@@ -146,7 +157,7 @@ function EditRecord() {
                         <thead>
                             <tr>
                                 <th>Food</th>
-                                <th style={{textAlign: 'right'}}>Action</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -154,17 +165,17 @@ function EditRecord() {
                                 <tr><td colSpan="2">No food items found.</td></tr>
                             ) : (
                                 items.map((item, index) => (
-                                    <tr key={index} style={{ borderBottom: '1px solid #eee' }}>
+                                    <tr key={index}>
                                         <td className="food-name">
-                                            <span style={{fontWeight: 'bold'}}>{item.name}</span>
-                                            <br/>
-                                            <span style={{fontSize: '0.8rem', color: '#666'}}>
+                                            <span>{item.name}</span>
+                                            <br />
+                                            <span>
                                                 {fmt(item.grams)}g | P:{fmt(item.protein)} C:{fmt(item.carbs)} F:{fmt(item.fat)}
                                             </span>
                                         </td>
-                                        <td style={{ textAlign: 'right', verticalAlign: 'middle' }}>
-                                            <button 
-                                                onClick={() => handleInstantDelete(index)}
+                                        <td>
+                                            <button
+                                                onClick={() => initiateDelete(index)}
                                             >
                                                 🗑️
                                             </button>
@@ -175,6 +186,30 @@ function EditRecord() {
                         </tbody>
                     </table>
                 </div>
+                {showConfirm && (
+                    <div className="popup-overlay" role="dialog" aria-modal="true">
+                        <div className="popup-card">
+                            <h3>Sure to delete <b>{items[deleteIndex]?.name}</b>?</h3>
+
+                            <div className="popup-actions">
+                                <button
+                                    className="popup-btn cancel-btn"
+                                    onClick={cancelDelete}
+                                    disabled={isSaving}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="popup-btn confirm-btn"
+                                    onClick={confirmDelete}
+                                    disabled={isSaving}
+                                >
+                                    {isSaving ? "Deleting..." : "Confirm"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </main>
             <Footer />
         </div>
