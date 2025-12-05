@@ -38,7 +38,7 @@ function HomePage() {
       axios.get(`${API}/api/userdata`, {
         headers: { Authorization: `Bearer ${token}` }
       }),
-      axios.get('http://localhost:5000/api/pet', {
+      axios.get(`${API}/api/pet`, {
         headers: { Authorization: `Bearer ${token}` }
       })
     ])
