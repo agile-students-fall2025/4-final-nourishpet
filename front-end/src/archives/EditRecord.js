@@ -20,7 +20,6 @@ function EditRecord() {
         return Number.isFinite(v) ? v.toFixed(1) : "0";
     };
 
-    // 1. Fetch Data
     useEffect(() => {
         const token = getToken();
         let fetchPromise;
@@ -81,28 +80,22 @@ function EditRecord() {
 
     }, [id]);
 
-    // 2. Handle Instant Delete
     const handleInstantDelete = async (indexToRemove) => {
         const itemToDelete = items[indexToRemove];
         
-        // A. Ask for confirmation
-        // Since there is no "Save" button, we warn them this is permanent
         if (!window.confirm(`Delete ${itemToDelete.name}? This will update your log immediately.`)) {
             return; 
         }
 
-        // B. Calculate the NEW list state locally
         const newItems = items.filter((_, index) => index !== indexToRemove);
 
-        // C. Calculate NEW totals based on the new list
         const newTotalIntake = newItems.reduce((acc, curr) => acc + (curr.protein * 4) + (curr.carbs * 4) + (curr.fat * 9), 0);
         const newProtein = newItems.reduce((acc, curr) => acc + curr.protein, 0);
         const newCarbs = newItems.reduce((acc, curr) => acc + curr.carbs, 0);
         const newFat = newItems.reduce((acc, curr) => acc + curr.fat, 0);
 
-        // D. Prepare Payload for Backend
         const payload = {
-            _id: recordId,  // Crucial: The backend uses this to find the document
+            _id: recordId,
             date: recordDate,
             food_list: newItems.map(i => i.name),
             grams: newItems.map(i => i.grams),
@@ -115,19 +108,16 @@ function EditRecord() {
             fat: newFat
         };
 
-        // E. Send to the SINGLE Backend Endpoint
+        // Send to the SINGLE Backend Endpoint
         try {
             const token = getToken();
             
-            // --- THIS IS THE KEY CHANGE ---
-            // We use the single route we just created in server.js
             const endpoint = 'http://localhost:5000/api/update_record';
 
             await axios.post(endpoint, payload, {
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            // F. Success: Update UI
             setItems(newItems);
 
         } catch (err) {

@@ -356,7 +356,6 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     
-    // We get the whole payload from the frontend including the _id and the new arrays
     const { 
         _id, 
         food_list, 
@@ -370,8 +369,6 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
         fat 
     } = req.body;
 
-    // 1. Update the Food Log Record directly
-    // We use $set to overwrite the old arrays with the new edited ones
     const updatedLog = await Nutrition.findByIdAndUpdate(
         _id, 
         {
@@ -394,7 +391,6 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
         return res.status(404).json({ error: "Record not found" });
     }
 
-    // 2. Fetch user goals (Using your existing logic)
     const userData = await findUserById(userId);
 
     const goals = {
@@ -404,9 +400,7 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
       fat_goal: userData.fat_goal
     };
 
-    // 3. Recalculate Pet XP
-    // Since we changed the food, we need to re-run the daily calculation.
-    // We pass 'updatedLog' because it contains the NEW current totals (protein, fat, etc.)
+    // recalculation
     const { updatedPet, gainedXp } = await applyDailyNutritionXP(
       userId,
       {
@@ -423,11 +417,11 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
       }
     );
 
-    // 4. Respond with full update (Matching your addfooditem response structure)
+    // full update
     res.json({
       message: "Record updated successfully",
       updatedLog,
-      todayNutrition: updatedLog, // The log IS the nutrition for that day
+      todayNutrition: updatedLog,
       userGoals: goals,
       updatedPet,
       gainedXp
