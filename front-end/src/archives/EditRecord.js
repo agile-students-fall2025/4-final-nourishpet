@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../css/HomePage.css';
 import Footer from '../components/Footer';
+import { API } from "../api";
 
 function EditRecord() {
     const { id } = useParams();
@@ -27,11 +28,11 @@ function EditRecord() {
         // We still fetch from two different places depending on context
         // This part is fine and doesn't need to change
         if (id === 'today') {
-            fetchPromise = axios.get('http://localhost:5000/api/home/nutrition', {
+            fetchPromise = axios.get(`${API}/api/home/nutrition`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
         } else {
-            fetchPromise = axios.get('http://localhost:5000/api/histdata', {
+            fetchPromise = axios.get(`${API}/api/histdata`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
         }
@@ -112,7 +113,7 @@ function EditRecord() {
         try {
             const token = getToken();
             
-            const endpoint = 'http://localhost:5000/api/update_record';
+            const endpoint = `${API}/api/update_record`;
 
             await axios.post(endpoint, payload, {
                 headers: { Authorization: `Bearer ${token}` }
