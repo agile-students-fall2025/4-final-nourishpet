@@ -17,25 +17,21 @@ export const findUserById = async (id) => {
 };
 
 export const updateUserById = async (id, data) => {
-    if (data.height !== undefined || data.weight !== undefined) {
-        const currentDoc = await User.findById(id);
-        
-        if (currentDoc) {
-            const height = data.height !== undefined 
-                ? Number(data.height) || currentDoc.height 
-                : currentDoc.height;
-            const weight = data.weight !== undefined 
-                ? Number(data.weight) || currentDoc.weight 
-                : currentDoc.weight;
-            
-            if (height > 0 && weight > 0) {
-                const calculatedBmi = calculate_bmi(height, weight);
-                data.bmi = Math.round(calculatedBmi * 10) / 10;
-            }
-        }
+    const user = await User.findById(id);
+    
+    if (!user) {
+        throw new Error("User not found");
     }
     
-    return await User.findByIdAndUpdate(id, data, {new: true});
+    Object.keys(data).forEach(key => {
+        if (data[key] !== undefined) {
+            user[key] = data[key];
+        }
+    });
+    
+    await user.save();
+    
+    return user;
 };
 
 export const DeleteById = async (id) => {
