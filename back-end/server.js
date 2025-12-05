@@ -19,6 +19,7 @@ import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
 import { showPetInfo, updatePetByUserId, createPet} from "./db/petDB.js"
 import Pet from "./schemas/Pet.js"
+import Nutrition from "./schemas/Nutrition.js";;
 
 dotenv.config();
 
@@ -347,6 +348,88 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Food add error:", error);
     res.status(500).json({ error: "Failed to add food item" });
+  }
+});
+
+// EDIT ARCHIVE
+app.post("/api/update_record", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const { 
+        _id, 
+        food_list, 
+        grams, 
+        protein_list, 
+        fat_list, 
+        carbs_list, 
+        total_intake, 
+        protein, 
+        carbs, 
+        fat 
+    } = req.body;
+
+    const updatedLog = await Nutrition.findByIdAndUpdate(
+        _id, 
+        {
+            $set: {
+                food_list: food_list,
+                grams: grams,
+                protein_list: protein_list,
+                carbs_list: carbs_list,
+                fat_list: fat_list,
+                total_intake: total_intake,
+                protein: protein,
+                carbs: carbs,
+                fat: fat
+            }
+        },
+        { new: true } // Return the updated document
+    );
+
+    if (!updatedLog) {
+        return res.status(404).json({ error: "Record not found" });
+    }
+
+    const userData = await findUserById(userId);
+
+    const goals = {
+      total_intake_goal: userData.total_intake_goal,
+      protein_goal: userData.protein_goal,
+      carbs_goal: userData.carbs_goal,
+      fat_goal: userData.fat_goal
+    };
+
+    // recalculation
+    const { updatedPet, gainedXp } = await applyDailyNutritionXP(
+      userId,
+      {
+        total_intake: updatedLog.total_intake,
+        protein: updatedLog.protein,
+        carbs: updatedLog.carbs,
+        fat: updatedLog.fat
+      },
+      {
+        total_intake_goal: goals.total_intake_goal,
+        protein_goal: goals.protein_goal,
+        carbs_goal: goals.carbs_goal,
+        fat_goal: goals.fat_goal
+      }
+    );
+
+    // full update
+    res.json({
+      message: "Record updated successfully",
+      updatedLog,
+      todayNutrition: updatedLog,
+      userGoals: goals,
+      updatedPet,
+      gainedXp
+    });
+
+  } catch (error) {
+    console.error("Update record error:", error);
+    res.status(500).json({ error: "Failed to update record" });
   }
 });
 
