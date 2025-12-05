@@ -24,7 +24,7 @@ function HistRecord() {
 
     const isEditable = () => {
         if (!record) return false;
-        
+
         if (id === 'today') return true;
         const today = new Date();
         const recordDate = new Date(record.date); //check if it's current day record
@@ -159,11 +159,11 @@ function HistRecord() {
                             ))}
                         </tbody>
                     </table>
-                    {(
-                            <Link to={`/archives/editRecord/${id}`} className="user-button">
-                                Edit
-                            </Link>
-                        )}
+                    {isEditable() && (
+                        <Link to={`/archives/editRecord/${id}`} className="user-button">
+                            Edit
+                        </Link>
+                    )}
                 </div>
             </main>
             <Footer />
