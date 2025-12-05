@@ -19,6 +19,7 @@ import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
 import { showPetInfo, updatePetByUserId, createPet} from "./db/petDB.js"
 import Pet from "./schemas/Pet.js"
+import Nutrition from "./schemas/Nutrition.js";;
 
 dotenv.config();
 
@@ -347,6 +348,94 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
   } catch (error) {
     console.error("Food add error:", error);
     res.status(500).json({ error: "Failed to add food item" });
+  }
+});
+
+// EDIT ARCHIVE
+app.post("/api/update_record", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // We get the whole payload from the frontend including the _id and the new arrays
+    const { 
+        _id, 
+        food_list, 
+        grams, 
+        protein_list, 
+        fat_list, 
+        carbs_list, 
+        total_intake, 
+        protein, 
+        carbs, 
+        fat 
+    } = req.body;
+
+    // 1. Update the Food Log Record directly
+    // We use $set to overwrite the old arrays with the new edited ones
+    const updatedLog = await Nutrition.findByIdAndUpdate(
+        _id, 
+        {
+            $set: {
+                food_list: food_list,
+                grams: grams,
+                protein_list: protein_list,
+                carbs_list: carbs_list,
+                fat_list: fat_list,
+                total_intake: total_intake,
+                protein: protein,
+                carbs: carbs,
+                fat: fat
+            }
+        },
+        { new: true } // Return the updated document
+    );
+
+    if (!updatedLog) {
+        return res.status(404).json({ error: "Record not found" });
+    }
+
+    // 2. Fetch user goals (Using your existing logic)
+    const userData = await findUserById(userId);
+
+    const goals = {
+      total_intake_goal: userData.total_intake_goal,
+      protein_goal: userData.protein_goal,
+      carbs_goal: userData.carbs_goal,
+      fat_goal: userData.fat_goal
+    };
+
+    // 3. Recalculate Pet XP
+    // Since we changed the food, we need to re-run the daily calculation.
+    // We pass 'updatedLog' because it contains the NEW current totals (protein, fat, etc.)
+    const { updatedPet, gainedXp } = await applyDailyNutritionXP(
+      userId,
+      {
+        total_intake: updatedLog.total_intake,
+        protein: updatedLog.protein,
+        carbs: updatedLog.carbs,
+        fat: updatedLog.fat
+      },
+      {
+        total_intake_goal: goals.total_intake_goal,
+        protein_goal: goals.protein_goal,
+        carbs_goal: goals.carbs_goal,
+        fat_goal: goals.fat_goal
+      }
+    );
+
+    // 4. Respond with full update (Matching your addfooditem response structure)
+    res.json({
+      message: "Record updated successfully",
+      updatedLog,
+      todayNutrition: updatedLog, // The log IS the nutrition for that day
+      userGoals: goals,
+      updatedPet,
+      gainedXp
+    });
+
+  } catch (error) {
+    console.error("Update record error:", error);
+    res.status(500).json({ error: "Failed to update record" });
   }
 });
 

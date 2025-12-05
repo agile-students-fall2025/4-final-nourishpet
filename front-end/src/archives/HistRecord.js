@@ -4,9 +4,7 @@ import axios from 'axios';
 import GoalsPanel from "../petpage/GoalsPanel";
 import StatusPie from "../petpage/StatusPie";
 import "./Archive.css";
-
 import '../css/HomePage.css';
-
 import Footer from '../components/Footer';
 
 function HistRecord() {
@@ -21,6 +19,16 @@ function HistRecord() {
     const fmt = (n) => {
         const v = Number(n);
         return Number.isFinite(v) ? v.toFixed(1) : "0.0";
+    };
+
+    const isEditable = () => {
+        if (!record) return false;
+        
+        if (id === 'today') return true;
+        const today = new Date();
+        const recordDate = new Date(record.date); //check if it's current day record
+
+        return today.toDateString() === recordDate.toDateString();
     };
 
     useEffect(() => {
@@ -150,12 +158,16 @@ function HistRecord() {
                             ))}
                         </tbody>
                     </table>
+                    {(
+                            <Link to={`/archives/editRecord/${id}`} className="user-button">
+                                Edit
+                            </Link>
+                        )}
                 </div>
             </main>
             <Footer />
         </div>
     );
 }
-
 
 export default HistRecord;

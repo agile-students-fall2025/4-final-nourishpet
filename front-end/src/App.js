@@ -10,6 +10,7 @@ import PetPage from './petpage/PetPage.js';
 import FeedPage from './pages/FeedPage.js';
 import Archive from './archives/Archive.js';
 import HistRecord from './archives/HistRecord.js';
+import EditRecord from './archives/EditRecord.js';
 import { Navigate } from "react-router-dom";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/feedpage" element={<FeedPage />} />
           <Route path="/archives" element={<Archive />} />
           <Route path="/archives/histrecord/:id" element={<HistRecord />} />
+          <Route path="/archives/editRecord/:id" element={<EditRecord />} />
         </Routes>
       </div>
     </Router>
