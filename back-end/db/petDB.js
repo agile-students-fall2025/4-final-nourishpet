@@ -46,18 +46,21 @@ export async function updatePetByUserId(userId, updateData) {
     return updatedPet;
 }
 
-export async function applyDailyNutritionXP(userId, nutrition, goals) {
+export async function applyDailyNutritionXP(userId, nutrition, goals, targetDate) {
   if (!userId) throw new Error("userId is required");
+  if (!targetDate) throw new Error("targetDate is required");
 
-  // 1. Compute XP
-  const gainedXp = computeDailyXP(nutrition, goals);
-
-  // 2. Load pet
+  // 1. Load pet
   const pet = await Pet.findOne({ user_id: userId });
   if (!pet) throw new Error("Pet not found");
 
-  // 3. Apply XP
-  pet.xp += gainedXp;
+  // 2. Compute XP
+  const gainedXp = computeDailyXP(nutrition, goals);
+
+
+  if (gainedXp > 0) {
+    pet.xp += gainedXp;
+  }
 
   // 4. Recalculate level
   const newLevel = Math.floor(pet.xp / XP_PER_LEVEL) + 1;
@@ -79,24 +82,84 @@ export async function applyDailyNutritionXP(userId, nutrition, goals) {
 }
 
 
+
 export function computeDailyXP(nutrition, goals) {
   let xp = 0;
   let goalsReached = 0;
 
-  if (nutrition.total_intake >= goals.total_intake_goal) {
-    xp += 5; goalsReached++;
+  if (nutrition.total_intake >= goals.total_intake_goal && 
+      nutrition.total_intake <= goals.total_intake_goal * 1.2) {
+    xp += 20; goalsReached++;
   }
-  if (nutrition.protein >= goals.protein_goal) {
-    xp += 5; goalsReached++;
+  if (nutrition.protein >= goals.protein_goal && 
+      nutrition.protein <= goals.protein_goal * 1.2) {
+    xp += 20; goalsReached++;
   }
-  if (nutrition.carbs >= goals.carbs_goal) {
-    xp += 5; goalsReached++;
+  if (nutrition.carbs >= goals.carbs_goal && 
+      nutrition.carbs <= goals.carbs_goal * 1.2) {
+    xp += 20; goalsReached++;
   }
-  if (nutrition.fat >= goals.fat_goal) {
-    xp += 5; goalsReached++;
+  if (nutrition.fat >= goals.fat_goal && 
+      nutrition.fat <= goals.fat_goal * 1.2) {
+    xp += 20; goalsReached++;
   }
 
-  if (goalsReached === 4) xp += 20;
+  if (goalsReached === 4) xp += 50;
 
   return xp;
+}
+
+function getTodayString() {
+  const dateObj = new Date();
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+}
+
+function getYesterdayString() {
+  const dateObj = new Date();
+  dateObj.setDate(dateObj.getDate() - 1);
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
+}
+
+function dateStringToDate(dateString) {
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const parts = dateString.split(", ");
+  const year = parseInt(parts[1]);
+  const monthDay = parts[0].split(" ");
+  const month = monthNames.indexOf(monthDay[0]);
+  const day = parseInt(monthDay[1]);
+  return new Date(year, month, day);
+}
+
+export async function addFoodXP(userId) {
+  if (!userId) throw new Error("userId is required");
+
+  // 1. Load pet
+  const pet = await Pet.findOne({ user_id: userId });
+  if (!pet) throw new Error("Pet not found");
+
+  // 2. Add 2 XP
+  pet.xp += 2;
+
+  // 3. Recalculate level
+  const newLevel = Math.floor(pet.xp / XP_PER_LEVEL) + 1;
+  pet.level = newLevel;
+
+  // 4. Recalculate stage
+  if (newLevel <= LEVELS_PER_STAGE) {
+    pet.status = "stage1";
+  } else if (newLevel <= LEVELS_PER_STAGE * 2) {
+    pet.status = "stage2";
+  } else {
+    pet.status = "stage3";
+  }
+
+  // 5. Save pet
+  await pet.save();
+
+  return { updatedPet: pet, gainedXp: 2 };
 }

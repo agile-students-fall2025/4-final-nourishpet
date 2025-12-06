@@ -14,6 +14,7 @@ const PetSchema = new mongoose.Schema(
 
     xp: { type: Number, default: 0 },
 
+    lastDailyXPDate: { type: String, default: null }, // 记录最后计算daily XP的日期
 
     level: { type: Number, default: 1 },
     status: {

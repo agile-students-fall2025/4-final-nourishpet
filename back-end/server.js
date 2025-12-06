@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import morgan from "morgan";
-import { applyDailyNutritionXP } from "./db/petDB.js";
+import { applyDailyNutritionXP, addFoodXP } from "./db/petDB.js";
 import AuthUser from "./schemas/AuthUser.js";
 import NutritionUser from "./schemas/User.js";
 import {
@@ -224,6 +224,69 @@ app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
     const todayString = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
     const todayData = histData.find((entry) => entry.date === todayString);
 
+    // Check and calculate daily XP for the date stored in lastDailyXPDate
+    // lastDailyXPDate stores the date that needs to be calculated (the last login date)
+    try {
+      const pet = await Pet.findOne({ user_id: userId });
+      if (pet && pet.lastDailyXPDate) {
+        // Parse lastDailyXPDate string (format: "Jan 15, 2024")
+        const lastDateString = pet.lastDailyXPDate;
+        const lastDateParts = lastDateString.split(", ");
+        const year = parseInt(lastDateParts[1]);
+        const monthDay = lastDateParts[0].split(" ");
+        const monthName = monthDay[0];
+        const day = parseInt(monthDay[1]);
+        const monthIndex = monthNames.indexOf(monthName);
+        
+        // Create date objects for comparison
+        const lastDateOnly = new Date(year, monthIndex, day);
+        const todayDateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+        
+        // Only calculate if lastDailyXPDate is before today
+        if (lastDateOnly < todayDateOnly) {
+          // lastDailyXPDate is in the past, calculate XP for that date
+          const targetDateString = pet.lastDailyXPDate;
+          
+          // Fetch nutrition data for that date
+          const targetData = histData.find((entry) => entry.date === targetDateString) || {
+            total_intake: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+          };
+
+          // Fetch user goals
+          const userData = await findUserById(userId);
+          const goals = {
+            total_intake_goal: userData.total_intake_goal,
+            protein_goal: userData.protein_goal,
+            carbs_goal: userData.carbs_goal,
+            fat_goal: userData.fat_goal
+          };
+
+          // Calculate and apply daily XP for that date
+          await applyDailyNutritionXP(
+            userId,
+            {
+              total_intake: targetData.total_intake,
+              protein: targetData.protein,
+              carbs: targetData.carbs,
+              fat: targetData.fat
+            },
+            goals,
+            targetDateString
+          );
+
+          // Clear lastDailyXPDate after calculation (set to null)
+          pet.lastDailyXPDate = null;
+          await pet.save();
+        }
+      }
+    } catch (xpError) {
+      // If daily XP calculation fails, just log and continue
+      console.error("Error calculating daily XP:", xpError);
+    }
+
     if (!todayData) {
       return res.json({
         date: todayString,
@@ -318,31 +381,25 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
       fat_goal: userData.fat_goal
     };
 
-    // 4. Use DB service to calculate XP + upgrade pet
-    const { updatedPet, gainedXp } = await applyDailyNutritionXP(
-      userId,
-      {
-        total_intake: today.total_intake,
-        protein: today.protein,
-        carbs: today.carbs,
-        fat: today.fat
-      },
-      {
-        total_intake_goal: goals.total_intake_goal,
-        protein_goal: goals.protein_goal,
-        carbs_goal: goals.carbs_goal,
-        fat_goal: goals.fat_goal
-      }
-    );
+    // 4. Add 2 XP for each food addition
+    const { updatedPet: petAfterFoodXP, gainedXp: foodXP } = await addFoodXP(userId);
 
-    // 5. Respond with full update
+    // 5. Set lastDailyXPDate to today (mark today as needing XP calculation)
+    // This will be calculated when user logs in tomorrow
+    const pet = await Pet.findOne({ user_id: userId });
+    if (pet) {
+      pet.lastDailyXPDate = todayString;
+      await pet.save();
+    }
+
+    // 6. Respond with full update
     res.json({
       message: "Food item added",
       updatedLog,
       todayNutrition: today,
       userGoals: goals,
-      updatedPet,
-      gainedXp
+      updatedPet: petAfterFoodXP,
+      gainedXp: foodXP  // XP from adding food (always 2)
     });
 
   } catch (error) {
@@ -400,31 +457,12 @@ app.post("/api/update_record", authMiddleware, async (req, res) => {
       fat_goal: userData.fat_goal
     };
 
-    // recalculation
-    const { updatedPet, gainedXp } = await applyDailyNutritionXP(
-      userId,
-      {
-        total_intake: updatedLog.total_intake,
-        protein: updatedLog.protein,
-        carbs: updatedLog.carbs,
-        fat: updatedLog.fat
-      },
-      {
-        total_intake_goal: goals.total_intake_goal,
-        protein_goal: goals.protein_goal,
-        carbs_goal: goals.carbs_goal,
-        fat_goal: goals.fat_goal
-      }
-    );
-
     // full update
     res.json({
       message: "Record updated successfully",
       updatedLog,
       todayNutrition: updatedLog,
-      userGoals: goals,
-      updatedPet,
-      gainedXp
+      userGoals: goals
     });
 
   } catch (error) {
@@ -489,7 +527,7 @@ function mapPetToResponse(pet) {
   const stage =
     status === "stage1" ? 1 :
     status === "stage2" ? 2 :
-    3; // 默认 3
+    3;
 
   return {
     id: pet._id.toString(),
