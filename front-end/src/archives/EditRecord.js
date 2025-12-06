@@ -83,6 +83,7 @@ function EditRecord() {
     }, [id]);
 
     const initiateDelete = (index) => {
+        
         setDeleteIndex(index);
         setShowConfirm(true);  // show confirmation popup
     };
@@ -130,6 +131,8 @@ function EditRecord() {
         } catch (err) {
             console.error("Failed to delete:", err);
             alert(`Fail to save change: ${err.response?.data?.message || err.message}`);
+        } finally {
+            setIsSaving(false);
         }
     };
 

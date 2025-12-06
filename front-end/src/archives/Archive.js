@@ -70,10 +70,21 @@ function WeekArchive() {
                     {records.map(record => {
                         const currentIntake = record.total_intake || 0;
 
-                        const goalstatus = (currentIntake >= userGoal);
-                        const statusText = goalstatus ? 'Goal Reached' : 'Goal Not Reached';
-                        const rowHighlighted = goalstatus ? '' : 'record-row-goal-notreached';
+                        let statusText;
+                        let rowHighlighted;
 
+                        if (currentIntake < userGoal) {
+                            statusText = 'Goal Not Reached';
+                            rowHighlighted = 'record-row-goal-notreached';
+
+                        } else if (currentIntake <= userGoal * 1.2) {
+                            statusText = 'Goal Reached';
+                            rowHighlighted = 'record-row-goal-reached';
+
+                        } else {
+                            statusText = 'Goal Exceeded';
+                            rowHighlighted = 'record-row-goal-exceeded';
+                        }
                         return (
 
                             <div className={`record-row ${rowHighlighted}`} key={record._id}>
