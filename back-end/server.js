@@ -17,7 +17,7 @@ import {
 } from "./db/userDB.js";
 import * as ArchiveDB from "./db/archiveDB.js"
 import * as FoodDB from "./db/foodDB.js"
-import { showPetInfo, updatePetByUserId, createPet} from "./db/petDB.js"
+import { showPetInfo, updatePetByUserId, createPet } from "./db/petDB.js"
 import Pet from "./schemas/Pet.js"
 import Nutrition from "./schemas/Nutrition.js";;
 
@@ -42,7 +42,7 @@ const connectDB = async () => {
     }
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
-        // --- 🔍 DEBUGGING: PRINT DB INFO ---
+    // --- DEBUGGING: PRINT DB INFO ---
     console.log("---------------------------------------");
     console.log("📂 Current Database Name:", mongoose.connection.name);
     console.log("------------------------------------------------");
@@ -53,7 +53,7 @@ const connectDB = async () => {
 };
 
 // ==========================================================
-// 🔐 AUTH MIDDLEWARE — requires JWT for protected routes
+//  AUTH MIDDLEWARE — requires JWT for protected routes
 // ==========================================================
 import jwt from "jsonwebtoken";
 
@@ -82,7 +82,7 @@ function authMiddleware(req, res, next) {
 }
 
 // ==========================================================
-// 🔐 AUTH ROUTES
+//  AUTH ROUTES
 // ==========================================================
 
 // --------------------- SIGNUP -------------------------
@@ -118,7 +118,7 @@ app.post("/auth/signup", async (req, res) => {
         name: name
       });
       console.log("User created:", nutritionUser._id);
-      
+
       // Create pet for the new user
       try {
         await createPet(auth._id);
@@ -143,8 +143,8 @@ app.post("/auth/signup", async (req, res) => {
   } catch (err) {
     console.error("Signup error:", err);
     console.error("Error details:", err.message);
-    res.status(500).json({ 
-      success: false, 
+    res.status(500).json({
+      success: false,
       message: err.message || "Signup failed.",
       error: process.env.NODE_ENV === "development" ? err.stack : undefined
     });
@@ -201,7 +201,7 @@ app.get("/auth/logout", (req, res) => {
 });
 
 // ==========================================================
-// 🔐 PROTECTED NUTRITION API ROUTES
+//  PROTECTED NUTRITION API ROUTES
 // ==========================================================
 
 const readJson = (fileName) => {
@@ -237,16 +237,16 @@ app.get("/api/home/nutrition", authMiddleware, async (req, res) => {
         const monthName = monthDay[0];
         const day = parseInt(monthDay[1]);
         const monthIndex = monthNames.indexOf(monthName);
-        
+
         // Create date objects for comparison
         const lastDateOnly = new Date(year, monthIndex, day);
         const todayDateOnly = new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
-        
+
         // Only calculate if lastDailyXPDate is before today
         if (lastDateOnly < todayDateOnly) {
           // lastDailyXPDate is in the past, calculate XP for that date
           const targetDateString = pet.lastDailyXPDate;
-          
+
           // Fetch nutrition data for that date
           const targetData = histData.find((entry) => entry.date === targetDateString) || {
             total_intake: 0,
@@ -360,7 +360,7 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
     const histData = await ArchiveDB.getWeeklyLogs(userId);
     const dateObj = new Date();
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     const todayString = `${monthNames[dateObj.getMonth()]} ${dateObj.getDate()}, ${dateObj.getFullYear()}`;
 
@@ -412,40 +412,40 @@ app.post("/api/addfooditem", authMiddleware, async (req, res) => {
 app.post("/api/update_record", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
-    
-    const { 
-        _id, 
-        food_list, 
-        grams, 
-        protein_list, 
-        fat_list, 
-        carbs_list, 
-        total_intake, 
-        protein, 
-        carbs, 
-        fat 
+
+    const {
+      _id,
+      food_list,
+      grams,
+      protein_list,
+      fat_list,
+      carbs_list,
+      total_intake,
+      protein,
+      carbs,
+      fat
     } = req.body;
 
     const updatedLog = await Nutrition.findByIdAndUpdate(
-        _id, 
-        {
-            $set: {
-                food_list: food_list,
-                grams: grams,
-                protein_list: protein_list,
-                carbs_list: carbs_list,
-                fat_list: fat_list,
-                total_intake: total_intake,
-                protein: protein,
-                carbs: carbs,
-                fat: fat
-            }
-        },
-        { new: true } // Return the updated document
+      _id,
+      {
+        $set: {
+          food_list: food_list,
+          grams: grams,
+          protein_list: protein_list,
+          carbs_list: carbs_list,
+          fat_list: fat_list,
+          total_intake: total_intake,
+          protein: protein,
+          carbs: carbs,
+          fat: fat
+        }
+      },
+      { new: true } // Return the updated document
     );
 
     if (!updatedLog) {
-        return res.status(404).json({ error: "Record not found" });
+      return res.status(404).json({ error: "Record not found" });
     }
 
     const userData = await findUserById(userId);
@@ -526,8 +526,8 @@ function mapPetToResponse(pet) {
   const status = pet.status || "stage1";
   const stage =
     status === "stage1" ? 1 :
-    status === "stage2" ? 2 :
-    3;
+      status === "stage2" ? 2 :
+        3;
 
   return {
     id: pet._id.toString(),
@@ -535,8 +535,8 @@ function mapPetToResponse(pet) {
     user_id: pet.user_id.toString(),
     xp: pet.xp,
     level: pet.level,
-    stage,      
-    status,      
+    stage,
+    status,
   };
 }
 
