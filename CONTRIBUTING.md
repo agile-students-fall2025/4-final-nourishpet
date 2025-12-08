@@ -5,6 +5,7 @@ This document explains how to contribute and the rules our team follows. Keep ch
 ## Status
 - [Figma Prototype](https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0)
 - [App Map (Figma Board)](https://www.figma.com/board/Ap3PkTRrukV8oVRh2tlZMD/App-Map?t=jhqZDDOU0ArQTD3g-0)
+
 We have completed the [project](https://nourishpet2025-dd9b5.ondigitalocean.app/) and deployed it on DigitalOcean.
 
 
