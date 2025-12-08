@@ -219,3 +219,47 @@
   min-width: 30px;
 }
 
+
+/* Gender Selection Styles */
+.gender-selection-container {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+  max-width: 200px;
+}
+
+.gender-option {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid rgba(77, 184, 196, 0.3);
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #2d3748;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.gender-option:hover {
+  background-color: #ffffff;
+  border-color: #4db8c4;
+  transform: translateY(-1px);
+}
+
+.gender-option.selected {
+  background: linear-gradient(135deg, #4db8c4 0%, #3aa0ac 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(77, 184, 196, 0.3);
+  font-weight: 600;
+}
+
+.checkmark {
+  font-weight: bold;
+  font-size: 14px;
+}
