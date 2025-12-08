@@ -21,10 +21,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: |
-          back-end/package-lock.json
-          front-end/package-lock.json
 
     # Backend
     - name: Install Backend Dependencies
