@@ -1,3 +1,4 @@
+![CI Status](https://github.com/agile-students-fall2025/4-final-nourishpet/actions/workflows/ci.yml/badge.svg)
 # NourishPet
 
 
