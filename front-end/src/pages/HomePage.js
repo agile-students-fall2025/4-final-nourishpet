@@ -5,9 +5,9 @@ import Footer from '../components/Footer';
 import '../css/HomePage.css';
 import { API } from "../api";
 
-import stage1Img from "../petpage/pet_stage1.jpg";
-import stage2Img from "../petpage/pet_stage2.jpg";
-import stage3Img from "../petpage/pet_stage3.jpg";
+import stage1Img from "../petpage/pet_stage1.png";
+import stage2Img from "../petpage/pet_stage2.png";
+import stage3Img from "../petpage/pet_stage3.png";
 
 const stageImages = {
   1: stage1Img,
