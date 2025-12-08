@@ -1,0 +1,49 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json'
+
+    # Backend
+    - name: Install Backend Dependencies
+      run: |
+        cd back-end
+        npm ci
+
+    - name: Run Backend Tests
+      run: |
+        cd back-end
+        npm test
+
+    # Frontend
+    - name: Install Frontend Dependencies
+      run: |
+        cd front-end
+        npm ci
+
+    - name: Run Frontend Tests
+      run: |
+        cd front-end
+        npm test
+      env:
+        CI: true

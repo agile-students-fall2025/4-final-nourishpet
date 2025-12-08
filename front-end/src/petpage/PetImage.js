@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-// ---- Stage 1: 4 帧 ----
+// ---- Stage 1 ----
 import s1_0 from "./pet_stage1.png";
 import s1_1 from "./pet_stage1 1.png";
 import s1_2 from "./pet_stage1 2.png";
 import s1_3 from "./pet_stage1 3.png";
 
-// ---- Stage 2: 4 帧 ----
+// ---- Stage 2----
 import s2_0 from "./pet_stage2.png";
 import s2_1 from "./pet_stage2 1.png";
 import s2_2 from "./pet_stage2 2.png";
 import s2_3 from "./pet_stage2 3.png";
 
-// ---- Stage 3: 4 帧 ----
+// ---- Stage 3----
 import s3_0 from "./pet_stage3.png";
 import s3_1 from "./pet_stage3 1.png";
 import s3_2 from "./pet_stage3 2.png";
 import s3_3 from "./pet_stage3 3.png";
 
-// 每个 stage 的 4 帧
 const FRAMES = {
   1: [s1_0, s1_1, s1_2, s1_3],
   2: [s2_0, s2_1, s2_2, s2_3],

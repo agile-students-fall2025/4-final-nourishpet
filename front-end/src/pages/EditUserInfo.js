@@ -8,58 +8,58 @@ import Footer from '../components/Footer.js'
 import axios from "axios";
 
 
-function EditUserInfo(){
+function EditUserInfo() {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [fullfilled, setFullfilled] = useState(false);
     const [fullfilledinitial, setFullfilledinitial] = useState(false);
     const hasInitialized = useRef(false);
     useEffect(() => {
-      axios
-        .get(`${API}/api/userdata`, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
-        .then((res) => {
-          console.log(res.data);
-          const userData = res.data; 
+        axios
+            .get(`${API}/api/userdata`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then((res) => {
+                console.log(res.data);
+                const userData = res.data;
 
-          setUserData({
-            name: userData.name,
-            petName: userData.petName,
-            age: userData.age,
-            gender: userData.gender,
-            height: userData.height,
-            weight: userData.weight,
-            target_weight: userData.target_weight,
-            // bmi: userData.bmi,
-          });
-          setLoading(false);
-        })
-        .catch((err) => console.error("Error fetching data:", err));
+                setUserData({
+                    name: userData.name,
+                    petName: userData.petName,
+                    age: userData.age,
+                    gender: userData.gender,
+                    height: userData.height,
+                    weight: userData.weight,
+                    target_weight: userData.target_weight,
+                    // bmi: userData.bmi,
+                });
+                setLoading(false);
+            })
+            .catch((err) => console.error("Error fetching data:", err));
     }, []);
 
     useEffect(() => {
-      if (userData) {
-        // const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
-        const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
-        const hasEmptyField = requiredFields.some(field => {
-          const value = userData[field];
-          return value === null || value === undefined || value === '' || (typeof value === 'number' && isNaN(value));
-        });
-        setFullfilled(!hasEmptyField);
-        
-        if (!hasInitialized.current) {
-          setFullfilledinitial(!hasEmptyField);
-          hasInitialized.current = true;
+        if (userData) {
+            // const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
+            const requiredFields = ['name', 'petName', 'age', 'gender', 'height', 'weight', 'target_weight'];
+            const hasEmptyField = requiredFields.some(field => {
+                const value = userData[field];
+                return value === null || value === undefined || value === '' || (typeof value === 'number' && isNaN(value));
+            });
+            setFullfilled(!hasEmptyField);
+
+            if (!hasInitialized.current) {
+                setFullfilledinitial(!hasEmptyField);
+                hasInitialized.current = true;
+            }
         }
-      }
     }, [userData]);
 
 
     if (loading) {
-      return <div>Loading...</div>;
+        return <div>Loading...</div>;
     }
 
     if (!userData) {
@@ -73,17 +73,17 @@ function EditUserInfo(){
         }));
     };
 
-    const handleConfirm = async() => {
+    const handleConfirm = async () => {
         if (!fullfilled) {
             alert('Please fill in all required fields before confirming the operation.');
             return;
         }
         axios
             .post(`${API}/api/updateuserdata`, userData, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then((res) => {
                 console.log(res.data);
             })
@@ -97,16 +97,16 @@ function EditUserInfo(){
         }
     }
 
-    return(
+    return (
         <div className="homepage">
 
             <main className="homepage-main">
                 <div className="page-header">
                     <h1 className="app-title">Edit Info</h1>
                 </div>
-                
+
                 <UserInfo formData={userData} onInputChange={handleInputChange} />
-                
+
                 <div className="button-section">
                     <Confirm onConfirm={handleConfirm} fullfilled={fullfilled} />
                     <Cancel onCancel={handleCancel} fullfilled={fullfilledinitial} />
@@ -117,7 +117,7 @@ function EditUserInfo(){
     )
 }
 
-function UserInfo({ formData, onInputChange }){
+function UserInfo({ formData, onInputChange }) {
     return (
         <section className="nutrition-section">
             <div className="nutrition-chart">
@@ -126,19 +126,19 @@ function UserInfo({ formData, onInputChange }){
                 <div className="form-section-simple">
                     <div className="form-row">
                         <label>Username:</label>
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             value={formData.name}
                             onChange={(e) => onInputChange('name', e.target.value)}
                             className="form-input-simple"
                         />
                     </div>
-                    
+
                     <div className="form-row">
                         <label>Pet name:</label>
-                        <input 
-                            type="text" 
-                            value={formData.petName} 
+                        <input
+                            type="text"
+                            value={formData.petName}
                             onChange={(e) => onInputChange('petName', e.target.value)}
                             className="form-input-simple"
                         />
@@ -146,32 +146,39 @@ function UserInfo({ formData, onInputChange }){
 
                     <div className="form-row">
                         <label>Gender:</label>
-                        <select 
-                            value={formData.gender || ''}
-                            onChange={(e) => onInputChange('gender', e.target.value)}
-                            className="form-input-simple"
-                        >
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                        </select>
+                        <div className="gender-selection-container">
+                            <button
+                                type="button"
+                                className={`gender-option ${formData.gender === 'male' ? 'selected' : ''}`}
+                                onClick={() => onInputChange('gender', 'male')}
+                            >
+                                {formData.gender === 'male' && <span className="checkmark">✓</span>} Male
+                            </button>
+                            <button
+                                type="button"
+                                className={`gender-option ${formData.gender === 'female' ? 'selected' : ''}`}
+                                onClick={() => onInputChange('gender', 'female')}
+                            >
+                                {formData.gender === 'female' && <span className="checkmark">✓</span>} Female
+                            </button>
+                        </div>
                     </div>
 
                     <div className="form-row">
                         <label>Age:</label>
-                        <input 
-                            type="number" 
+                        <input
+                            type="number"
                             value={formData.age}
                             onChange={(e) => onInputChange('age', e.target.value)}
                             className="form-input-simple"
                         />
                     </div>
-                    
+
                     <div className="form-row">
                         <label>Height:</label>
                         <div className="input-with-unit-simple">
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 value={formData.height}
                                 onChange={(e) => onInputChange('height', e.target.value)}
                                 className="form-input-simple"
@@ -179,12 +186,12 @@ function UserInfo({ formData, onInputChange }){
                             <span className="unit-simple">cm</span>
                         </div>
                     </div>
-                    
+
                     <div className="form-row">
                         <label>Current Weight:</label>
                         <div className="input-with-unit-simple">
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 value={formData.weight}
                                 onChange={(e) => onInputChange('weight', e.target.value)}
                                 className="form-input-simple"
@@ -196,8 +203,8 @@ function UserInfo({ formData, onInputChange }){
                     <div className="form-row">
                         <label>Target Weight:</label>
                         <div className="input-with-unit-simple">
-                            <input 
-                                type="number" 
+                            <input
+                                type="number"
                                 value={formData.target_weight}
                                 onChange={(e) => onInputChange('target_weight', e.target.value)}
                                 className="form-input-simple"
@@ -213,16 +220,16 @@ function UserInfo({ formData, onInputChange }){
 
 function Confirm({ onConfirm, fullfilled }) {
     return (
-    <button className="user-button" onClick={onConfirm} style={{cursor: fullfilled ? 'pointer' : 'not-allowed', opacity: fullfilled ? 1 : 0.6}}>
-        <Link to='/userpage' onClick={(e) => !fullfilled && e.preventDefault()} style={{textDecoration: 'none', color: 'inherit'}}>Confirm</Link>
-    </button>
+        <button className="user-button" onClick={onConfirm} style={{ cursor: fullfilled ? 'pointer' : 'not-allowed', opacity: fullfilled ? 1 : 0.6 }}>
+            <Link to='/userpage' onClick={(e) => !fullfilled && e.preventDefault()} style={{ textDecoration: 'none', color: 'inherit' }}>Confirm</Link>
+        </button>
     );
 }
 
 function Cancel({ onCancel, fullfilled }) {
     return (
-        <button className="user-button" onClick={onCancel} style={{cursor: fullfilled ? 'pointer' : 'not-allowed', opacity: fullfilled ? 1 : 0.6, background: 'rgba(255, 255, 255, 0.7)'}}>
-            <Link to='/userpage' onClick={(e) => !fullfilled && e.preventDefault()} style={{textDecoration: 'none', color: 'inherit'}}>Cancel</Link>
+        <button className="user-button" onClick={onCancel} style={{ cursor: fullfilled ? 'pointer' : 'not-allowed', opacity: fullfilled ? 1 : 0.6, background: 'rgba(255, 255, 255, 0.7)' }}>
+            <Link to='/userpage' onClick={(e) => !fullfilled && e.preventDefault()} style={{ textDecoration: 'none', color: 'inherit' }}>Cancel</Link>
         </button>
     );
 }
