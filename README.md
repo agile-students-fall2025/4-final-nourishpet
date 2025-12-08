@@ -16,8 +16,7 @@ Make healthy eating sticky and delightful by turning daily nutrition goals into 
 
 ---
 ## Deployment: 
-[Production URL](https://nourishpet2025-dd9b5.ondigitalocean.app/)
-This application is deployed on DigitalOcean App Platform. The front-end (React) and back-end (Node/Express API) are both built and deployed through the platform.
+The [application](https://nourishpet2025-dd9b5.ondigitalocean.app/) is deployed on DigitalOcean App Platform. The front-end (React) and back-end (Node/Express API) are both built and deployed through the platform.
 
 ---
 
