@@ -42,9 +42,9 @@ const connectDB = async () => {
     }
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB Atlas connected");
-    // --- DEBUGGING: PRINT DB INFO ---
+    // ---  DEBUGGING: PRINT DB INFO ---
     console.log("---------------------------------------");
-    console.log("📂 Current Database Name:", mongoose.connection.name);
+    console.log(" Current Database Name:", mongoose.connection.name);
     console.log("------------------------------------------------");
   } catch (error) {
     console.error("MongoDB connection error:", error);
