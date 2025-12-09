@@ -214,7 +214,7 @@ function EditRecord() {
                     </div>
                 )}
             </main>
-            <Footer />
+            
         </div>
     );
 }

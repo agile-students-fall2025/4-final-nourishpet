@@ -58,9 +58,6 @@ function WeekArchive() {
     return (
         <div className="homepage">
             <header className="homepage-header">
-                <Link to="/home" className="user-button">
-                    Home
-                </Link>
             </header>
 
             <main className="homepage-main">

@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/FeedPage.css";
+import '../css/HomePage.css';
 import Footer from "../components/Footer";
 import { API } from "../api";
 
@@ -153,6 +154,8 @@ function FeedPage() {
 
   return (
     <div className="feedpage">
+      <header className="homepage-header">
+      </header>
       <main className="feedpage-main">
         {/* Removed FeedHeader */}
 
