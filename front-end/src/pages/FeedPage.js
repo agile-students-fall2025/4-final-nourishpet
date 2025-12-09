@@ -155,6 +155,9 @@ function FeedPage() {
   return (
     <div className="feedpage">
       <header className="homepage-header">
+        <Link to="/home" className="user-button">
+                    Home
+        </Link>
       </header>
       <main className="feedpage-main">
         {/* Removed FeedHeader */}
