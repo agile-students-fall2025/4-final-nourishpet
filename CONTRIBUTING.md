@@ -10,10 +10,10 @@ We have completed the [project](https://nourishpet2025-dd9b5.ondigitalocean.app/
 
 
 ## Team Norms
-- Communicate via GitHub Issues/PRs.
-- 2-week sprint cadence: plan at start, 2-3 synchronous standups per week, quick demo/retro at end.
-- Keep scope tight; prefer incremental changes.
-- Be kind and direct: feedback is specific, actionable, and respectful.
+- All team members must acknowledge Discord messages within 12 hours. Urgent issues tagged with @team require acknowledgment within 2 hours. Every meeting must have a rotating note-taker, and notes must be posted in the meetings channel within 1 hour. Updates follow the SCRUM pattern: yesterday I did X, today I will do Y, blockers are Z.
+- Definition of Done: code compiles with no warnings, passes all unit tests with at least 80 percent coverage, has meaningful commit messages, includes comments for complex logic, and updates documentation. Pull requests require review by two team members before merging. No PR over 300 lines unless approved. PRs must include a test plan and screenshots for frontend changes. Frontend uses ESLint and Prettier; backend follows REST conventions and standard error handling.
+- Weekly meeting times are set in advance. Last-minute cancellations are only allowed for emergencies. If unavailable for more than 24 hours, the member must notify the team and assign someone to handle urgent tasks.
+- No code is merged if the GitHub Actions CI tests fail. Every deployment must be verified by at least one member who did not write the code being deployed.
 
 
 ## What We Accept (now)

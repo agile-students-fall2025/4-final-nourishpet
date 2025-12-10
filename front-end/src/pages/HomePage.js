@@ -9,6 +9,15 @@ import stage1Img from "../petpage/pet_stage1.png";
 import stage2Img from "../petpage/pet_stage2.png";
 import stage3Img from "../petpage/pet_stage3.png";
 
+/**
+ * HomePage Component
+ * ----------------------------------------------------
+ * Shows:
+ *  - Today's nutrition progress
+ *  - Pet image + evolution stage
+ *  - User’s daily goals
+ *  - Navigation to PetPage & UserPage
+ */
 const stageImages = {
   1: stage1Img,
   2: stage2Img,
