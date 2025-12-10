@@ -1,8 +1,9 @@
 ![CI Status](https://github.com/agile-students-fall2025/4-final-nourishpet/actions/workflows/ci.yml/badge.svg)
+
 # NourishPet
 
-
 ## Team Members
+
 - [Kevin Yang](https://github.com/KevinYang-hi)
 - [Keven Ni](https://github.com/BlackCloud-K)
 - [Ellen Wong](https://github.com/ellen-wnl)
@@ -11,59 +12,61 @@
 
 ---
 
-**Product Vision Statement**  
+### Product Vision Statement
+
 Make healthy eating sticky and delightful by turning daily nutrition goals into the care and growth of a virtual companion.
 
 ---
-## Deployment: 
+
+## Deployment
+
 The [application](https://nourishpet2025-dd9b5.ondigitalocean.app/) is deployed on DigitalOcean App Platform. The front-end (React) and back-end (Node/Express API) are both built and deployed through the platform.
 
 ---
 
-# Running Locally
+## Running Locally
 
-## Front-End Setup
+### Front-End Setup
 
-Note: NourishPet is currently designed for iPhone 14 Pro Max Screen fitting. 
+> **Note:** NourishPet is currently designed for iPhone 14 Pro Max Screen fitting.
 
 ```bash
-# clone from Github Repo
+# Clone from Github Repo
 git clone https://github.com/agile-students-fall2025/4-final-nourishpet
 
-# navigate to front-end folder
+# Navigate to front-end folder
 cd front-end
 
-# download npm 
+# Install dependencies
 npm install
 
-#start front-end
+# Start front-end
 npm start
 ```
 
-
-## Back-End Setup
+### Back-End Setup
 
 ```bash
-# navigate to the back-end folder
+# Navigate to the back-end folder
 cd back-end
 
-# install dependencies
+# Install dependencies
 npm install
 
-# run the server
+# Run the server
 npm run dev
 
-# run unit tests
+# Run unit tests
 npm test
 
-# check coverage
+# Check coverage
 npx c8 npm test
-
-## Check coverage
-npx c8 npm test1. Build the Express.js back-end with dynamic and static routes.
 ```
 
-## .env Setup (.env in /back-end)
+### Environment Variables Setup
+
+Create a `.env` file in the `/back-end` directory with the following variables:
+
 ```bash
 MONGO_URI=<your mongodb atlas uri>
 JWT_SECRET=<your jwt secret>
@@ -72,11 +75,16 @@ NODE_ENV=development
 REACT_APP_API_URL=http://localhost:5000
 ```
 
-## Designs 
+---
 
-- **Figma Prototype:** <https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0>  
+## Designs
+
+- **Figma Prototype:** <https://www.figma.com/design/U0WY0qWMAR0VKkSKN4gRPR/NourishPet?node-id=0-1&p=f&t=jhqZDDOU0ArQTD3g-0>
 - **App Map (Figma Board):** <https://www.figma.com/board/Ap3PkTRrukV8oVRh2tlZMD/App-Map?t=jhqZDDOU0ArQTD3g-0>
 
+---
+
 ## Contributing
+
 See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full guide.
 
