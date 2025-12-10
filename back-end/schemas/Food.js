@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+/**
+ * Food Schema
+ * Stores macronutrient information for a food item.
+ * Used for search, autocomplete, and logging daily nutrition.
+ */
 const FoodSchema = new mongoose.Schema({
   food: {
     type: String,

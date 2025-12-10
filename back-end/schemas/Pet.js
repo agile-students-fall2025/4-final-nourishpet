@@ -1,7 +1,13 @@
-// back-end/schemas/Pet.js
-
 import mongoose from "mongoose";
 
+/**
+ * Pet Schema
+ * Stores virtual pet data for each user:
+ * - Name
+ * - XP and Level
+ * - Evolution stage (stage1 → stage2 → stage3)
+ * - lastDailyXPDate (used to calculate daily XP once per day)
+ */
 const PetSchema = new mongoose.Schema(
   {
 

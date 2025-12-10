@@ -1,5 +1,11 @@
 import mongoose from "mongoose";
 
+/**
+ * Nutrition Schema
+ * Stores a single day's nutrition log for a specific user.
+ * Each document corresponds to one date and includes total macros
+ * plus detailed lists (foods, grams, protein, carbs, fat).
+ */
 const NutritionSchema = new mongoose.Schema({
 
   user_id: {

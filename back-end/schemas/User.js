@@ -1,9 +1,24 @@
 import mongoose from "mongoose";
 
+/**
+ * ----------------------------------------------------
+ * USER SCHEMA
+ * Stores personal metrics + dynamically calculated
+ * nutrition goals (calculated in pre-save hook).
+ * ----------------------------------------------------
+ */
 const calculate_bmi = function(height, weight){
   return weight / (height * height / 10000)
 }
 
+/**
+ * -------------------------
+ * BMR CALCULATION (Mifflin-St Jeor Equation)
+ * -------------------------
+ * Male:    BMR = 10W + 6.25H - 5A + 5
+ * Female:  BMR = 10W + 6.25H - 5A - 161
+ * If gender missing, apply neutral adjustment (-78).
+ */
 const calculate_bmr = function(weight, height, age, gender) {
   if (!weight || !height || !age || !gender) return 0;
   
@@ -18,6 +33,13 @@ const calculate_bmr = function(weight, height, age, gender) {
   return baseBMR - 78;
 }
 
+/**
+ * -------------------------
+ * TDEE CALCULATION
+ * -------------------------
+ * TDEE = BMR * activity multiplier
+ * Multiplier depends on lifestyle activity level.
+ */
 const calculate_tdee = function(bmr, activityLevel = 'moderate') {
   const activityMultipliers = {
     'sedentary': 1.2,
@@ -31,6 +53,14 @@ const calculate_tdee = function(bmr, activityLevel = 'moderate') {
   return bmr * multiplier;
 }
 
+/**
+ * -------------------------
+ * CALORIE ADJUSTMENT FOR WEIGHT GOAL
+ * -------------------------
+ * If user wants to lose weight → subtract ~400 calories
+ * If user wants to gain weight → add ~400 calories
+ * If near target weight → no adjustment
+ */
 const adjust_calories_for_target = function(tdee, currentWeight, targetWeight) {
   if (!targetWeight || targetWeight <= 0 || currentWeight <= 0) {
     return tdee;
@@ -49,6 +79,15 @@ const adjust_calories_for_target = function(tdee, currentWeight, targetWeight) {
   return tdee + 400;
 }
 
+/**
+ * -------------------------
+ * FULL DAILY NUTRITION GOAL CALCULATION
+ * -------------------------
+ * Returns total calories + macro targets (protein/fat/carbs).
+ * Protein based on body weight (1.2g/kg).
+ * Fat = ~25% of calories.
+ * Carbs = remaining calories.
+ */
 const calculate_nutrition_goals = function(weight, height, age, gender, targetWeight, activityLevel = 'moderate') {
   if (!weight || !height || !age || !gender) {
     return {

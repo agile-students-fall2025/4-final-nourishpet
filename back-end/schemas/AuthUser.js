@@ -6,6 +6,11 @@ import dotenv from "dotenv";
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET;
 
+/**
+ * AuthUser Schema
+ * This schema stores login credentials only.
+ * Data is stored separately in the Nutrition and User schemas.
+ */
 const AuthUserSchema = new mongoose.Schema({
   username: {
     type: String,
