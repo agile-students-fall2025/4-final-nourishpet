@@ -5,6 +5,22 @@ import '../css/HomePage.css';
 import Footer from "../components/Footer";
 import { API } from "../api";
 
+/**
+ * FeedPage Component
+ * ------------------------------------------------------------------
+ * This page allows users to:
+ *   1. Search foods (auto-suggestions + explicit search)
+ *   2. Enter grams consumed
+ *   3. Preview scaled nutrition info
+ *   4. Add food to daily archive log (backend POST)
+ *
+ * UX Flow:
+ *   - User types → suggestions appear
+ *   - User selects a food OR presses search
+ *   - Nutritional details shown for 100g AND scaled grams
+ *   - User clicks "Add" → item saved to backend
+ *   - Confirmation popup displayed
+ */
 const foodDB = `${API}/api/fooddata`;
 const searchAPI = `${API}/api/foods/search`;
 

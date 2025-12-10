@@ -4,6 +4,16 @@ import "../css/RegisterPage.css";
 import logo from "../logo.svg";
 import { API } from "../api";
 
+/**
+ * RegisterPage Component
+ * ---------------------------------------------------------
+ * Handles:
+ *  - Creating a new user account
+ *  - Validating input (password confirmation)
+ *  - Sending signup data to backend
+ *  - Saving returned JWT token
+ *  - Redirecting user to fill out health info (/editUserInfo)
+ */
 function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

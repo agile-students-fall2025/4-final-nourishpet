@@ -4,6 +4,15 @@ import '../css/LoginPage.css';
 import logo from '../logo.svg';
 import { API } from "../api";
 
+/**
+ * LoginPage Component
+ * -------------------------------------------------------
+ * Handles:
+ *  - User input for username + password
+ *  - Sending login request to backend
+ *  - Storing returned JWT token + user info
+ *  - Redirecting to /home after successful login
+ */
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

@@ -7,7 +7,26 @@ import '../css/EditUserInfo.css';
 import Footer from '../components/Footer.js'
 import axios from "axios";
 
-
+/**
+ * EditUserInfo Page
+ * ------------------------------------------------------------------
+ * Allows user to modify personal info:
+ *   - name
+ *   - pet name
+ *   - age
+ *   - gender
+ *   - height (cm)
+ *   - weight (kg)
+ *   - target weight (kg)
+ *
+ * Backend will automatically:
+ *   - update BMI
+ *   - update nutrition goals (TDEE, protein/fat/carbs)
+ *
+ * Validations ensure that:
+ *   - user cannot confirm unless all required fields are filled
+ *   - user cannot cancel until required fields were filled at least once
+ */
 function EditUserInfo() {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
