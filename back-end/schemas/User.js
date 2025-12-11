@@ -7,7 +7,7 @@ import mongoose from "mongoose";
  * nutrition goals (calculated in pre-save hook).
  * ----------------------------------------------------
  */
-const calculate_bmi = function(height, weight){
+const calculateBMI = function(height, weight){
   return weight / (height * height / 10000)
 }
 
@@ -88,7 +88,7 @@ const adjust_calories_for_target = function(tdee, currentWeight, targetWeight) {
  * Fat = ~25% of calories.
  * Carbs = remaining calories.
  */
-const calculate_nutrition_goals = function(weight, height, age, gender, targetWeight, activityLevel = 'moderate') {
+const calculateNutritionGoals = function(weight, height, age, gender, targetWeight, activityLevel = 'moderate') {
   if (!weight || !height || !age || !gender) {
     return {
       total_intake_goal: 2000,
@@ -150,12 +150,12 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.pre('save', function(next) {
   if (this.height > 0 && this.weight > 0) {
-    const calculatedBmi = calculate_bmi(this.height, this.weight);
+    const calculatedBmi = calculateBMI(this.height, this.weight);
     this.bmi = Math.round(calculatedBmi * 10) / 10;
   }
   
   if (this.height > 0 && this.weight > 0 && this.age > 0 && this.gender) {
-    const nutritionGoals = calculate_nutrition_goals(
+    const nutritionGoals = calculateNutritionGoals(
       this.weight,
       this.height,
       this.age,
